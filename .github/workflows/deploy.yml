@@ -262,8 +262,9 @@ jobs:
             dotnet add package TypeGuard.Console --version ${{ needs.validate-tag.outputs.version }}
             ```
 
-            ### NuGet Packages
-            - https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }}
+            ### Packages
+          - [TypeGuard.Core](https://www.nuget.org/packages/TypeGuard.Core/${{ needs.validate-tag.outputs.version }})
+          - [TypeGuard.Console](https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }})
 
       - name: Upload artifact to existing release
         if: steps.check_release.outputs.exists == 'true'
