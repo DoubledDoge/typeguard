@@ -10,7 +10,7 @@
     <Version>0.1.0</Version>
     <Authors>DoubledDoge</Authors>
     <Company>Personal</Company>
-    <Description>Console implementation for TypeGuard. Provides beautiful, colorful input validation for C# console applications with ConsolePrism integration.</Description>
+    <Description>Console implementation for TypeGuard.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
     <RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
