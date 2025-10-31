@@ -7,7 +7,7 @@
 
     <!-- Package Metadata -->
     <PackageId>TypeGuard.Console</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>DoubledDoge</Authors>
     <Company>Personal</Company>
     <Description>Console implementation for TypeGuard.</Description>

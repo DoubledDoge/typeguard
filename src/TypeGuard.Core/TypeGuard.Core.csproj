@@ -7,7 +7,7 @@
 
     <!-- Package Metadata -->
     <PackageId>TypeGuard.Core</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>DoubledDoge</Authors>
     <Company>Personal</Company>
     <Description>Core validation library for TypeGuard.</Description>
