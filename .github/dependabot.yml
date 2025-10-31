@@ -8,7 +8,6 @@ updates:
       day: 'monday'
       time: '09:00'
     open-pull-requests-limit: 3
-    versioning-strategy: 'auto'
     labels:
       - 'dependencies'
       - 'nuget'
@@ -16,7 +15,7 @@ updates:
       - 'DoubledDoge'
     assignees:
       - 'DoubledDoge'
-    groups: 
+    groups:
       nuget-dependencies:
         patterns:
           - '*'
@@ -26,7 +25,7 @@ updates:
           - 'major'
     commit-message:
       prefix: 'chore'
-  
+
   # GitHub Actions
   - package-ecosystem: 'github-actions'
     directory: '/'
@@ -41,7 +40,7 @@ updates:
       - 'DoubledDoge'
     assignees:
       - 'DoubledDoge'
-    groups: 
+    groups:
       actions-updates:
         patterns:
           - '*'
@@ -51,5 +50,4 @@ updates:
           - 'major'
     commit-message:
       prefix: 'chore'
-    
-      
+
