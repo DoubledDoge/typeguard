@@ -7,10 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/release.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy.yml" afterDir="false" />
-    </list>
+    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,18 +16,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "DoubledDoge"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;DoubledDoge&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/DoubledDoge/typeguard.git",
-    "accountId": "f43d412e-acef-4719-9fb1-ce7f77feaa1d"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/DoubledDoge/typeguard.git&quot;,
+    &quot;accountId&quot;: &quot;f43d412e-acef-4719-9fb1-ce7f77feaa1d&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Console/ConsoleInput.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Console/ConsoleOutput.cs" root0="FORCE_HIGHLIGHTING" />
@@ -64,20 +61,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "settings.editor.selected.configurable": "reference.settings.grazie.pro.style.in.ai.assistant",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.grazie.pro.style.in.ai.assistant&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="" />
@@ -121,7 +118,39 @@
       <option name="project" value="LOCAL" />
       <updated>1761895161629</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="chore: refine dependabot configuration by removing versioning strategy">
+      <option name="closed" value="true" />
+      <created>1761896914637</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1761896914637</updated>
+    </task>
+    <task id="LOCAL-00006" summary="chore: change version numbering">
+      <option name="closed" value="true" />
+      <created>1761897089581</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1761897089581</updated>
+    </task>
+    <task id="LOCAL-00007" summary="chore: refine deployment workflow by excluding pre-release tags">
+      <option name="closed" value="true" />
+      <created>1761897501970</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1761897501970</updated>
+    </task>
+    <task id="LOCAL-00008" summary="chore: revert unintended change">
+      <option name="closed" value="true" />
+      <created>1761897532093</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1761897532093</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
@@ -132,7 +161,11 @@
     <MESSAGE value="chore: update project description for clarity" />
     <MESSAGE value="chore: update package tags and workspace configuration" />
     <MESSAGE value="chore: add GitHub pull request search history configuration" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: add GitHub pull request search history configuration" />
+    <MESSAGE value="chore: refine dependabot configuration by removing versioning strategy" />
+    <MESSAGE value="chore: change version numbering" />
+    <MESSAGE value="chore: refine deployment workflow by excluding pre-release tags" />
+    <MESSAGE value="chore: revert unintended change" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: revert unintended change" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
