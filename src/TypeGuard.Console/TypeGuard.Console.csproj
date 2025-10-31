@@ -15,7 +15,7 @@
     <PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
     <RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>console;validation;input-validation;cli;terminal;console-app;typesafe</PackageTags>
+    <PackageTags>console;validation;input-validation;cli;terminal;</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
