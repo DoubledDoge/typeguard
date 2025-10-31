@@ -1,0 +1,40 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - dependencies
+  categories:
+    - title: 🚀 Features
+      labels:
+        - feature
+        - enhancement
+        - feat
+    - title: 🐛 Bug Fixes
+      labels:
+        - bug
+        - fix
+    - title: 📚 Documentation
+      labels:
+        - documentation
+        - docs
+    - title: 🎨 Styling & Theming
+      labels:
+        - style
+        - theme
+    - title: Performance
+      labels:
+        - performance
+        - perf
+    - title: 🧹 Maintenance
+      labels:
+        - chore
+        - refactor
+    - title: Other Changes
+      labels:
+        - "*"
+    template: |
+      ## What's Changed
+
+      {{#each categories}}
+      {{#if changes.[this.title]}}
+      ### {{this.title}}

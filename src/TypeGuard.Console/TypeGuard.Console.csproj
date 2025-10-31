@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- General Settings -->
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Package Metadata -->
+    <PackageId>TypeGuard.Console</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>DoubledDoge</Authors>
+    <Company>Personal</Company>
+    <Description>Console implementation for TypeGuard. Provides beautiful, colorful input validation for C# console applications with ConsolePrism integration.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>console;validation;input-validation;cli;terminal;console-app;typesafe</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ConsolePrism" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
+  </ItemGroup>
+</Project>

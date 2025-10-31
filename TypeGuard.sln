@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeGuard.Core", "src\TypeGuard.Core\TypeGuard.Core.csproj", "{E103EF96-B1C0-4FA4-BA37-E5E7925925F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeGuard.Console", "src\TypeGuard.Console\TypeGuard.Console.csproj", "{D99283F1-102F-404A-85A5-11268C8A28D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E103EF96-B1C0-4FA4-BA37-E5E7925925F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E103EF96-B1C0-4FA4-BA37-E5E7925925F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E103EF96-B1C0-4FA4-BA37-E5E7925925F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E103EF96-B1C0-4FA4-BA37-E5E7925925F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D99283F1-102F-404A-85A5-11268C8A28D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D99283F1-102F-404A-85A5-11268C8A28D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D99283F1-102F-404A-85A5-11268C8A28D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D99283F1-102F-404A-85A5-11268C8A28D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

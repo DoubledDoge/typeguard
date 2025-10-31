@@ -1,0 +1,55 @@
+version: 2
+updates:
+  # NuGet dependencies
+  - package-ecosystem: 'nuget'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    open-pull-requests-limit: 3
+    versioning-strategy: 'auto'
+    labels:
+      - 'dependencies'
+      - 'nuget'
+    reviewers:
+      - 'DoubledDoge'
+    assignees:
+      - 'DoubledDoge'
+    groups: 
+      nuget-dependencies:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+          - 'major'
+    commit-message:
+      prefix: 'chore'
+  
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+    reviewers:
+      - 'DoubledDoge'
+    assignees:
+      - 'DoubledDoge'
+    groups: 
+      actions-updates:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+          - 'major'
+    commit-message:
+      prefix: 'chore'
+    
+      

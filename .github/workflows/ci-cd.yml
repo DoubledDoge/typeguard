@@ -1,0 +1,130 @@
+name: .NET CI-CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '**/*.csproj'
+      - '**/*.sln'
+      - '.github/workflows/ci-cd.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '**/*.csproj'
+      - '**/*.sln'
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build library
+        run: dotnet build --configuration Release --no-restore
+        
+      - name: Detect test projects
+        id: detect_tests
+        run: |
+          found=false
+          # Look for explicit IsTestProject flag
+          if grep -R --include="*.csproj" -l "<IsTestProject>true</IsTestProject>" . >/dev/null 2>&1; then
+            found=true
+          fi
+          # Also detect common test SDK package usage
+          if [ "$found" = "false" ] && grep -R --include="*.csproj" -l "Microsoft.NET.Test.Sdk" . >/dev/null 2>&1; then
+            found=true
+          fi
+          echo "found=$found" >> $GITHUB_OUTPUT
+
+      - name: Run tests
+        if: steps.detect_tests.outputs.found == 'true'
+        run: |
+          dotnet test --configuration Release --no-build --verbosity normal \
+            --logger "trx;LogFileName=test-results.trx" \
+            --results-directory ./test-results
+
+      - name: Test Report
+        if: always() && steps.detect_tests.outputs.found == 'true'
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Results
+          path: "test-results/*.trx"
+          reporter: dotnet-trx
+          fail-on-error: true
+        
+  validate-package:
+    name: Validate Package Metadata
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build library
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack for validation
+        run: dotnet pack --configuration Release --no-build --output ./artifacts
+
+      - name: Validate README exists
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "❌ README.md is missing!"
+            exit 1
+          fi
+          echo "✅ README.md found"
+
+      - name: Validate LICENSE exists
+        run: |
+          if [ ! -f "LICENSE" ]; then
+            echo "❌ LICENSE file is missing!"
+            exit 1
+          fi
+          echo "✅ LICENSE found"
+
+      - name: Display package info
+        run: |
+          echo "📦 Package validation successful"
+          ls -lh ./artifacts/

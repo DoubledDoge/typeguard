@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- General Settings -->
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Package Metadata -->
+    <PackageId>TypeGuard.Core</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>DoubledDoge</Authors>
+    <Company>Personal</Company>
+    <Description>Core validation library for TypeGuard.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>validation;input-validation;typesafe;validation-library;csharp</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>
