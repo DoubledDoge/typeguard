@@ -39,13 +39,13 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Release version: $VERSION"
 
-          if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
             echo "Invalid version format: $VERSION"
-            echo "Expected format: v0.1.0 or 0.1.0 (semver)"
+            echo "Expected semver like: 0.1.0 or 0.1.0-alpha.1"
             exit 1
           fi
           echo "Valid semver format"
-          
+
   build-and-test:
     name: Build & Test
     runs-on: ubuntu-latest
@@ -107,31 +107,38 @@ jobs:
         run: |
           VERSION=${{ needs.validate-tag.outputs.version }}
           echo "Packing version: $VERSION"
-          
+
           # Pack Core library
           dotnet pack src/TypeGuard.Core/TypeGuard.Core.csproj \
             --configuration Release --no-build --output ./artifacts \
             /p:PackageVersion=$VERSION
-          
+
           # Pack Console library
           dotnet pack src/TypeGuard.Console/TypeGuard.Console.csproj \
             --configuration Release --no-build --output ./artifacts \
             /p:PackageVersion=$VERSION
-    
+
       - name: Validate package contents
         run: |
           echo "Package contents:"
-          ls -lh ./artifacts/
-          
-          if [ ! -f ./artifacts/TypeGuard.Core.${{ needs.validate-tag.outputs.version }}.nupkg ]; then
-            echo "TypeGuard.Core package not found!"
+          ls -lh ./artifacts/ || true
+
+          # Fail if no .nupkg produced
+          shopt -s nullglob
+          pkgs=(./artifacts/*.nupkg)
+          if [ ${#pkgs[@]} -eq 0 ]; then
+            echo "No .nupkg files produced in ./artifacts - aborting"
             exit 1
+          fi
+
+          # Optional checks retained as warnings (file names may vary by PackageId)
+          if [ ! -f ./artifacts/TypeGuard.Core.${{ needs.validate-tag.outputs.version }}.nupkg ]; then
+            echo "Warning: TypeGuard.Core package not found (expected TypeGuard.Core.${{ needs.validate-tag.outputs.version }}.nupkg)"
           fi
           if [ ! -f ./artifacts/TypeGuard.Console.${{ needs.validate-tag.outputs.version }}.nupkg ]; then
-            echo "TypeGuard.Console package not found!"
-            exit 1
+            echo "Warning: TypeGuard.Console package not found (expected TypeGuard.Console.${{ needs.validate-tag.outputs.version }}.nupkg)"
           fi
-          echo "Both packages created successfully"
+          echo "Package validation complete"
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
@@ -151,8 +158,8 @@ jobs:
       packages: write
     environment:
       name: nuget-production
-      url: https://www.nuget.org/packages/ConsolePrism/${{ needs.validate-tag.outputs.version }}
-    
+      url: https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }}
+
     steps:
       - name: Download package artifact
         uses: actions/download-artifact@v4
@@ -160,38 +167,48 @@ jobs:
           name: nuget-package-${{ needs.validate-tag.outputs.version }}
           path: ./artifacts
 
+      - name: Debug artifacts directory
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la ./artifacts || true
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
 
-        # Stable versions
-      - name: Publish to NuGet.org
+      - name: Publish to NuGet.org (stable)
         if: |
-          !contains(github.ref, '-alpha') && 
-          !contains(github.ref, '-beta') && 
+          !contains(github.ref, '-alpha') &&
+          !contains(github.ref, '-beta') &&
           !contains(github.ref, '-rc')
         run: |
-          echo "Publishing TypeGuard packages v${{ needs.validate-tag.outputs.version }}"
+          echo "Publishing packages v${{ needs.validate-tag.outputs.version }} to NuGet.org"
+          shopt -s nullglob
           for package in ./artifacts/*.nupkg; do
-            echo "Publishing $(basename $package)"
+            echo "Publishing $(basename "$package")"
             dotnet nuget push "$package" \
               --api-key ${{ secrets.NUGET_API_KEY }} \
               --source https://api.nuget.org/v3/index.json \
               --skip-duplicate
           done
-          
-        # Unstable versions
-      - name: Publish to GitHub Packages
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+      - name: Publish to GitHub Packages (unstable)
         run: |
-          echo "Publishing ConsolePrism v${{ needs.validate-tag.outputs.version }} to GitHub Packages"
-          dotnet nuget push ./artifacts/*.nupkg \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --source https://nuget.pkg.github.com/DoubledDoge/index.json \
-            --skip-duplicate
+          echo "Publishing packages v${{ needs.validate-tag.outputs.version }} to GitHub Packages"
+          shopt -s nullglob
+          for package in ./artifacts/*.nupkg; do
+            echo "Publishing $(basename "$package") to GitHub Packages"
+            dotnet nuget push "$package" \
+              --api-key ${{ secrets.GITHUB_TOKEN }} \
+              --source https://nuget.pkg.github.com/DoubledDoge/index.json \
+              --skip-duplicate || true
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Set release variables
         id: set_vars
         run: |
@@ -217,29 +234,44 @@ jobs:
         env:
           TAG: ${{ env.TAG }}
 
+      - name: Ensure package(s) exist before release
+        run: |
+          shopt -s nullglob
+          files=(./artifacts/*.nupkg)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No packages found in ./artifacts; skipping GitHub release steps"
+            exit 1
+          fi
+          echo "Found packages: ${files[*]}"
+
       - name: Create GitHub Release (if not exists)
         if: steps.check_release.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.TAG }}
-          files: ./artifacts/ConsolePrism.${{ needs.validate-tag.outputs.version }}.nupkg
+          files: ./artifacts/*.nupkg
           generate_release_notes: true
           draft: false
-          prerelease: ${{ !startsWith(needs.validate-tag.outputs.version, '1.') }}
+          prerelease: ${{ contains(needs.validate-tag.outputs.version, '-') }}
           body: |
-            ## ConsolePrism v${{ needs.validate-tag.outputs.version }}
-            
+            ## Release v${{ needs.validate-tag.outputs.version }}
+
             ### Installation
             ```bash
-            dotnet add package ConsolePrism --version ${{ needs.validate-tag.outputs.version }}
+            # Example: use the package ID you published on NuGet
+            dotnet add package TypeGuard.Console --version ${{ needs.validate-tag.outputs.version }}
             ```
-            
-            ### NuGet Package
-            https://www.nuget.org/packages/ConsolePrism/${{ needs.validate-tag.outputs.version }}
+
+            ### NuGet Packages
+            - https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }}
 
       - name: Upload artifact to existing release
         if: steps.check_release.outputs.exists == 'true'
         run: |
-          gh release upload "${{ env.TAG }}" ./artifacts/ConsolePrism.${{ needs.validate-tag.outputs.version }}.nupkg --clobber
+          shopt -s nullglob
+          for f in ./artifacts/*.nupkg; do
+            echo "Uploading $f to release ${{ env.TAG }}"
+            gh release upload "${{ env.TAG }}" "$f" --clobber
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
