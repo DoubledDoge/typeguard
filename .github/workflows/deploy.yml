@@ -4,14 +4,9 @@ on:
   push:
     tags:
       - 'v*.*.*'
-
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release'
-        required: false
-        type: string
-
+      - '!v*.*.*-alpha.*'
+      - '!v*.*.*-beta.*'
+      - '!v*.*.*-rc.*'
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
