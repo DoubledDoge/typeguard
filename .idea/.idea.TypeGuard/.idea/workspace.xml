@@ -7,7 +7,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="" />
+    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Console/ConsoleInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Console/ConsoleInput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Console/ConsoleOutput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Console/ConsoleOutput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IInputProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IInputProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IOutputProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IOutputProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/IntValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/IntValidatorBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringValidatorBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/CustomRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/CustomRule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/IValidationRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/IValidationRule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RegexRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RegexRule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/DateTimeValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/DateTimeValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/IntValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/IntValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/StringValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/StringValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/ValidatorBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/ValidatorBase.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,6 +88,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -85,6 +108,8 @@
       <workItem from="1761385511371" duration="116000" />
       <workItem from="1761846220231" duration="7188000" />
       <workItem from="1761889270216" duration="6417000" />
+      <workItem from="1761897827632" duration="260000" />
+      <workItem from="1762850063254" duration="2875000" />
     </task>
     <task id="LOCAL-00001" summary="chore: first commit">
       <option name="closed" value="true" />
@@ -150,7 +175,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761897532093</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="chore: clean up workspace configuration by removing unnecessary change lists">
+      <option name="closed" value="true" />
+      <created>1761897859536</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1761897859536</updated>
+    </task>
+    <task id="LOCAL-00010" summary="chore: update deployment workflow to ensure package existence and upgrade action versions">
+      <option name="closed" value="true" />
+      <created>1761897939590</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1761897939590</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
@@ -165,7 +206,9 @@
     <MESSAGE value="chore: change version numbering" />
     <MESSAGE value="chore: refine deployment workflow by excluding pre-release tags" />
     <MESSAGE value="chore: revert unintended change" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: revert unintended change" />
+    <MESSAGE value="chore: clean up workspace configuration by removing unnecessary change lists" />
+    <MESSAGE value="chore: update deployment workflow to ensure package existence and upgrade action versions" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: update deployment workflow to ensure package existence and upgrade action versions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
