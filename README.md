@@ -83,7 +83,7 @@ int countSync = TypeGuard.GetInt("How many items?"); // Synchronous version
 
 // String input
 string username = await TypeGuard.GetStringAsync("Enter username");
-string usernameSync = TypeGuard.GetString("Enter username");
+string usernameSync = TypeGuard.GetString("Enter username"); // Synchronous version
 ```
 
 ### Validation with Rules
