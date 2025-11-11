@@ -1,4 +1,4 @@
-﻿﻿namespace TypeGuard.Core.Builders;
+﻿namespace TypeGuard.Core.Builders;
 using Abstractions;
 using Validators;
 using Rules;

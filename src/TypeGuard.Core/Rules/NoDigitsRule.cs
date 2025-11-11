@@ -16,5 +16,5 @@ public class NoDigitsRule(string? customMessage = null) : IValidationRule<string
 	/// <summary>
 	/// Gets the error message that should be displayed when validation fails.
 	/// </summary>
-	public string ErrorMessage { get; } = customMessage ?? "Input cannot contain digits";
+	public string errorMessage { get; } = customMessage ?? "Input cannot contain digits";
 }

@@ -18,5 +18,5 @@ public class CustomRule<T>(Func<T, bool> predicate, string errorMessage) : IVali
 	/// <summary>
 	/// Gets the error message that should be displayed when validation fails.
 	/// </summary>
-	public string ErrorMessage { get; } = errorMessage;
+	public string errorMessage { get; } = errorMessage;
 }

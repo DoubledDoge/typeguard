@@ -54,7 +54,7 @@ public abstract class ValidatorBase<T>(
             bool allRulesPassed = true;
             foreach (IValidationRule<T> rule in _rules.Where(rule => !rule.IsValid(value!)))
             {
-                await outputProvider.DisplayErrorAsync(rule.ErrorMessage, cancellationToken);
+                await outputProvider.DisplayErrorAsync(rule.errorMessage, cancellationToken);
                 allRulesPassed = false;
                 break;
             }

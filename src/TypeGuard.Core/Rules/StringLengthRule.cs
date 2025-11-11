@@ -1,4 +1,4 @@
-﻿﻿namespace TypeGuard.Core.Rules;
+﻿namespace TypeGuard.Core.Rules;
 
 /// <summary>
 /// A validation rule that ensures a string's length falls within specified minimum and maximum bounds.
@@ -20,15 +20,15 @@ public class StringLengthRule : IValidationRule<string>
 		_maxLength = maxLength;
 
 		if (customMessage != null)
-			ErrorMessage = customMessage;
+			errorMessage = customMessage;
 		else if (minLength.HasValue && maxLength.HasValue)
-			ErrorMessage = $"Length must be between {minLength} and {maxLength} characters";
+			errorMessage = $"Length must be between {minLength} and {maxLength} characters";
 		else if (minLength.HasValue)
-			ErrorMessage = $"Length must be at least {minLength} characters";
+			errorMessage = $"Length must be at least {minLength} characters";
 		else if (maxLength.HasValue)
-			ErrorMessage = $"Length must be at most {maxLength} characters";
+			errorMessage = $"Length must be at most {maxLength} characters";
 		else
-			ErrorMessage = "Invalid length";
+			errorMessage = "Invalid length";
 	}
 
 	/// <summary>
@@ -49,5 +49,5 @@ public class StringLengthRule : IValidationRule<string>
 	/// <summary>
 	/// Gets the error message that should be displayed when validation fails.
 	/// </summary>
-	public string ErrorMessage { get; }
+	public string errorMessage { get; }
 }

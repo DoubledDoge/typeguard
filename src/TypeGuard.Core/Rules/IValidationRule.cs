@@ -16,5 +16,5 @@ public interface IValidationRule<in T>
 	/// <summary>
 	/// Gets the error message that should be displayed when validation fails.
 	/// </summary>
-	string ErrorMessage { get; }
+	string errorMessage { get; }
 }

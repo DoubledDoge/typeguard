@@ -21,5 +21,5 @@ public class RegexRule(string pattern, string? customMessage = null) : IValidati
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string ErrorMessage { get; } = customMessage ?? $"Value must match pattern: {pattern}";
+    public string errorMessage { get; } = customMessage ?? $"Value must match pattern: {pattern}";
 }

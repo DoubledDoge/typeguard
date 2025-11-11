@@ -20,5 +20,5 @@ public class RangeRule<T>(T min, T max, string? customMessage = null) : IValidat
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string ErrorMessage { get; } = customMessage ?? $"Value must be between {min} and {max}";
+    public string errorMessage { get; } = customMessage ?? $"Value must be between {min} and {max}";
 }
