@@ -14,17 +14,7 @@
       <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/FloatValidator.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/LongValidator.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/ShortValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.Console.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.Console.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/CustomRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/CustomRule.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/IValidationRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/IValidationRule.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RegexRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RegexRule.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/TypeGuard.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/TypeGuard.Core.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/ValidatorBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/ValidatorBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,15 +44,19 @@
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IOutputProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/dbritz/RiderProjects/TypeGuard/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/DoubleValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/IntValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/CustomRule.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/IValidationRule.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/dbritz/RiderProjects/TypeGuard/src/TypeGuard.Core/Rules/IValidationRule.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/dbritz/RiderProjects/TypeGuard/src/TypeGuard.Core/Rules/NoDigitsRule.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/RegexRule.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/dbritz/RiderProjects/TypeGuard/src/TypeGuard.Core/Rules/StringLengthRule.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/CharValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/DateTimeValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/DoubleValidator.cs" root0="FORCE_HIGHLIGHTING" />
@@ -71,7 +65,9 @@
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/LongValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/ShortValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/StringValidator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/dbritz/RiderProjects/TypeGuard/src/TypeGuard.Core/Validators/ValidatorBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/ValidatorBase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/dbritz/RiderProjects/TypeGuard/src/TypeGuard.Core/Validators/ValidatorBase.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -115,7 +111,7 @@
       <workItem from="1761889270216" duration="6417000" />
       <workItem from="1761897827632" duration="260000" />
       <workItem from="1762850063254" duration="6192000" />
-      <workItem from="1762888779902" duration="389000" />
+      <workItem from="1762888779902" duration="733000" />
     </task>
     <task id="LOCAL-00001" summary="chore: first commit">
       <option name="closed" value="true" />
@@ -213,7 +209,31 @@
       <option name="project" value="LOCAL" />
       <updated>1762853114097</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="chore: updated dotnet from 9 to 10">
+      <option name="closed" value="true" />
+      <created>1762889376620</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1762889376620</updated>
+    </task>
+    <task id="LOCAL-00014" summary="style: renamed ErrorMessage property to errorMessage">
+      <option name="closed" value="true" />
+      <created>1762889424374</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1762889424374</updated>
+    </task>
+    <task id="LOCAL-00015" summary="chore: updated workspace configuration">
+      <option name="closed" value="true" />
+      <created>1762889439398</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1762889439398</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
@@ -232,7 +252,10 @@
     <MESSAGE value="chore: update deployment workflow to ensure package existence and upgrade action versions" />
     <MESSAGE value="docs: enhanced documentation with XML comments for input and validation classes" />
     <MESSAGE value="chore: update workspace configuration to include recent changes and tasks" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: update workspace configuration to include recent changes and tasks" />
+    <MESSAGE value="chore: updated dotnet from 9 to 10" />
+    <MESSAGE value="style: renamed ErrorMessage property to errorMessage" />
+    <MESSAGE value="chore: updated workspace configuration" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: updated workspace configuration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
