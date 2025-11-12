@@ -226,7 +226,7 @@ string email = await TypeGuard
 
 ## 💻 Requirements
 
-- .NET 9.0 or higher
+- .NET 10.0 or higher
 - **TypeGuard.Console** requires ConsolePrism for colored output (Dependency)
 - Works on Windows, macOS, and Linux
 
@@ -243,7 +243,7 @@ Contributions welcome! Feel free to:
 
 ## 🗺️ Roadmap
 
-Current version: **v0.1.0** (Pre-release)
+Current version: **v0.1.1** (Pre-release)
 
 **Planned Features:**
 -  WinForms implementation
