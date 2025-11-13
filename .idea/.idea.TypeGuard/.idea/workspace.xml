@@ -7,14 +7,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="# &lt;type&gt;[optional scope]: &lt;description&gt;&#10;# Types (Uncomment):&#10;#&#10;# feat: &#10;# fix: &#10;# docs: &#10;# style: &#10;#  refactor: &#10;# perf: &#10;# test: &#10;# chore: &#10;# remove: &#10;# deploy: &#10;#&#10;# Body (optional):&#10;#&#10;# Footer (optional, breaking changes):&#10;#&#10;# BREAKING CHANGE:">
-      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/NumericValidatorBuilder.cs" afterDir="false" />
+    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/GuidValidatorBuilder.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/GuidRules.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/CharValidator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/NumericValidator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/GuidValidator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/IntValidatorBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/IntValidator.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,9 +44,11 @@
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IOutputProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/GuidValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/NumericValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/CustomRule.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/GuidRules.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/IValidationRule.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" root0="FORCE_HIGHLIGHTING" />
@@ -55,6 +56,7 @@
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/CharValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/DateTimeValidator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/GuidValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/NumericValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/StringValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/ValidatorBase.cs" root0="FORCE_HIGHLIGHTING" />
@@ -105,7 +107,7 @@
       <workItem from="1762927843698" duration="1586000" />
       <workItem from="1762933796098" duration="2538000" />
       <workItem from="1762966994940" duration="1193000" />
-      <workItem from="1763019410330" duration="3166000" />
+      <workItem from="1763019410330" duration="5601000" />
     </task>
     <task id="LOCAL-00001" summary="chore: first commit">
       <option name="closed" value="true" />
@@ -243,7 +245,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762889625321</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="# &lt;type&gt;[optional scope]: &lt;description&gt;&#10;# Types (Uncomment):&#10;#&#10;feat: redone int validation into generic numeric validation for all relevant types&#10;# fix: &#10;# docs: &#10;# style: &#10;#  refactor: &#10;# perf: &#10;# test: &#10;# chore: &#10;# remove: &#10;# deploy: &#10;#&#10;# Body (optional):&#10;#&#10;# Footer (optional, breaking changes):&#10;#&#10;# BREAKING CHANGE:">
+      <option name="closed" value="true" />
+      <created>1763023298263</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1763023298264</updated>
+    </task>
+    <task id="LOCAL-00019" summary="chore: updated workspace configuration and modified file paths for validators">
+      <option name="closed" value="true" />
+      <created>1763023978296</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1763023978296</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
@@ -267,7 +285,9 @@
     <MESSAGE value="chore: updated workspace configuration" />
     <MESSAGE value="refactor: redone gitignore and gitattributes files based on autogenerated output" />
     <MESSAGE value="chore: updated workspace configuration and added mock file paths for highlighting" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: updated workspace configuration and added mock file paths for highlighting" />
+    <MESSAGE value="# &lt;type&gt;[optional scope]: &lt;description&gt;&#10;# Types (Uncomment):&#10;#&#10;feat: redone int validation into generic numeric validation for all relevant types&#10;# fix: &#10;# docs: &#10;# style: &#10;#  refactor: &#10;# perf: &#10;# test: &#10;# chore: &#10;# remove: &#10;# deploy: &#10;#&#10;# Body (optional):&#10;#&#10;# Footer (optional, breaking changes):&#10;#&#10;# BREAKING CHANGE:" />
+    <MESSAGE value="chore: updated workspace configuration and modified file paths for validators" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: updated workspace configuration and modified file paths for validators" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

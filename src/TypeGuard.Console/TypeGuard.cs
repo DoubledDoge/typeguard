@@ -281,4 +281,38 @@ public static class TypeGuard
     /// <returns>A <see cref="DateTimeValidatorBuilder"/> instance for configuring validation rules.</returns>
     public static DateTimeValidatorBuilder ForDateTime(string prompt, string? format = null) =>
         new(prompt, format, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for a GUID value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated GUID.</returns>
+    public static Guid GetGuid(string prompt)
+    {
+        GuidValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return validator.GetValidInput();
+    }
+
+    /// <summary>
+    /// Asynchronously prompts the user for a GUID value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated GUID.</returns>
+    public static async Task<Guid> GetGuidAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        GuidValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing a GUID validator with custom validation rules.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>A <see cref="GuidValidatorBuilder"/> instance for configuring validation rules.</returns>
+    public static GuidValidatorBuilder ForGuid(string prompt) =>
+        new(prompt, DefaultInputProvider, DefaultOutputProvider);
 }
