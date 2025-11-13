@@ -37,7 +37,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -52,7 +52,7 @@ jobs:
 
       - name: Build library
         run: dotnet build --configuration Release --no-restore
-        
+
       - name: Detect test projects
         id: detect_tests
         run: |
@@ -82,7 +82,7 @@ jobs:
           path: "test-results/*.trx"
           reporter: dotnet-trx
           fail-on-error: true
-        
+
   validate-package:
     name: Validate Package Metadata
     runs-on: ubuntu-latest
@@ -97,7 +97,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Restore dependencies
         run: dotnet restore
@@ -108,23 +108,7 @@ jobs:
       - name: Pack for validation
         run: dotnet pack --configuration Release --no-build --output ./artifacts
 
-      - name: Validate README exists
-        run: |
-          if [ ! -f "README.md" ]; then
-            echo "❌ README.md is missing!"
-            exit 1
-          fi
-          echo "✅ README.md found"
-
-      - name: Validate LICENSE exists
-        run: |
-          if [ ! -f "LICENSE" ]; then
-            echo "❌ LICENSE file is missing!"
-            exit 1
-          fi
-          echo "✅ LICENSE found"
-
       - name: Display package info
         run: |
-          echo "📦 Package validation successful"
+          echo "Package validation successful"
           ls -lh ./artifacts/

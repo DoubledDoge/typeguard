@@ -19,8 +19,8 @@ on:
 
 jobs:
   analyze:
-    name: Analyze (${{ matrix.language }})
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    name: Analyze C#
+    runs-on: ubuntu-latest
     permissions:
       security-events: write
       packages: read
@@ -33,7 +33,7 @@ jobs:
         include:
           - language: csharp
             build-mode: autobuild
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -41,7 +41,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: 10.0.x
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
