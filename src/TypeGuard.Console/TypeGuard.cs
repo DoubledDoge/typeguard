@@ -1,5 +1,6 @@
 ﻿namespace TypeGuard.Console;
 
+using System.Numerics;
 using Core.Builders;
 using Core.Validators;
 
@@ -12,38 +13,231 @@ public static class TypeGuard
     private static readonly ConsoleOutput DefaultOutputProvider = new();
 
     /// <summary>
-    /// Asynchronously prompts the user for an integer value from the console.
+    /// Creates a fluent builder for constructing a numeric validator with custom validation rules.
+    /// Supports all numeric types including int, long, float, double, decimal, byte, short, uint, ulong, ushort, sbyte, and Half.
+    /// </summary>
+    /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>, <see cref="IMinMaxValue{TSelf}"/>, and <see cref="IComparable{T}"/>.</typeparam>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>A <see cref="NumericValidatorBuilder{T}"/> instance for configuring validation rules.</returns>
+    public static NumericValidatorBuilder<T> ForNumeric<T>(string prompt)
+        where T : INumber<T>, IMinMaxValue<T>, IComparable<T> =>
+        new(prompt, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Asynchronously prompts the user for an int value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the validated integer.</returns>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated int.</returns>
     public static async Task<int> GetIntAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    )
-    {
-        IntValidator validator = new(
-            DefaultInputProvider,
-            DefaultOutputProvider,
-            prompt
-        );
-        return await validator.GetValidInputAsync(cancellationToken);
-    }
+    ) => await ForNumeric<int>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
-    /// Synchronously prompts the user for an integer value from the console.
+    /// Asynchronously prompts the user for a long value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
-    /// <returns>The validated integer.</returns>
-    public static int GetInt(string prompt)
-    {
-        IntValidator validator = new(
-            DefaultInputProvider,
-            DefaultOutputProvider,
-            prompt
-        );
-        return validator.GetValidInput();
-    }
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated long.</returns>
+    public static async Task<long> GetLongAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<long>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a short value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated short.</returns>
+    public static async Task<short> GetShortAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<short>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a byte value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated byte.</returns>
+    public static async Task<byte> GetByteAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<byte>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for an sbyte value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated sbyte.</returns>
+    public static async Task<sbyte> GetSByteAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<sbyte>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a uint value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated uint.</returns>
+    public static async Task<uint> GetUIntAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<uint>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a ulong value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated ulong.</returns>
+    public static async Task<ulong> GetULongAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<ulong>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a ushort value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated ushort.</returns>
+    public static async Task<ushort> GetUShortAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<ushort>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a double value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated double.</returns>
+    public static async Task<double> GetDoubleAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<double>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a float value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated float.</returns>
+    public static async Task<float> GetFloatAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<float>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a decimal value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated decimal.</returns>
+    public static async Task<decimal> GetDecimalAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<decimal>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Asynchronously prompts the user for a Half value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated Half.</returns>
+    public static async Task<Half> GetHalfAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    ) => await ForNumeric<Half>(prompt).GetAsync(cancellationToken);
+
+    /// <summary>
+    /// Synchronously prompts the user for an int value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated int.</returns>
+    public static int GetInt(string prompt) => ForNumeric<int>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a long value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated long.</returns>
+    public static long GetLong(string prompt) => ForNumeric<long>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a short value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated short.</returns>
+    public static short GetShort(string prompt) => ForNumeric<short>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a byte value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated byte.</returns>
+    public static byte GetByte(string prompt) => ForNumeric<byte>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for an sbyte value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated sbyte.</returns>
+    public static sbyte GetSByte(string prompt) => ForNumeric<sbyte>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a uint value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated uint.</returns>
+    public static uint GetUInt(string prompt) => ForNumeric<uint>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a ulong value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated ulong.</returns>
+    public static ulong GetULong(string prompt) => ForNumeric<ulong>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a ushort value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated ushort.</returns>
+    public static ushort GetUShort(string prompt) => ForNumeric<ushort>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a double value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated double.</returns>
+    public static double GetDouble(string prompt) => ForNumeric<double>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a float value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated float.</returns>
+    public static float GetFloat(string prompt) => ForNumeric<float>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a decimal value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated decimal.</returns>
+    public static decimal GetDecimal(string prompt) => ForNumeric<decimal>(prompt).Get();
+
+    /// <summary>
+    /// Synchronously prompts the user for a Half value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated Half.</returns>
+    public static Half GetHalf(string prompt) => ForNumeric<Half>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a string value from the console.
@@ -52,21 +246,24 @@ public static class TypeGuard
     /// <returns>The validated non-empty string.</returns>
     public static string GetString(string prompt)
     {
-        StringValidator validator = new(
-            DefaultInputProvider,
-            DefaultOutputProvider,
-            prompt
-        );
+        StringValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
         return validator.GetValidInput();
     }
 
     /// <summary>
-    /// Creates a fluent builder for constructing an integer validator with custom validation rules.
+    /// Asynchronously prompts the user for a string value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
-    /// <returns>An <see cref="IntValidatorBuilder"/> instance for configuring validation rules.</returns>
-    public static IntValidatorBuilder ForInt(string prompt) =>
-        new(prompt, DefaultInputProvider, DefaultOutputProvider);
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated non-empty string.</returns>
+    public static async Task<string> GetStringAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        StringValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
 
     /// <summary>
     /// Creates a fluent builder for constructing a string validator with custom validation rules.
@@ -80,7 +277,7 @@ public static class TypeGuard
     /// Creates a fluent builder for constructing a DateTime validator with custom validation rules.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
-    /// <param name="format">The expected date/time format string. If its null, any valid DateTime format is accepted.</param>
+    /// <param name="format">The expected date/time format string. If null, any valid DateTime format is accepted.</param>
     /// <returns>A <see cref="DateTimeValidatorBuilder"/> instance for configuring validation rules.</returns>
     public static DateTimeValidatorBuilder ForDateTime(string prompt, string? format = null) =>
         new(prompt, format, DefaultInputProvider, DefaultOutputProvider);
