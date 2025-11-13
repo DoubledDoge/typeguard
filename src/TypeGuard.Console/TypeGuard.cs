@@ -18,8 +18,8 @@ public static class TypeGuard
     /// </summary>
     /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>, <see cref="IMinMaxValue{TSelf}"/>, and <see cref="IComparable{T}"/>.</typeparam>
     /// <param name="prompt">The prompt message to display to the user.</param>
-    /// <returns>A <see cref="NumericValidatorBuilder{T}"/> instance for configuring validation rules.</returns>
-    public static NumericValidatorBuilder<T> ForNumeric<T>(string prompt)
+    /// <returns>A <see cref="NumericBuilder{T}"/> instance for configuring validation rules.</returns>
+    public static NumericBuilder<T> ForNumeric<T>(string prompt)
         where T : INumber<T>, IMinMaxValue<T>, IComparable<T> =>
         new(prompt, DefaultInputProvider, DefaultOutputProvider);
 
@@ -269,8 +269,8 @@ public static class TypeGuard
     /// Creates a fluent builder for constructing a string validator with custom validation rules.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
-    /// <returns>A <see cref="StringValidatorBuilder"/> instance for configuring validation rules.</returns>
-    public static StringValidatorBuilder ForString(string prompt) =>
+    /// <returns>A <see cref="StringBuilder"/> instance for configuring validation rules.</returns>
+    public static StringBuilder ForString(string prompt) =>
         new(prompt, DefaultInputProvider, DefaultOutputProvider);
 
     /// <summary>
@@ -278,8 +278,8 @@ public static class TypeGuard
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <param name="format">The expected date/time format string. If null, any valid DateTime format is accepted.</param>
-    /// <returns>A <see cref="DateTimeValidatorBuilder"/> instance for configuring validation rules.</returns>
-    public static DateTimeValidatorBuilder ForDateTime(string prompt, string? format = null) =>
+    /// <returns>A <see cref="DateTimeBuilder"/> instance for configuring validation rules.</returns>
+    public static DateTimeBuilder ForDateTime(string prompt, string? format = null) =>
         new(prompt, format, DefaultInputProvider, DefaultOutputProvider);
 
     /// <summary>
@@ -312,7 +312,51 @@ public static class TypeGuard
     /// Creates a fluent builder for constructing a GUID validator with custom validation rules.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
-    /// <returns>A <see cref="GuidValidatorBuilder"/> instance for configuring validation rules.</returns>
-    public static GuidValidatorBuilder ForGuid(string prompt) =>
+    /// <returns>A <see cref="GuidBuilder"/> instance for configuring validation rules.</returns>
+    public static GuidBuilder ForGuid(string prompt) =>
         new(prompt, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for a single character from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated character.</returns>
+    public static char GetChar(string prompt)
+    {
+        CharValidator validator = new(
+            DefaultInputProvider,
+            DefaultOutputProvider,
+            prompt
+        );
+        return validator.GetValidInput();
+    }
+
+    /// <summary>
+    /// Asynchronously prompts the user for a single character from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated character.</returns>
+    public static async Task<char> GetCharAsync(
+        string            prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        CharValidator validator = new(
+            DefaultInputProvider,
+            DefaultOutputProvider,
+            prompt
+        );
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing a character validator with custom validation rules.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>A <see cref="CharBuilder"/> instance for configuring validation rules.</returns>
+    public static CharBuilder ForChar(string prompt) =>
+        new(prompt, DefaultInputProvider, DefaultOutputProvider);
+
+
 }

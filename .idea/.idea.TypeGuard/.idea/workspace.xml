@@ -8,12 +8,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/GuidValidatorBuilder.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/GuidRules.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/CharBuilder.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/CharRules.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/DateTimeRules.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/NumericRules.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringRules.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/CharValidator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/GuidValidator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TypeGuard/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/GuidValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/GuidBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/NumericValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/NumericBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringValidatorBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringBuilder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/RegexRule.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/StringValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeGuard.Core/Validators/StringValidator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,21 +50,21 @@
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Console/ConsoleInput.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Console/ConsoleOutput.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Console/TypeGuard.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/dbritz/RiderProjects/TypeGuard/src/TypeGuard.Console/TypeGuard.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IInputProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IOutputProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Abstractions/IValidator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/GuidValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/NumericValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringValidatorBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/CharBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/DateTimeBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/GuidBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/NumericBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Builders/StringBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/CharRules.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/CustomRule.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/DateTimeRules.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/GuidRules.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/IValidationRule.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/NoDigitsRule.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/RangeRule.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/RegexRule.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringLengthRule.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/NumericRules.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Rules/StringRules.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/CharValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/DateTimeValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/TypeGuard.Core/Validators/GuidValidator.cs" root0="FORCE_HIGHLIGHTING" />
@@ -76,21 +87,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;io.github.pandier.intellijdiscordrp.settings.DiscordSettingsConfigurable&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "settings.editor.selected.configurable": "editor.preferences.smartKeys_rider",
+    "to.speed.mode.migration.done": "true"
   }
-}</component>
+}]]></component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="" />
@@ -107,7 +118,8 @@
       <workItem from="1762927843698" duration="1586000" />
       <workItem from="1762933796098" duration="2538000" />
       <workItem from="1762966994940" duration="1193000" />
-      <workItem from="1763019410330" duration="5601000" />
+      <workItem from="1763019410330" duration="6819000" />
+      <workItem from="1763047385324" duration="11961000" />
     </task>
     <task id="LOCAL-00001" summary="chore: first commit">
       <option name="closed" value="true" />
@@ -261,7 +273,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763023978296</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="feat: implemented guid validation">
+      <option name="closed" value="true" />
+      <created>1763025769117</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1763025769117</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
@@ -287,7 +307,8 @@
     <MESSAGE value="chore: updated workspace configuration and added mock file paths for highlighting" />
     <MESSAGE value="# &lt;type&gt;[optional scope]: &lt;description&gt;&#10;# Types (Uncomment):&#10;#&#10;feat: redone int validation into generic numeric validation for all relevant types&#10;# fix: &#10;# docs: &#10;# style: &#10;#  refactor: &#10;# perf: &#10;# test: &#10;# chore: &#10;# remove: &#10;# deploy: &#10;#&#10;# Body (optional):&#10;#&#10;# Footer (optional, breaking changes):&#10;#&#10;# BREAKING CHANGE:" />
     <MESSAGE value="chore: updated workspace configuration and modified file paths for validators" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: updated workspace configuration and modified file paths for validators" />
+    <MESSAGE value="feat: implemented guid validation" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: implemented guid validation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,4 +1,4 @@
-﻿﻿namespace TypeGuard.Core.Validators;
+﻿namespace TypeGuard.Core.Validators;
 
 using Abstractions;
 

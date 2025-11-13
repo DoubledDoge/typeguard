@@ -10,7 +10,7 @@ using Validators;
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
-public class GuidValidatorBuilder(
+public class GuidBuilder(
     string prompt,
     IInputProvider inputProvider,
     IOutputProvider outputProvider
@@ -23,7 +23,7 @@ public class GuidValidatorBuilder(
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public GuidValidatorBuilder WithNonEmpty(string? customMessage = null)
+    public GuidBuilder WithNonEmpty(string? customMessage = null)
     {
         _validator.AddRule(new NonEmptyGuidRule(customMessage));
         return this;
@@ -35,7 +35,7 @@ public class GuidValidatorBuilder(
     /// <param name="version">The GUID version to validate against (1-5).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public GuidValidatorBuilder WithVersion(int version, string? customMessage = null)
+    public GuidBuilder WithVersion(int version, string? customMessage = null)
     {
         _validator.AddRule(new GuidVersionRule(version, customMessage));
         return this;
@@ -47,7 +47,7 @@ public class GuidValidatorBuilder(
     /// <param name="excludedGuids">The collection of GUIDs that are not allowed.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public GuidValidatorBuilder WithExcluded(IEnumerable<Guid> excludedGuids, string? customMessage = null)
+    public GuidBuilder WithExcluded(IEnumerable<Guid> excludedGuids, string? customMessage = null)
     {
         _validator.AddRule(new ExcludedGuidRule(excludedGuids, customMessage));
         return this;
@@ -59,7 +59,7 @@ public class GuidValidatorBuilder(
     /// <param name="allowedGuids">The collection of GUIDs that are allowed.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public GuidValidatorBuilder WithAllowed(IEnumerable<Guid> allowedGuids, string? customMessage = null)
+    public GuidBuilder WithAllowed(IEnumerable<Guid> allowedGuids, string? customMessage = null)
     {
         _validator.AddRule(new AllowedGuidRule(allowedGuids, customMessage));
         return this;
@@ -71,7 +71,7 @@ public class GuidValidatorBuilder(
     /// <param name="predicate">The function that determines whether a GUID is valid.</param>
     /// <param name="errorMessage">The error message to display when validation fails.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public GuidValidatorBuilder WithCustomRule(Func<Guid, bool> predicate, string errorMessage)
+    public GuidBuilder WithCustomRule(Func<Guid, bool> predicate, string errorMessage)
     {
         _validator.AddRule(new CustomRule<Guid>(predicate, errorMessage));
         return this;
