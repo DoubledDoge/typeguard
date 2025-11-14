@@ -176,34 +176,6 @@ TypeGuard.Console       → Console-specific implementation
 
 ## 🔌 Extending TypeGuard
 
-### Creating Custom Validators
-
-```csharp
-public class DecimalValidator : ValidatorBase<decimal>
-{
-    public DecimalValidator(
-        IInputProvider inputProvider,
-        IOutputProvider outputProvider,
-        string prompt)
-        : base(inputProvider, outputProvider, prompt)
-    {
-    }
-
-    protected override bool TryParse(string? input, out decimal value, out string? errorMessage)
-    {
-        if (decimal.TryParse(input, out value))
-        {
-            errorMessage = null;
-            return true;
-        }
-
-        errorMessage = "Please enter a valid decimal number";
-        value = default;
-        return false;
-    }
-}
-```
-
 ### Creating Custom Rules
 
 ```csharp
@@ -226,7 +198,7 @@ string email = await TypeGuard
 
 ## 💻 Requirements
 
-- .NET 10.0 or higher
+- .NET 8.0 or higher
 - **TypeGuard.Console** requires ConsolePrism for colored output (Dependency)
 - Works on Windows, macOS, and Linux
 
@@ -243,16 +215,12 @@ Contributions welcome! Feel free to:
 
 ## 🗺️ Roadmap
 
-Current version: **v0.1.1** (Pre-release)
-
 **Planned Features:**
 -  WinForms implementation
 -  WPF implementation
 -  TimeSpan validator
--  Decimal/Float validators
 -  Collection validators
 -  Comprehensive unit tests?
--  Full XML documentation
 -  Interactive demo application?
 
 ---

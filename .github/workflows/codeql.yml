@@ -1,58 +1,54 @@
-# name: CodeQL for C# Project
-#
-# on:
-#   push:
-#     branches: [ main ]
-#     paths:
-#       - 'src/**'
-#       - '**/*.csproj'
-#       - '**/*.sln'
-#       - '.github/workflows/codeql.yml'
-#   pull_request:
-#     branches: [ main ]
-#     paths:
-#       - 'src/**'
-#       - '**/*.csproj'
-#       - '**/*.sln'
-#   schedule:
-#     - cron: '40 4 * * 6'
-#
-# jobs:
-#   analyze:
-#     name: Analyze C#
-#     runs-on: ubuntu-latest
-#     permissions:
-#       security-events: write
-#       packages: read
-#       actions: read
-#       contents: read
-#
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         include:
-#           - language: ${{ matrix.language }}
-#             build-mode: autobuild
-#
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v5
-#
-#       - name: Setup .NET
-#         uses: actions/setup-dotnet@v5
-#         with:
-#           dotnet-version: 10.0.x
-#
-#       - name: Initialize CodeQL
-#         uses: github/codeql-action/init@v4
-#         with:
-#           languages: ${{ matrix.language }}
-#           build-mode: ${{ matrix.build-mode }}
-#
-#
-#       - name: Perform CodeQL Analysis
-#         uses: github/codeql-action/analyze@v4
-#         with:
-#           category: "/language:${{matrix.language}}"
-# Disabled: CodeQL does not support .NET 10 yet.
+ name: CodeQL for C# Project
 
+ on:
+   push:
+     branches: [ main ]
+     paths:
+       - 'src/**'
+       - '**/*.csproj'
+       - '**/*.sln'
+       - '.github/workflows/codeql.yml'
+   pull_request:
+     branches: [ main ]
+     paths:
+       - 'src/**'
+       - '**/*.csproj'
+       - '**/*.sln'
+   schedule:
+     - cron: '40 4 * * 6'
+
+ jobs:
+   analyze:
+     name: Analyze C#
+     runs-on: ubuntu-latest
+     permissions:
+       security-events: write
+       packages: read
+       actions: read
+       contents: read
+
+     strategy:
+       fail-fast: false
+       matrix:
+         include:
+           - language: ${{ matrix.language }}
+             build-mode: autobuild
+
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v5
+
+       - name: Setup .NET
+         uses: actions/setup-dotnet@v5
+         with:
+           dotnet-version: 9.0.x
+
+       - name: Initialize CodeQL
+         uses: github/codeql-action/init@v4
+         with:
+           languages: ${{ matrix.language }}
+           build-mode: ${{ matrix.build-mode }}
+
+
+       - name: Perform CodeQL Analysis
+         uses: github/codeql-action/analyze@v4
