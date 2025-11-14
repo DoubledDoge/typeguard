@@ -8,7 +8,11 @@ namespace TypeGuard.Core.Rules;
 /// <param name="minLength">The minimum acceptable length.</param>
 /// <param name="maxLength">The maximum acceptable length.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message based on the constraints is used.</param>
-public class StringLengthRule(int? minLength = null, int? maxLength = null, string? customMessage = null) : IValidationRule<string>
+public class StringLengthRule(
+    int? minLength = null,
+    int? maxLength = null,
+    string? customMessage = null
+) : IValidationRule<string>
 {
     /// <summary>
     /// Determines whether the specified string's length falls within the configured bounds.
@@ -28,14 +32,15 @@ public class StringLengthRule(int? minLength = null, int? maxLength = null, stri
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ??
-        (minLength.HasValue && maxLength.HasValue
-            ? $"Length must be between {minLength} and {maxLength} characters"
-            : minLength.HasValue
-                ? $"Length must be at least {minLength} characters"
-                : maxLength.HasValue
-                    ? $"Length must be at most {maxLength} characters"
-                    : "Invalid length");
+    public string errorMessage { get; } =
+        customMessage
+        ?? (
+            minLength.HasValue && maxLength.HasValue
+                ? $"Length must be between {minLength} and {maxLength} characters"
+            : minLength.HasValue ? $"Length must be at least {minLength} characters"
+            : maxLength.HasValue ? $"Length must be at most {maxLength} characters"
+            : "Invalid length"
+        );
 }
 
 /// <summary>
@@ -59,7 +64,6 @@ public class RegexRule(string pattern, string? customMessage = null) : IValidati
     /// </summary>
     public string errorMessage { get; } = customMessage ?? $"Value must match pattern: {pattern}";
 }
-
 
 /// <summary>
 /// A validation rule that ensures a string contains only letters.
@@ -96,7 +100,8 @@ public class AlphanumericStringRule(string? customMessage = null) : IValidationR
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? "Input must contain only letters and digits";
+    public string errorMessage { get; } =
+        customMessage ?? "Input must contain only letters and digits";
 }
 
 /// <summary>
@@ -221,7 +226,8 @@ public class ContainsRule(string substring, string? customMessage = null) : IVal
 /// </summary>
 /// <param name="substring">The forbidden substring.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NotContainsRule(string substring, string? customMessage = null) : IValidationRule<string>
+public class NotContainsRule(string substring, string? customMessage = null)
+    : IValidationRule<string>
 {
     /// <summary>
     /// Determines whether the specified string does not contain the forbidden substring.
@@ -241,9 +247,10 @@ public class NotContainsRule(string substring, string? customMessage = null) : I
 /// </summary>
 /// <param name="allowedValues">The collection of allowed string values.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AllowedValuesRule(IEnumerable<string> allowedValues, string? customMessage = null) : IValidationRule<string>
+public class AllowedValuesRule(IEnumerable<string> allowedValues, string? customMessage = null)
+    : IValidationRule<string>
 {
-    private readonly HashSet<string> _allowed = [..allowedValues];
+    private readonly HashSet<string> _allowed = [.. allowedValues];
 
     /// <summary>
     /// Determines whether the specified string matches one of the allowed values.
@@ -255,19 +262,19 @@ public class AllowedValuesRule(IEnumerable<string> allowedValues, string? custom
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage => customMessage ?? $"Input must be one of: {string.Join(", ", _allowed)}";
-
+    public string errorMessage =>
+        customMessage ?? $"Input must be one of: {string.Join(", ", _allowed)}";
 }
-
 
 /// <summary>
 /// A validation rule that ensures a string does not match any of the excluded values (case-sensitive).
 /// </summary>
 /// <param name="excludedValues">The collection of excluded string values.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class ExcludedValuesRule(IEnumerable<string> excludedValues, string? customMessage = null) : IValidationRule<string>
+public class ExcludedValuesRule(IEnumerable<string> excludedValues, string? customMessage = null)
+    : IValidationRule<string>
 {
-    private readonly HashSet<string> _excluded = [..excludedValues];
+    private readonly HashSet<string> _excluded = [.. excludedValues];
 
     /// <summary>
     /// Determines whether the specified string does not match any of the excluded values.
@@ -280,4 +287,82 @@ public class ExcludedValuesRule(IEnumerable<string> excludedValues, string? cust
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
     public string errorMessage { get; } = customMessage ?? "Input value is not allowed";
+}
+
+/// <summary>
+/// A validation rule that ensures a string is a valid email address format.
+/// Uses a regex pattern that covers most common email formats.
+/// </summary>
+/// <param name="customMessage">An optional custom error message.</param>
+public partial class EmailRule(string? customMessage = null) : IValidationRule<string>
+{
+    [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex EmailRegex();
+
+    /// <summary>
+    /// Determines whether the specified string is a valid email address.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <returns><c>true</c> if the string is a valid email format; otherwise, <c>false</c>.</returns>
+    public bool IsValid(string value) => EmailRegex().IsMatch(value);
+
+    /// <summary>
+    /// Gets the error message that should be displayed when validation fails.
+    /// </summary>
+    public string errorMessage { get; } = customMessage ?? "Input must be a valid email address";
+}
+
+/// <summary>
+/// A validation rule that ensures a string contains only digits, spaces, hyphens, parentheses, and plus signs.
+/// Does not enforce a specific phone number format to allow international use.
+/// </summary>
+/// <param name="customMessage">An optional custom error message.</param>
+public partial class PhoneRule(string? customMessage = null) : IValidationRule<string>
+{
+    [GeneratedRegex(@"^[\d\s\-\(\)\+]+$", RegexOptions.Compiled)]
+    private static partial Regex PhoneRegex();
+
+    /// <summary>
+    /// Determines whether the specified string contains only valid phone number characters.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <returns><c>true</c> if the string contains only phone number characters; otherwise, <c>false</c>.</returns>
+    public bool IsValid(string value) => PhoneRegex().IsMatch(value);
+
+    /// <summary>
+    /// Gets the error message that should be displayed when validation fails.
+    /// </summary>
+    public string errorMessage { get; } = customMessage ?? "Input must be a valid phone number";
+}
+
+/// <summary>
+/// A validation rule that ensures a string is a valid file path and optionally checks if the file exists.
+/// </summary>
+/// <param name="mustExist">If true, validates that the file actually exists on the file system.</param>
+/// <param name="customMessage">An optional custom error message.</param>
+public class FilePathRule(bool mustExist = false, string? customMessage = null) : IValidationRule<string>
+{
+    /// <summary>
+    /// Determines whether the specified string is a valid file path.
+    /// </summary>
+    /// <param name="value">The string value to validate.</param>
+    /// <returns><c>true</c> if the string is a valid file path and meets existence requirements; otherwise, <c>false</c>.</returns>
+    public bool IsValid(string value)
+    {
+        try
+        {
+            string fullPath = Path.GetFullPath(value);
+
+            return !mustExist || File.Exists(fullPath);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Gets the error message that should be displayed when validation fails.
+    /// </summary>
+    public string errorMessage { get; } = customMessage ?? (mustExist ? "File path must exist" : "Input must be a valid file path");
 }

@@ -16,7 +16,7 @@ public class NumericValidator<T>(
     IOutputProvider outputProvider,
     string prompt
 ) : ValidatorBase<T>(inputProvider, outputProvider, prompt)
-    where T : INumber<T>, IMinMaxValue<T>
+    where T : INumber<T>
 {
     /// <summary>
     /// Attempts to parse the raw user input into a numeric value of type <typeparamref name="T"/>. (Overrides <see cref="ValidatorBase{T}.TryParse"/>)

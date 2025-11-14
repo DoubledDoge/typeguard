@@ -14,13 +14,24 @@ public static class TypeGuard
 
     /// <summary>
     /// Creates a fluent builder for constructing a numeric validator with custom validation rules.
-    /// Supports all numeric types including int, long, float, double, decimal, byte, short, uint, ulong, ushort, sbyte, and Half.
+    /// Supports all numeric types including int, long, float, double, decimal, byte, short, uint, ulong, ushort, sbyte, nint, nuint, and Half.
     /// </summary>
-    /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>, <see cref="IMinMaxValue{TSelf}"/>, and <see cref="IComparable{T}"/>.</typeparam>
+    /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/> and <see cref="IMinMaxValue{TSelf}"/>.</typeparam>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>A <see cref="NumericBuilder{T}"/> instance for configuring validation rules.</returns>
     public static NumericBuilder<T> ForNumeric<T>(string prompt)
-        where T : INumber<T>, IMinMaxValue<T>, IComparable<T> =>
+        where T : INumber<T>, IMinMaxValue<T> =>
+        new(prompt, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Creates a fluent builder for constructing an integer validator with integer-specific validation rules.
+    /// Supports integer types including int, long, byte, short, uint, ulong, ushort, sbyte, nint, and nuint.
+    /// </summary>
+    /// <typeparam name="T">The integer type to validate. Must implement <see cref="IBinaryInteger{TSelf}"/> and <see cref="IMinMaxValue{TSelf}"/>.</typeparam>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>An <see cref="IntegerBuilder{T}"/> instance for configuring validation rules.</returns>
+    public static IntegerBuilder<T> ForInteger<T>(string prompt)
+        where T : IBinaryInteger<T>, IMinMaxValue<T> =>
         new(prompt, DefaultInputProvider, DefaultOutputProvider);
 
     /// <summary>
@@ -32,7 +43,7 @@ public static class TypeGuard
     public static async Task<int> GetIntAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<int>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<int>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for a long value from the console.
@@ -43,7 +54,7 @@ public static class TypeGuard
     public static async Task<long> GetLongAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<long>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<long>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for a short value from the console.
@@ -54,7 +65,7 @@ public static class TypeGuard
     public static async Task<short> GetShortAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<short>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<short>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for a byte value from the console.
@@ -65,7 +76,7 @@ public static class TypeGuard
     public static async Task<byte> GetByteAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<byte>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<byte>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for an sbyte value from the console.
@@ -76,7 +87,7 @@ public static class TypeGuard
     public static async Task<sbyte> GetSByteAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<sbyte>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<sbyte>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for a uint value from the console.
@@ -87,7 +98,7 @@ public static class TypeGuard
     public static async Task<uint> GetUIntAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<uint>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<uint>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for a ulong value from the console.
@@ -98,7 +109,7 @@ public static class TypeGuard
     public static async Task<ulong> GetULongAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<ulong>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<ulong>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for a ushort value from the console.
@@ -109,7 +120,7 @@ public static class TypeGuard
     public static async Task<ushort> GetUShortAsync(
         string prompt,
         CancellationToken cancellationToken = default
-    ) => await ForNumeric<ushort>(prompt).GetAsync(cancellationToken);
+    ) => await ForInteger<ushort>(prompt).GetAsync(cancellationToken);
 
     /// <summary>
     /// Asynchronously prompts the user for a double value from the console.
@@ -160,56 +171,56 @@ public static class TypeGuard
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated int.</returns>
-    public static int GetInt(string prompt) => ForNumeric<int>(prompt).Get();
+    public static int GetInt(string prompt) => ForInteger<int>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a long value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated long.</returns>
-    public static long GetLong(string prompt) => ForNumeric<long>(prompt).Get();
+    public static long GetLong(string prompt) => ForInteger<long>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a short value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated short.</returns>
-    public static short GetShort(string prompt) => ForNumeric<short>(prompt).Get();
+    public static short GetShort(string prompt) => ForInteger<short>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a byte value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated byte.</returns>
-    public static byte GetByte(string prompt) => ForNumeric<byte>(prompt).Get();
+    public static byte GetByte(string prompt) => ForInteger<byte>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for an sbyte value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated sbyte.</returns>
-    public static sbyte GetSByte(string prompt) => ForNumeric<sbyte>(prompt).Get();
+    public static sbyte GetSByte(string prompt) => ForInteger<sbyte>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a uint value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated uint.</returns>
-    public static uint GetUInt(string prompt) => ForNumeric<uint>(prompt).Get();
+    public static uint GetUInt(string prompt) => ForInteger<uint>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a ulong value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated ulong.</returns>
-    public static ulong GetULong(string prompt) => ForNumeric<ulong>(prompt).Get();
+    public static ulong GetULong(string prompt) => ForInteger<ulong>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a ushort value from the console.
     /// </summary>
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>The validated ushort.</returns>
-    public static ushort GetUShort(string prompt) => ForNumeric<ushort>(prompt).Get();
+    public static ushort GetUShort(string prompt) => ForInteger<ushort>(prompt).Get();
 
     /// <summary>
     /// Synchronously prompts the user for a double value from the console.
@@ -323,11 +334,7 @@ public static class TypeGuard
     /// <returns>The validated character.</returns>
     public static char GetChar(string prompt)
     {
-        CharValidator validator = new(
-            DefaultInputProvider,
-            DefaultOutputProvider,
-            prompt
-        );
+        CharValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
         return validator.GetValidInput();
     }
 
@@ -338,15 +345,11 @@ public static class TypeGuard
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the validated character.</returns>
     public static async Task<char> GetCharAsync(
-        string            prompt,
+        string prompt,
         CancellationToken cancellationToken = default
     )
     {
-        CharValidator validator = new(
-            DefaultInputProvider,
-            DefaultOutputProvider,
-            prompt
-        );
+        CharValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
         return await validator.GetValidInputAsync(cancellationToken);
     }
 
@@ -357,6 +360,4 @@ public static class TypeGuard
     /// <returns>A <see cref="CharBuilder"/> instance for configuring validation rules.</returns>
     public static CharBuilder ForChar(string prompt) =>
         new(prompt, DefaultInputProvider, DefaultOutputProvider);
-
-
 }

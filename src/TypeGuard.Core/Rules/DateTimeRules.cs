@@ -178,6 +178,10 @@ public class YearRule(int year, string? customMessage = null) : IValidationRule<
     public string errorMessage { get; } = customMessage ?? $"Date must be in the year {year}";
 }
 
+/// <summary>
+/// A validation rule that ensures a DateTime falls within a leap year.
+/// </summary>
+/// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class LeapYearRule(string? customMessage = null) : IValidationRule<DateTime>
 {
     /// <summary>
@@ -196,7 +200,7 @@ public class LeapYearRule(string? customMessage = null) : IValidationRule<DateTi
 /// <summary>
 /// A validation rule that ensures a DateTime represents a specific month.
 /// </summary>
-/// <param name="month">The required month (1-12).</param>
+/// <param name="month">The required month.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class MonthRule(int month, string? customMessage = null) : IValidationRule<DateTime>
 {

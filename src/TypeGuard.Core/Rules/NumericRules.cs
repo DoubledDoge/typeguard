@@ -215,5 +215,54 @@ public class NotMultipleOfRule<T>(T divisor, string? customMessage = null) : IVa
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Value must not be a multiple of {divisor}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Value must not be a multiple of {divisor}";
+}
+
+/// <summary>
+/// A validation rule that ensures a numeric value passes the Luhn algorithm.
+/// The Luhn algorithm is a checksum formula used to validate identification numbers.
+/// </summary>
+/// <typeparam name="T">The numeric type to validate. Must be an integer related type.</typeparam>
+/// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
+public class LuhnRule<T>(string? customMessage = null) : IValidationRule<T>
+    where T : IBinaryInteger<T>
+{
+    /// <summary>
+    /// Determines whether the specified numeric value passes the Luhn algorithm check.
+    /// </summary>
+    /// <param name="value">The numeric value to validate.</param>
+    /// <returns><c>true</c> if the value passes the Luhn check; otherwise, <c>false</c>.</returns>
+    public bool IsValid(T value)
+    {
+        string digits = value.ToString() ?? string.Empty;
+        int length = digits.Length;
+
+        if (length == 0)
+            return false;
+
+        int sum = 0;
+        int parity = length % 2;
+
+        for (int i = 0; i < length - 1; i++)
+        {
+            int digit = digits[i] - '0';
+
+            if (i % 2 == parity)
+                sum += digit;
+            else if (digit > 4)
+                sum += 2 * digit - 9;
+            else
+                sum += 2 * digit;
+        }
+
+        int checkDigit = digits[length - 1] - '0';
+        return checkDigit == (10 - sum % 10) % 10;
+    }
+
+    /// <summary>
+    /// Gets the error message that should be displayed when validation fails.
+    /// </summary>
+    public string errorMessage { get; } =
+        customMessage ?? "Value must pass Luhn checksum validation";
 }

@@ -140,7 +140,7 @@ public class PunctuationRule(string? customMessage = null) : IValidationRule<cha
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class AllowedCharsRule(string allowedChars, string? customMessage = null) : IValidationRule<char>
 {
-    private readonly HashSet<char> _allowed = new(allowedChars);
+    private readonly HashSet<char> _allowed = [..allowedChars];
 
     /// <summary>
     /// Determines whether the specified character is in the allowed set.
@@ -162,7 +162,7 @@ public class AllowedCharsRule(string allowedChars, string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class ExcludedCharsRule(string excludedChars, string? customMessage = null) : IValidationRule<char>
 {
-    private readonly HashSet<char> _excluded = new(excludedChars);
+    private readonly HashSet<char> _excluded = [..excludedChars];
 
     /// <summary>
     /// Determines whether the specified character is not in the excluded set.

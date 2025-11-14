@@ -19,7 +19,7 @@ public class StringBuilder(
     private readonly StringValidator _validator = new(inputProvider, outputProvider, prompt);
 
     /// <summary>
-    /// Adds a length validation rule to the validator.
+    /// Adds a rule that ensures that the string length is within the specified range.
     /// </summary>
     /// <param name="minLength">The minimum optional acceptable length.</param>
     /// <param name="maxLength">The maximum optional acceptable length.</param>
@@ -173,6 +173,40 @@ public class StringBuilder(
     public StringBuilder WithExcludedValues(string[] excludedValues, string? customMessage = null)
     {
         _validator.AddRule(new ExcludedValuesRule(excludedValues, customMessage));
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a rule that ensures the string is in a valid email format.
+    /// </summary>
+    /// <param name="customMessage">An optional custom error message.</param>
+    /// <returns>The current builder instance for method chaining.</returns>
+    public StringBuilder WithEmailFormat(string? customMessage = null)
+    {
+        _validator.AddRule(new EmailRule(customMessage));
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a rule that ensures the string is in a valid phone format.
+    /// </summary>
+    /// <param name="customMessage">An optional custom error message.</param>
+    /// <returns>The current builder instance for method chaining.</returns>
+    public StringBuilder WithPhoneFormat(string? customMessage = null)
+    {
+        _validator.AddRule(new PhoneRule(customMessage));
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a rule that ensures the string is in a valid file path format.
+    /// </summary>
+    /// <param name="mustExist">A boolean that determines weather the file must exist or not.</param>
+    /// <param name="customMessage">An optional custom error message.</param>
+    /// <returns>The current builder instance for method chaining.</returns>
+    public StringBuilder WithFilePathFormat(bool mustExist = false, string? customMessage = null)
+    {
+        _validator.AddRule(new FilePathRule(mustExist, customMessage));
         return this;
     }
 
