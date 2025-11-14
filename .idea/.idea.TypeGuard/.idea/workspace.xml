@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/codeql.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/codeql.yml" afterDir="false" />
-    </list>
+    <list default="true" id="171eb8d0-cd48-4cb8-bdc4-8476927c7c46" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,7 +101,7 @@
       <workItem from="1762933796098" duration="2538000" />
       <workItem from="1762966994940" duration="1193000" />
       <workItem from="1763019410330" duration="6819000" />
-      <workItem from="1763047385324" duration="14243000" />
+      <workItem from="1763047385324" duration="14466000" />
     </task>
     <task id="LOCAL-00001" summary="chore: first commit">
       <option name="closed" value="true" />
@@ -281,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763063572637</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="fix: fixed build mode for codeql">
+      <option name="closed" value="true" />
+      <created>1763064073144</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1763064073144</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
@@ -310,7 +316,8 @@
     <MESSAGE value="feat: implemented guid validation" />
     <MESSAGE value="# &lt;type&gt;[optional scope]: &lt;description&gt;&#10;# Types (Uncomment):&#10;#&#10;# feat: &#10;# fix: &#10;# docs: &#10;# style: &#10;# refactor: &#10;# perf: &#10;# test: &#10;# chore: &#10;# remove: &#10;# deploy: &#10;ci: updated version number for dotnet&#10;# Body (optional):&#10;#&#10;# Footer (optional, breaking changes):&#10;#&#10;# BREAKING CHANGE:" />
     <MESSAGE value="feat: added char + guid validation and reorganised + added rules" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: added char + guid validation and reorganised + added rules" />
+    <MESSAGE value="fix: fixed build mode for codeql" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: fixed build mode for codeql" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
