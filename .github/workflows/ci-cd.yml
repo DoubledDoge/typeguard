@@ -51,7 +51,9 @@ jobs:
 
       - name: Check code formatting
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet csharpier --check .
+        run: |
+          dotnet tool restore
+          dotnet csharpier --check .
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
