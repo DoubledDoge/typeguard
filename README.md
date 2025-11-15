@@ -201,7 +201,7 @@ string email = await TypeGuard
 - Works on Windows, macOS, and Linux
 
 ## 📄 License
-s
+
 MIT License — see [LICENSE](LICENSE) file for details
 
 ## 🤝 Contributing
