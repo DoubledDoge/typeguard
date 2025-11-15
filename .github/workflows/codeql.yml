@@ -1,54 +1,72 @@
- name: CodeQL for C# Project
+name: CodeQL for C# Project
 
- on:
-   push:
-     branches: [ main ]
-     paths:
-       - 'src/**'
-       - '**/*.csproj'
-       - '**/*.sln'
-       - '.github/workflows/codeql.yml'
-   pull_request:
-     branches: [ main ]
-     paths:
-       - 'src/**'
-       - '**/*.csproj'
-       - '**/*.sln'
-   schedule:
-     - cron: '40 4 * * 6'
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - '**/*.csproj'
+      - '**/*.sln'
+      - '.github/workflows/codeql.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - '**/*.csproj'
+      - '**/*.sln'
+      - '.github/workflows/codeql.yml'
+  schedule:
+    - cron: '40 4 * * 6'
 
- jobs:
-   analyze:
-     name: Analyze C#
-     runs-on: ubuntu-latest
-     permissions:
-       security-events: write
-       packages: read
-       actions: read
-       contents: read
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_VERSION: |
+    8.0.x
+    9.0.x
 
-     strategy:
-       fail-fast: false
-       matrix:
-         include:
-           - language: ${{ matrix.language }}
-             build-mode: autobuild
+jobs:
+  analyze:
+    name: Analyze C#
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
 
-     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
-       - name: Setup .NET
-         uses: actions/setup-dotnet@v5
-         with:
-           dotnet-version: 9.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-       - name: Initialize CodeQL
-         uses: github/codeql-action/init@v4
-         with:
-           languages: ${{ matrix.language }}
-           build-mode: ${{ matrix.build-mode }}
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
 
+      - name: Restore dependencies
+        run: dotnet restore
 
-       - name: Perform CodeQL Analysis
-         uses: github/codeql-action/analyze@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: csharp
+          queries: +security-and-quality
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:csharp"

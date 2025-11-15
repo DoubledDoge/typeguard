@@ -9,13 +9,18 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
+  DOTNET_VERSION: |
+    8.0.x
+    9.0.x
+    10.0.x
 
 jobs:
   validate-tag:
-    name: Prepare Release
+    name: Validate Release Tag
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.extract.outputs.version }}
+      is-prerelease: ${{ steps.extract.outputs.is-prerelease }}
 
     steps:
       - name: Extract version from tag
@@ -28,10 +33,15 @@ jobs:
           echo "Release version: $VERSION"
 
           if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
-            echo "Invalid version format: $VERSION"
+            echo "::error::Invalid version format: $VERSION"
             exit 1
           fi
-          echo "Valid semver format"
+
+          if [[ $VERSION =~ - ]]; then
+            echo "is-prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is-prerelease=false" >> $GITHUB_OUTPUT
+          fi
 
   build-and-test:
     name: Build & Test
@@ -49,96 +59,28 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build library
+      - name: Build
         run: dotnet build --configuration Release --no-restore
 
       - name: Run tests
         run: dotnet test --configuration Release --no-build --verbosity normal
 
-  pack:
-    name: Release packages
+  pack-and-publish:
+    name: Pack & Publish
     runs-on: ubuntu-latest
     needs: [validate-tag, build-and-test]
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 10.0.x
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build library
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Pack NuGet packages
-        run: |
-          VERSION=${{ needs.validate-tag.outputs.version }}
-          echo "Packing version: $VERSION"
-
-          # Pack Core library
-          dotnet pack src/TypeGuard.Core/TypeGuard.Core.csproj \
-            --configuration Release --no-build --output ./artifacts \
-            /p:PackageVersion=$VERSION
-
-          # Pack Console library
-          dotnet pack src/TypeGuard.Console/TypeGuard.Console.csproj \
-            --configuration Release --no-build --output ./artifacts \
-            /p:PackageVersion=$VERSION
-
-      - name: Validate package contents
-        run: |
-          echo "Package contents:"
-          ls -lh ./artifacts/ || true
-
-          # Fail if no .nupkg produced
-          shopt -s nullglob
-          pkgs=(./artifacts/*.nupkg)
-          if [ ${#pkgs[@]} -eq 0 ]; then
-            echo "No .nupkg files produced in ./artifacts - aborting"
-            exit 1
-          fi
-
-          # Optional checks retained as warnings (file names may vary by PackageId)
-          if [ ! -f ./artifacts/TypeGuard.Core.${{ needs.validate-tag.outputs.version }}.nupkg ]; then
-            echo "Warning: TypeGuard.Core package not found (expected TypeGuard.Core.${{ needs.validate-tag.outputs.version }}.nupkg)"
-          fi
-          if [ ! -f ./artifacts/TypeGuard.Console.${{ needs.validate-tag.outputs.version }}.nupkg ]; then
-            echo "Warning: TypeGuard.Console package not found (expected TypeGuard.Console.${{ needs.validate-tag.outputs.version }}.nupkg)"
-          fi
-          echo "Package validation complete"
-
-      - name: Upload package artifact
-        uses: actions/upload-artifact@v5
-        with:
-          name: nuget-package-${{ needs.validate-tag.outputs.version }}
-          path: ./artifacts/*.nupkg
-          retention-days: 90
-          if-no-files-found: error
-
-  publish:
-    name: Publish packages
-    runs-on: ubuntu-latest
-    needs: [validate-tag, pack]
     permissions:
       contents: write
       packages: write
@@ -147,40 +89,57 @@ jobs:
       url: https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }}
 
     steps:
-      - name: Download package artifact
-        uses: actions/download-artifact@v6
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
-          name: nuget-package-${{ needs.validate-tag.outputs.version }}
-          path: ./artifacts
-
-      - name: Debug artifacts directory
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -la ./artifacts || true
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Ensure package(s) exist before release
-        run: |
-          shopt -s nullglob
-          files=(./artifacts/*.nupkg)
-          if [ ${#files[@]} -eq 0 ]; then
-            echo "No packages found in ./artifacts"
-            exit 1
-          fi
-          echo "Found packages: ${files[*]}"
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
 
-      - name: Publish to NuGet.org (stable)
-        if: |
-          !contains(needs.validate-tag.outputs.version, '-alpha') &&
-          !contains(needs.validate-tag.outputs.version, '-beta') &&
-          !contains(needs.validate-tag.outputs.version, '-rc')
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack NuGet packages
         run: |
-          echo "Publishing packages v${{ needs.validate-tag.outputs.version }} to NuGet.org"
-          shopt -s nullglob
+          VERSION=${{ needs.validate-tag.outputs.version }}
+          echo "Packing version: $VERSION"
+
+          dotnet pack src/TypeGuard.Core/TypeGuard.Core.csproj \
+            --configuration Release \
+            --no-build \
+            --output ./artifacts \
+            /p:PackageVersion=$VERSION
+
+          dotnet pack src/TypeGuard.Console/TypeGuard.Console.csproj \
+            --configuration Release \
+            --no-build \
+            --output ./artifacts \
+            /p:PackageVersion=$VERSION
+
+      - name: Verify package signatures
+        run: |
+          for package in ./artifacts/*.nupkg; do
+            echo "Verifying $(basename "$package")"
+            dotnet nuget verify "$package" || echo "::warning::Package verification failed for $(basename "$package")"
+          done
+
+      - name: Publish to NuGet.org
+        if: needs.validate-tag.outputs.is-prerelease == 'false'
+        run: |
+          echo "Publishing stable packages to NuGet.org"
           for package in ./artifacts/*.nupkg; do
             echo "Publishing $(basename "$package")"
             dotnet nuget push "$package" \
@@ -188,77 +147,34 @@ jobs:
               --source https://api.nuget.org/v3/index.json \
               --skip-duplicate
           done
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
       - name: Publish to GitHub Packages
         run: |
-          echo "Publishing packages v${{ needs.validate-tag.outputs.version }} to GitHub Packages"
-          shopt -s nullglob
+          echo "Publishing packages to GitHub Packages"
           for package in ./artifacts/*.nupkg; do
-            echo "Publishing $(basename "$package") to GitHub Packages"
+            echo "Publishing $(basename "$package")"
             dotnet nuget push "$package" \
               --api-key ${{ secrets.GITHUB_TOKEN }} \
-              --source https://nuget.pkg.github.com/DoubledDoge/index.json \
-              --skip-duplicate || true
+              --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+              --skip-duplicate || echo "::warning::Failed to publish $(basename "$package") to GitHub Packages"
           done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set release variables
-        id: set_vars
-        run: |
-          echo "VERSION=${{ needs.validate-tag.outputs.version }}" >> $GITHUB_ENV
-          echo "TAG=v${{ needs.validate-tag.outputs.version }}" >> $GITHUB_ENV
-
-      - name: Check for existing release
-        id: check_release
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const tag = process.env.TAG;
-            try {
-              await github.rest.repos.getReleaseByTag({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                tag
-              });
-              core.setOutput('exists', 'true');
-            } catch (err) {
-              core.setOutput('exists', 'false');
-            }
-        env:
-          TAG: ${{ env.TAG }}
-
-      - name: Create GitHub Release (if not exists)
-        if: steps.check_release.outputs.exists == 'false'
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.TAG }}
           files: ./artifacts/*.nupkg
           generate_release_notes: true
           draft: false
-          prerelease: ${{ contains(needs.validate-tag.outputs.version, '-') }}
+          prerelease: ${{ needs.validate-tag.outputs.is-prerelease == 'true' }}
+          fail_on_unmatched_files: true
           body: |
             ## Release v${{ needs.validate-tag.outputs.version }}
 
             ### Installation
             ```bash
-            # Example: use the package ID you published on NuGet
             dotnet add package TypeGuard.Console --version ${{ needs.validate-tag.outputs.version }}
             ```
 
             ### Packages
-            - [TypeGuard.Core](https://www.nuget.org/packages/TypeGuard.Core/${{ needs.validate-tag.outputs.version }})
-            - [TypeGuard.Console](https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }})
-
-      - name: Upload artifact to existing release
-        if: steps.check_release.outputs.exists == 'true'
-        run: |
-          shopt -s nullglob
-          for f in ./artifacts/*.nupkg; do
-            echo "Uploading $f to release ${{ env.TAG }}"
-            gh release upload "${{ env.TAG }}" "$f" --clobber
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - [TypeGuard.Core v${{ needs.validate-tag.outputs.version }}](https://www.nuget.org/packages/TypeGuard.Core/${{ needs.validate-tag.outputs.version }})
+            - [TypeGuard.Console v${{ needs.validate-tag.outputs.version }}](https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }})

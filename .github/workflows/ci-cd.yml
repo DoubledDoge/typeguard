@@ -2,113 +2,96 @@ name: .NET CI-CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'src/**'
       - '**/*.csproj'
       - '**/*.sln'
       - '.github/workflows/ci-cd.yml'
   pull_request:
-    branches: [ main ]
-    paths:
-      - 'src/**'
-      - '**/*.csproj'
-      - '**/*.sln'
+    branches: [main]
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
+  DOTNET_VERSION: |
+    8.0.x
+    9.0.x
+    10.0.x
 
 jobs:
   build-and-test:
-    name: Build & Test
-    runs-on: ubuntu-latest
+    name: Build & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     permissions:
       contents: read
       pull-requests: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build library
+      - name: Check code formatting
+        if: matrix.os == 'ubuntu-latest'
+        run: dotnet csharpier --check .
+
+      - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Detect test projects
-        id: detect_tests
-        run: |
-          found=false
-          # Look for explicit IsTestProject flag
-          if grep -R --include="*.csproj" -l "<IsTestProject>true</IsTestProject>" . >/dev/null 2>&1; then
-            found=true
-          fi
-          # Also detect common test SDK package usage
-          if [ "$found" = "false" ] && grep -R --include="*.csproj" -l "Microsoft.NET.Test.Sdk" . >/dev/null 2>&1; then
-            found=true
-          fi
-          echo "found=$found" >> $GITHUB_OUTPUT
-
-      - name: Run tests
-        if: steps.detect_tests.outputs.found == 'true'
-        run: |
-          dotnet test --configuration Release --no-build --verbosity normal \
-            --logger "trx;LogFileName=test-results.trx" \
-            --results-directory ./test-results
-
-      - name: Test Report
-        if: always() && steps.detect_tests.outputs.found == 'true'
-        uses: dorny/test-reporter@v2
-        with:
-          name: Test Results
-          path: "test-results/*.trx"
-          reporter: dotnet-trx
-          fail-on-error: true
+# Todo: Add later when tests are available
+#      - name: Test
+#        run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ./test-results
+#
+#      - name: Test Report
+#        if: always()
+#        uses: dorny/test-reporter@v2
+#        with:
+#          name: Test Results
+#          path: test-results/*.trx
+#          reporter: dotnet-trx
+#          fail-on-error: true
 
   validate-package:
-    name: Validate Package Metadata
+    name: Validate Package
     runs-on: ubuntu-latest
     needs: build-and-test
-    permissions:
-      contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Pack NuGet package
+        run: dotnet pack --configuration Release --output ./artifacts
 
-      - name: Build library
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Pack for validation
-        run: dotnet pack --configuration Release --no-build --output ./artifacts
-
-      - name: Display package info
+      - name: Validate NuGet package
         run: |
-          echo "Package validation successful"
-          ls -lh ./artifacts/
+            dotnet nuget verify ./artifacts/*.nupkg --all-versions --verbosity detailed
+            dotnet nuget verify ./artifacts/*.nupkg --signature-validation --verbosity detailed
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package-${{ github.sha }}
+          path: ./artifacts/*.nupkg
+          retention-days: 7
