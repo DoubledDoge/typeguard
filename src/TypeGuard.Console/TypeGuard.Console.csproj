@@ -22,7 +22,7 @@
     <Version>0.1.1</Version>
     <Authors>DoubledDoge</Authors>
     <Description>Console implementation for TypeGuard.</Description>
-    <PackageIcon>icon.ico</PackageIcon>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
     <RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../../icon.ico" Pack="true" PackagePath="/" />
+    <None Include="../../icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 
   <ItemGroup>
