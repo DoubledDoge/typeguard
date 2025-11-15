@@ -19,7 +19,6 @@
 -  **Async Support** — Full async/await support with cancellation tokens
 -  **Extensible** — Easy to add as many custom validators and rules as you want!
 -  **Multi-Platform Ready** — Separate implementations for Console, WinForms, WPF (coming soon)
--  **Colored Console Output** — Integration with ConsolePrism for beautiful error messages
 
 ---
 
@@ -199,7 +198,6 @@ string email = await TypeGuard
 ## 💻 Requirements
 
 - .NET 8.0 or higher
-- **TypeGuard.Console** requires ConsolePrism for colored output (Dependency)
 - Works on Windows, macOS, and Linux
 
 ## 📄 License
@@ -218,8 +216,6 @@ Contributions welcome! Feel free to:
 **Planned Features:**
 -  WinForms implementation
 -  WPF implementation
--  TimeSpan validator
--  Collection validators
 -  Comprehensive unit tests?
 -  Interactive demo application?
 

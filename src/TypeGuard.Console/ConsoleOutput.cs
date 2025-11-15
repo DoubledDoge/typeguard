@@ -1,6 +1,4 @@
-﻿using ConsolePrism.Core;
-
-namespace TypeGuard.Console;
+﻿namespace TypeGuard.Console;
 
 using Core.Abstractions;
 using Console = System.Console;
@@ -51,7 +49,10 @@ public class ConsoleOutput : IOutputProvider
     /// <param name="message">The error message that gets displayed.</param>
     public void DisplayError(string message)
     {
-        ColorWriter.WriteError($"\n{message}");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"\n{message}");
+        Console.ResetColor();
+
         Console.Write("Press Enter to try again... ");
         Console.ReadLine();
         Console.WriteLine();

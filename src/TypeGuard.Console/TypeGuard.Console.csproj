@@ -43,10 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsolePrism" Version="0.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
   </ItemGroup>
 </Project>
