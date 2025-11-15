@@ -87,9 +87,7 @@ jobs:
         run: dotnet pack --configuration Release --output ./artifacts
 
       - name: Validate NuGet package
-        run: |
-            dotnet nuget verify ./artifacts/*.nupkg --all-versions --verbosity detailed
-            dotnet nuget verify ./artifacts/*.nupkg --signature-validation --verbosity detailed
+        run: dotnet nuget verify ./artifacts/*.nupkg --all --verbosity detailed
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
