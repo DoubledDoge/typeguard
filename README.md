@@ -13,7 +13,7 @@
 
 ## 🚀 Features
 
--  **Type-Safe Validation** — Built-in validators for `int`, `string`, `DateTime`, and more coming soon
+-  **Type-Safe Validation** — Built-in validators for all the common types.
 -  **Automatic Retry Logic** — Invalid input automatically re-prompts the user
 -  **Composable Rules** — Chain validation rules (Similar to LINQ)
 -  **Async Support** — Full async/await support with cancellation tokens
@@ -162,15 +162,15 @@ DateTime meetingDate = await TypeGuard
 
 ```
 TypeGuard.Core          → Platform-agnostic validation logic
-├── Abstractions        → Interfaces (IValidator, IInputProvider, IOutputProvider)
-├── Validators          → Type-specific validators (IntValidator, StringValidator, etc.)
-├── Rules               → Validation rules (RangeRule, RegexRule, CustomRule, etc.)
+├── Abstractions        → Interfaces
+├── Validators          → Type-specific validators
+├── Rules               → Validation rules
 └── Builders            → Fluent API builders
 
 TypeGuard.Console       → Console-specific implementation
-├── ConsoleInput   → Reads from Console.ReadLine()
-├── ConsoleOutput  → Writes errors/prompts with ConsolePrism
-└── TypeGuard              → Main entry point for developers
+├── ConsoleInput        → Reads from Console.ReadLine()
+├── ConsoleOutput       → Writes errors/prompts
+└── TypeGuard           → Main entry point for developers
 ```
 
 ## 🔌 Extending TypeGuard
