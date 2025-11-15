@@ -49,9 +49,10 @@ public class GuidVersionRule(int version, string? customMessage = null) : IValid
 /// </summary>
 /// <param name="excludedGuids">The collection of GUIDs that are not allowed.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class ExcludedGuidRule(IEnumerable<Guid> excludedGuids, string? customMessage = null) : IValidationRule<Guid>
+public class ExcludedGuidRule(IEnumerable<Guid> excludedGuids, string? customMessage = null)
+    : IValidationRule<Guid>
 {
-    private readonly HashSet<Guid> _excluded = [..excludedGuids];
+    private readonly HashSet<Guid> _excluded = [.. excludedGuids];
 
     /// <summary>
     /// Determines whether the specified GUID is not in the excluded list.
@@ -71,9 +72,10 @@ public class ExcludedGuidRule(IEnumerable<Guid> excludedGuids, string? customMes
 /// </summary>
 /// <param name="allowedGuids">The collection of GUIDs that are allowed.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AllowedGuidRule(IEnumerable<Guid> allowedGuids, string? customMessage = null) : IValidationRule<Guid>
+public class AllowedGuidRule(IEnumerable<Guid> allowedGuids, string? customMessage = null)
+    : IValidationRule<Guid>
 {
-    private readonly HashSet<Guid> _allowed = [..allowedGuids];
+    private readonly HashSet<Guid> _allowed = [.. allowedGuids];
 
     /// <summary>
     /// Determines whether the specified GUID is in the allowed list.

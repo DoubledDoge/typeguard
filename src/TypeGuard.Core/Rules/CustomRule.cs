@@ -8,15 +8,15 @@
 /// <param name="errorMessage">The error message to display when validation fails. (Generic Type)</param>
 public class CustomRule<T>(Func<T, bool> predicate, string errorMessage) : IValidationRule<T>
 {
-	/// <summary>
-	/// Determines whether the specified value passes this validation rule by executing the custom predicate.
-	/// </summary>
-	/// <param name="value">The value to validate.</param>
-	/// <returns><c>true</c> if the predicate returns true; otherwise, <c>false</c>.</returns>
-	public bool IsValid(T value) => predicate(value);
+    /// <summary>
+    /// Determines whether the specified value passes this validation rule by executing the custom predicate.
+    /// </summary>
+    /// <param name="value">The value to validate.</param>
+    /// <returns><c>true</c> if the predicate returns true; otherwise, <c>false</c>.</returns>
+    public bool IsValid(T value) => predicate(value);
 
-	/// <summary>
-	/// Gets the error message that should be displayed when validation fails.
-	/// </summary>
-	public string errorMessage { get; } = errorMessage;
+    /// <summary>
+    /// Gets the error message that should be displayed when validation fails.
+    /// </summary>
+    public string errorMessage { get; } = errorMessage;
 }

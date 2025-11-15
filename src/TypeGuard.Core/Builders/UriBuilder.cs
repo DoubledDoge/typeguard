@@ -72,7 +72,10 @@ public class UriBuilder(
     /// <param name="allowedDomains">The collection of allowed domains.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public UriBuilder WithAllowedDomains(IEnumerable<string> allowedDomains, string? customMessage = null)
+    public UriBuilder WithAllowedDomains(
+        IEnumerable<string> allowedDomains,
+        string? customMessage = null
+    )
     {
         _validator.AddRule(new AllowedDomainsRule(allowedDomains, customMessage));
         return this;

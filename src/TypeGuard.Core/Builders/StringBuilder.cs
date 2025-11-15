@@ -150,7 +150,6 @@ public class StringBuilder(
         return this;
     }
 
-
     /// <summary>
     /// Adds a rule that ensures the string contains values from a specified set.
     /// </summary>
@@ -162,7 +161,6 @@ public class StringBuilder(
         _validator.AddRule(new AllowedValuesRule(allowedValues, customMessage));
         return this;
     }
-
 
     /// <summary>
     /// Adds a rule that ensures the string does not contain values from a specified set.

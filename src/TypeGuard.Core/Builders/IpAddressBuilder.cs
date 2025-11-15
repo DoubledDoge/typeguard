@@ -114,7 +114,11 @@ public class IpAddressBuilder(
     /// <param name="prefixLength">The subnet prefix length.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public IpAddressBuilder WithSubnet(IPAddress network, int prefixLength, string? customMessage = null)
+    public IpAddressBuilder WithSubnet(
+        IPAddress network,
+        int prefixLength,
+        string? customMessage = null
+    )
     {
         _validator.AddRule(new SubnetRule(network, prefixLength, customMessage));
         return this;
@@ -126,7 +130,10 @@ public class IpAddressBuilder(
     /// <param name="allowedAddresses">The collection of allowed IP addresses.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public IpAddressBuilder WithAllowedAddresses(IEnumerable<IPAddress> allowedAddresses, string? customMessage = null)
+    public IpAddressBuilder WithAllowedAddresses(
+        IEnumerable<IPAddress> allowedAddresses,
+        string? customMessage = null
+    )
     {
         _validator.AddRule(new AllowedIpAddressesRule(allowedAddresses, customMessage));
         return this;
@@ -138,7 +145,10 @@ public class IpAddressBuilder(
     /// <param name="blockedAddresses">The collection of blocked IP addresses.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public IpAddressBuilder WithoutBlockedAddresses(IEnumerable<IPAddress> blockedAddresses, string? customMessage = null)
+    public IpAddressBuilder WithoutBlockedAddresses(
+        IEnumerable<IPAddress> blockedAddresses,
+        string? customMessage = null
+    )
     {
         _validator.AddRule(new BlockedIpAddressesRule(blockedAddresses, customMessage));
         return this;

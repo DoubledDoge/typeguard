@@ -24,7 +24,8 @@ public class PositiveTimeSpanRule(string? customMessage = null) : IValidationRul
 /// </summary>
 /// <param name="maximum">The maximum acceptable duration.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class MaxDurationRule(TimeSpan maximum, string? customMessage = null) : IValidationRule<TimeSpan>
+public class MaxDurationRule(TimeSpan maximum, string? customMessage = null)
+    : IValidationRule<TimeSpan>
 {
     /// <summary>
     /// Determines whether the specified TimeSpan does not exceed the maximum duration.
@@ -44,7 +45,8 @@ public class MaxDurationRule(TimeSpan maximum, string? customMessage = null) : I
 /// </summary>
 /// <param name="minimum">The minimum acceptable duration.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class MinDurationRule(TimeSpan minimum, string? customMessage = null) : IValidationRule<TimeSpan>
+public class MinDurationRule(TimeSpan minimum, string? customMessage = null)
+    : IValidationRule<TimeSpan>
 {
     /// <summary>
     /// Determines whether the specified TimeSpan meets the minimum duration.
@@ -64,19 +66,22 @@ public class MinDurationRule(TimeSpan minimum, string? customMessage = null) : I
 /// </summary>
 /// <param name="maxHours">The maximum number of hours for a work period. Default is 8.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class WorkingHoursRule(int maxHours = 8, string? customMessage = null) : IValidationRule<TimeSpan>
+public class WorkingHoursRule(int maxHours = 8, string? customMessage = null)
+    : IValidationRule<TimeSpan>
 {
     /// <summary>
     /// Determines whether the specified TimeSpan is within working hours.
     /// </summary>
     /// <param name="value">The TimeSpan value to validate.</param>
     /// <returns><c>true</c> if the TimeSpan is within the working hours limit; otherwise, <c>false</c>.</returns>
-    public bool IsValid(TimeSpan value) => value >= TimeSpan.Zero && value <= TimeSpan.FromHours(maxHours);
+    public bool IsValid(TimeSpan value) =>
+        value >= TimeSpan.Zero && value <= TimeSpan.FromHours(maxHours);
 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Duration must be within {maxHours} hours";
+    public string errorMessage { get; } =
+        customMessage ?? $"Duration must be within {maxHours} hours";
 }
 
 /// <summary>
@@ -123,7 +128,8 @@ public class WholeMinutesRule(string? customMessage = null) : IValidationRule<Ti
 /// </summary>
 /// <param name="unit">The unit TimeSpan that the value must be a multiple of.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class DurationIncrementRule(TimeSpan unit, string? customMessage = null) : IValidationRule<TimeSpan>
+public class DurationIncrementRule(TimeSpan unit, string? customMessage = null)
+    : IValidationRule<TimeSpan>
 {
     /// <summary>
     /// Determines whether the specified TimeSpan is a multiple of the unit.
@@ -135,7 +141,8 @@ public class DurationIncrementRule(TimeSpan unit, string? customMessage = null) 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Duration must be in increments of {unit}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Duration must be in increments of {unit}";
 }
 
 /// <summary>
@@ -154,5 +161,6 @@ public class WithinDayRule(string? customMessage = null) : IValidationRule<TimeS
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? "Duration must be within a single day (less than 24 hours)";
+    public string errorMessage { get; } =
+        customMessage ?? "Duration must be within a single day (less than 24 hours)";
 }

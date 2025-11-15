@@ -259,7 +259,7 @@ public static class TypeGuard
     public static string GetString(string prompt)
     {
         StringValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
-        return validator .GetValidInput();
+        return validator.GetValidInput();
     }
 
     /// <summary>
@@ -605,7 +605,6 @@ public static class TypeGuard
         IpAddressValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
         return validator.GetValidInput();
     }
-
 
     /// <summary>
     /// Asynchronously prompts the user for an IPAddress value from the console.

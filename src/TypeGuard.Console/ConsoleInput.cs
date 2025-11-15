@@ -1,7 +1,7 @@
 ﻿namespace TypeGuard.Console;
 
-using Console = System.Console;
 using Core.Abstractions;
+using Console = System.Console;
 
 /// <summary>
 /// Provides console-based input functionality by reading the user input from the standard input stream.

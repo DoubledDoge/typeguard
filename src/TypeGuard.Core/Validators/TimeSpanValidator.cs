@@ -33,9 +33,10 @@ public class TimeSpanValidator(
             return false;
         }
 
-        bool success = format != null
-            ? TimeSpan.TryParseExact(input, format, null, out value)
-            : TimeSpan.TryParse(input, out value);
+        bool success =
+            format != null
+                ? TimeSpan.TryParseExact(input, format, null, out value)
+                : TimeSpan.TryParse(input, out value);
 
         if (success)
         {
@@ -43,9 +44,10 @@ public class TimeSpanValidator(
             return true;
         }
 
-        errorMessage = format != null
-            ? $"Please enter a valid time span in format: {format}"
-            : "Please enter a valid time span (e.g., '1:30:00' or '1.12:00:00')";
+        errorMessage =
+            format != null
+                ? $"Please enter a valid time span in format: {format}"
+                : "Please enter a valid time span (e.g., '1:30:00' or '1.12:00:00')";
         value = TimeSpan.Zero;
         return false;
     }

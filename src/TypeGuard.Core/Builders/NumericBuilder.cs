@@ -17,7 +17,8 @@ public class NumericBuilder<T>(
     string prompt,
     IInputProvider inputProvider,
     IOutputProvider outputProvider
-) where T : INumber<T>, IMinMaxValue<T>
+)
+    where T : INumber<T>, IMinMaxValue<T>
 {
     /// <summary>
     ///

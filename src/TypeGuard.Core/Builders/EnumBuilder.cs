@@ -17,9 +17,15 @@ public class EnumBuilder<TEnum>(
     bool ignoreCase,
     IInputProvider inputProvider,
     IOutputProvider outputProvider
-) where TEnum : struct, Enum
+)
+    where TEnum : struct, Enum
 {
-    private readonly EnumValidator<TEnum> _validator = new(inputProvider, outputProvider, prompt, ignoreCase);
+    private readonly EnumValidator<TEnum> _validator = new(
+        inputProvider,
+        outputProvider,
+        prompt,
+        ignoreCase
+    );
 
     /// <summary>
     /// Adds a validation rule that ensures the enum value is defined.
@@ -49,7 +55,10 @@ public class EnumBuilder<TEnum>(
     /// <param name="allowedValues">The collection of allowed enum values.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public EnumBuilder<TEnum> WithAllowedValues(IEnumerable<TEnum> allowedValues, string? customMessage = null)
+    public EnumBuilder<TEnum> WithAllowedValues(
+        IEnumerable<TEnum> allowedValues,
+        string? customMessage = null
+    )
     {
         _validator.AddRule(new AllowedEnumValuesRule<TEnum>(allowedValues, customMessage));
         return this;
@@ -61,7 +70,10 @@ public class EnumBuilder<TEnum>(
     /// <param name="excludedValues">The collection of excluded enum values.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>The current builder instance for method chaining.</returns>
-    public EnumBuilder<TEnum> WithExcludedValues(IEnumerable<TEnum> excludedValues, string? customMessage = null)
+    public EnumBuilder<TEnum> WithExcludedValues(
+        IEnumerable<TEnum> excludedValues,
+        string? customMessage = null
+    )
     {
         _validator.AddRule(new ExcludedEnumValuesRule<TEnum>(excludedValues, customMessage));
         return this;

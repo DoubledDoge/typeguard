@@ -12,7 +12,8 @@ public class UriSchemeRule(string scheme, string? customMessage = null) : IValid
     /// </summary>
     /// <param name="value">The Uri to validate.</param>
     /// <returns><c>true</c> if the Uri uses the specified scheme; otherwise, <c>false</c>.</returns>
-    public bool IsValid(Uri value) => value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase);
+    public bool IsValid(Uri value) =>
+        value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
@@ -31,7 +32,8 @@ public class HttpsOnlyRule(string? customMessage = null) : IValidationRule<Uri>
     /// </summary>
     /// <param name="value">The Uri to validate.</param>
     /// <returns><c>true</c> if the Uri uses HTTPS; otherwise, <c>false</c>.</returns>
-    public bool IsValid(Uri value) => value.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase);
+    public bool IsValid(Uri value) =>
+        value.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
@@ -51,8 +53,8 @@ public class HttpOrHttpsRule(string? customMessage = null) : IValidationRule<Uri
     /// <param name="value">The Uri to validate.</param>
     /// <returns><c>true</c> if the Uri uses HTTP or HTTPS; otherwise, <c>false</c>.</returns>
     public bool IsValid(Uri value) =>
-        value.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase) ||
-        value.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase);
+        value.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase)
+        || value.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
@@ -85,9 +87,13 @@ public class DomainRule(string domain, string? customMessage = null) : IValidati
 /// </summary>
 /// <param name="allowedDomains">The collection of allowed domains.</param>
 /// <param name="customMessage">An optional custom error message.</param>
-public class AllowedDomainsRule(IEnumerable<string> allowedDomains, string? customMessage = null) : IValidationRule<Uri>
+public class AllowedDomainsRule(IEnumerable<string> allowedDomains, string? customMessage = null)
+    : IValidationRule<Uri>
 {
-    private readonly HashSet<string> _allowed = new(allowedDomains, StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _allowed = new(
+        allowedDomains,
+        StringComparer.OrdinalIgnoreCase
+    );
 
     /// <summary>
     /// Determines whether the specified Uri belongs to one of the allowed domains.
@@ -99,7 +105,8 @@ public class AllowedDomainsRule(IEnumerable<string> allowedDomains, string? cust
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage => customMessage ?? $"URI must be from one of: {string.Join(", ", _allowed)}";
+    public string errorMessage =>
+        customMessage ?? $"URI must be from one of: {string.Join(", ", _allowed)}";
 }
 
 /// <summary>
@@ -153,7 +160,8 @@ public class PathPrefixRule(string pathPrefix, string? customMessage = null) : I
     /// </summary>
     /// <param name="value">The Uri to validate.</param>
     /// <returns><c>true</c> if the Uri path starts with the prefix; otherwise, <c>false</c>.</returns>
-    public bool IsValid(Uri value) => value.AbsolutePath.StartsWith(pathPrefix, StringComparison.OrdinalIgnoreCase);
+    public bool IsValid(Uri value) =>
+        value.AbsolutePath.StartsWith(pathPrefix, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
@@ -230,8 +238,7 @@ public class LocalhostRule(string? customMessage = null) : IValidationRule<Uri>
     /// <param name="value">The Uri to validate.</param>
     /// <returns><c>true</c> if the Uri is localhost; otherwise, <c>false</c>.</returns>
     public bool IsValid(Uri value) =>
-        value.IsLoopback ||
-        value.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase);
+        value.IsLoopback || value.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.

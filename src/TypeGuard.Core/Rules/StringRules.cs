@@ -340,7 +340,8 @@ public partial class PhoneRule(string? customMessage = null) : IValidationRule<s
 /// </summary>
 /// <param name="mustExist">If true, validates that the file actually exists on the file system.</param>
 /// <param name="customMessage">An optional custom error message.</param>
-public class FilePathRule(bool mustExist = false, string? customMessage = null) : IValidationRule<string>
+public class FilePathRule(bool mustExist = false, string? customMessage = null)
+    : IValidationRule<string>
 {
     /// <summary>
     /// Determines whether the specified string is a valid file path.
@@ -364,5 +365,6 @@ public class FilePathRule(bool mustExist = false, string? customMessage = null) 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? (mustExist ? "File path must exist" : "Input must be a valid file path");
+    public string errorMessage { get; } =
+        customMessage ?? (mustExist ? "File path must exist" : "Input must be a valid file path");
 }

@@ -11,9 +11,9 @@ using Abstractions;
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 public class IpAddressValidator(
-    IInputProvider  inputProvider,
+    IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    string          prompt
+    string prompt
 ) : ValidatorBase<IPAddress>(inputProvider, outputProvider, prompt)
 {
     /// <summary>

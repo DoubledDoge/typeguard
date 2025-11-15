@@ -18,7 +18,8 @@ public class DefinedEnumRule<TEnum>(string? customMessage = null) : IValidationR
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Value must be a defined {typeof(TEnum).Name}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Value must be a defined {typeof(TEnum).Name}";
 }
 
 /// <summary>
@@ -39,7 +40,8 @@ public class NotDefaultEnumRule<TEnum>(string? customMessage = null) : IValidati
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Value cannot be the default {typeof(TEnum).Name}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Value cannot be the default {typeof(TEnum).Name}";
 }
 
 /// <summary>
@@ -48,10 +50,13 @@ public class NotDefaultEnumRule<TEnum>(string? customMessage = null) : IValidati
 /// <typeparam name="TEnum">The enum type to validate.</typeparam>
 /// <param name="allowedValues">The collection of allowed enum values.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AllowedEnumValuesRule<TEnum>(IEnumerable<TEnum> allowedValues, string? customMessage = null) : IValidationRule<TEnum>
+public class AllowedEnumValuesRule<TEnum>(
+    IEnumerable<TEnum> allowedValues,
+    string? customMessage = null
+) : IValidationRule<TEnum>
     where TEnum : struct, Enum
 {
-    private readonly HashSet<TEnum> _allowed = [..allowedValues];
+    private readonly HashSet<TEnum> _allowed = [.. allowedValues];
 
     /// <summary>
     /// Determines whether the specified enum value is in the allowed list.
@@ -63,7 +68,8 @@ public class AllowedEnumValuesRule<TEnum>(IEnumerable<TEnum> allowedValues, stri
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage => customMessage ?? $"Value must be one of: {string.Join(", ", allowedValues)}";
+    public string errorMessage =>
+        customMessage ?? $"Value must be one of: {string.Join(", ", allowedValues)}";
 }
 
 /// <summary>
@@ -72,7 +78,10 @@ public class AllowedEnumValuesRule<TEnum>(IEnumerable<TEnum> allowedValues, stri
 /// <typeparam name="TEnum">The enum type to validate.</typeparam>
 /// <param name="excludedValues">The collection of excluded enum values.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class ExcludedEnumValuesRule<TEnum>(IEnumerable<TEnum> excludedValues, string? customMessage = null) : IValidationRule<TEnum>
+public class ExcludedEnumValuesRule<TEnum>(
+    IEnumerable<TEnum> excludedValues,
+    string? customMessage = null
+) : IValidationRule<TEnum>
     where TEnum : struct, Enum
 {
     private readonly HashSet<TEnum> _excluded = [.. excludedValues];
@@ -96,7 +105,8 @@ public class ExcludedEnumValuesRule<TEnum>(IEnumerable<TEnum> excludedValues, st
 /// <typeparam name="TEnum">The enum type to validate. Should be decorated with the flag attribute.</typeparam>
 /// <param name="requiredFlag">The flag that must be set.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HasFlagRule<TEnum>(TEnum requiredFlag, string? customMessage = null) : IValidationRule<TEnum>
+public class HasFlagRule<TEnum>(TEnum requiredFlag, string? customMessage = null)
+    : IValidationRule<TEnum>
     where TEnum : struct, Enum
 {
     /// <summary>
@@ -109,7 +119,8 @@ public class HasFlagRule<TEnum>(TEnum requiredFlag, string? customMessage = null
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Value must have the flag {requiredFlag}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Value must have the flag {requiredFlag}";
 }
 
 /// <summary>
@@ -118,7 +129,8 @@ public class HasFlagRule<TEnum>(TEnum requiredFlag, string? customMessage = null
 /// <typeparam name="TEnum">The enum type to validate. Should be decorated with the flags attribute.</typeparam>
 /// <param name="forbiddenFlag">The flag that must not be set.</param>
 /// <param name="customMessage">An optional custom error message.</param>
-public class NotHasFlagRule<TEnum>(TEnum forbiddenFlag, string? customMessage = null) : IValidationRule<TEnum>
+public class NotHasFlagRule<TEnum>(TEnum forbiddenFlag, string? customMessage = null)
+    : IValidationRule<TEnum>
     where TEnum : struct, Enum
 {
     /// <summary>
@@ -131,5 +143,6 @@ public class NotHasFlagRule<TEnum>(TEnum forbiddenFlag, string? customMessage = 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Value must not have the flag {forbiddenFlag}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Value must not have the flag {forbiddenFlag}";
 }

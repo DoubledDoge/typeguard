@@ -138,9 +138,10 @@ public class PunctuationRule(string? customMessage = null) : IValidationRule<cha
 /// </summary>
 /// <param name="allowedChars">The string containing all allowed characters.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AllowedCharsRule(string allowedChars, string? customMessage = null) : IValidationRule<char>
+public class AllowedCharsRule(string allowedChars, string? customMessage = null)
+    : IValidationRule<char>
 {
-    private readonly HashSet<char> _allowed = [..allowedChars];
+    private readonly HashSet<char> _allowed = [.. allowedChars];
 
     /// <summary>
     /// Determines whether the specified character is in the allowed set.
@@ -152,7 +153,8 @@ public class AllowedCharsRule(string allowedChars, string? customMessage = null)
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Character must be one of: {allowedChars}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Character must be one of: {allowedChars}";
 }
 
 /// <summary>
@@ -160,9 +162,10 @@ public class AllowedCharsRule(string allowedChars, string? customMessage = null)
 /// </summary>
 /// <param name="excludedChars">The string containing all excluded characters.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class ExcludedCharsRule(string excludedChars, string? customMessage = null) : IValidationRule<char>
+public class ExcludedCharsRule(string excludedChars, string? customMessage = null)
+    : IValidationRule<char>
 {
-    private readonly HashSet<char> _excluded = [..excludedChars];
+    private readonly HashSet<char> _excluded = [.. excludedChars];
 
     /// <summary>
     /// Determines whether the specified character is not in the excluded set.
@@ -174,5 +177,6 @@ public class ExcludedCharsRule(string excludedChars, string? customMessage = nul
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"Character cannot be one of: {excludedChars}";
+    public string errorMessage { get; } =
+        customMessage ?? $"Character cannot be one of: {excludedChars}";
 }

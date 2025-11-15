@@ -55,14 +55,15 @@ public class PrivateIpRule(string? customMessage = null) : IValidationRule<IPAdd
     /// <returns><c>true</c> if the IP address is private; otherwise, <c>false</c>.</returns>
     public bool IsValid(IPAddress value)
     {
-        if (value.AddressFamily != AddressFamily.InterNetwork) return false;
+        if (value.AddressFamily != AddressFamily.InterNetwork)
+            return false;
         byte[] bytes = value.GetAddressBytes();
         switch (bytes[0])
         {
-            case 10:                                        // 10.0.0.0/8
+            case 10: // 10.0.0.0/8
             case 172 when bytes[1] >= 16 && bytes[1] <= 31: // 172.16.0.0/12
-            case 192 when bytes[1] == 168:                  // 192.168.0.0/16
-            case 169 when bytes[1] == 254:                  // 169.254.0.0/16 (APIPA)
+            case 192 when bytes[1] == 168: // 192.168.0.0/16
+            case 169 when bytes[1] == 254: // 169.254.0.0/16 (APIPA)
                 return true;
         }
         return false;
@@ -71,7 +72,9 @@ public class PrivateIpRule(string? customMessage = null) : IValidationRule<IPAdd
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? "IP address must be private (10.x.x.x, 172.16-31.x.x, 192.168.x.x, or 169.254.x.x)";
+    public string errorMessage { get; } =
+        customMessage
+        ?? "IP address must be private (10.x.x.x, 172.16-31.x.x, 192.168.x.x, or 169.254.x.x)";
 }
 
 /// <summary>
@@ -87,7 +90,8 @@ public class ApipaRule(string? customMessage = null) : IValidationRule<IPAddress
     /// <returns><c>true</c> if the IP address is in the APIPA range (169.254.0.0 - 169.254.255.255); otherwise, <c>false</c>.</returns>
     public bool IsValid(IPAddress value)
     {
-        if (value.AddressFamily != AddressFamily.InterNetwork) return false;
+        if (value.AddressFamily != AddressFamily.InterNetwork)
+            return false;
 
         byte[] bytes = value.GetAddressBytes();
 
@@ -97,7 +101,8 @@ public class ApipaRule(string? customMessage = null) : IValidationRule<IPAddress
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? "IP address must be an APIPA address (169.254.x.x)";
+    public string errorMessage { get; } =
+        customMessage ?? "IP address must be an APIPA address (169.254.x.x)";
 }
 
 /// <summary>
@@ -114,7 +119,8 @@ public class NotApipaRule(string? customMessage = null) : IValidationRule<IPAddr
     /// <returns><c>true</c> if the IP address is not in the APIPA range; otherwise, <c>false</c>.</returns>
     public bool IsValid(IPAddress value)
     {
-        if (value.AddressFamily != AddressFamily.InterNetwork) return true;
+        if (value.AddressFamily != AddressFamily.InterNetwork)
+            return true;
 
         byte[] bytes = value.GetAddressBytes();
 
@@ -124,7 +130,8 @@ public class NotApipaRule(string? customMessage = null) : IValidationRule<IPAddr
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? "IP address cannot be APIPA (169.254.x.x)";
+    public string errorMessage { get; } =
+        customMessage ?? "IP address cannot be APIPA (169.254.x.x)";
 }
 
 /// <summary>
@@ -143,7 +150,8 @@ public class LoopbackIpRule(string? customMessage = null) : IValidationRule<IPAd
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? "IP address must be loopback (127.0.0.1 or ::1)";
+    public string errorMessage { get; } =
+        customMessage ?? "IP address must be loopback (127.0.0.1 or ::1)";
 }
 
 /// <summary>
@@ -160,7 +168,8 @@ public class PublicIpRule(string? customMessage = null) : IValidationRule<IPAddr
     /// </summary>
     /// <param name="value">The IP address to validate.</param>
     /// <returns><c>true</c> if the IP address is public; otherwise, <c>false</c>.</returns>
-    public bool IsValid(IPAddress value) => !_privateCheck.IsValid(value) && !_loopbackCheck.IsValid(value);
+    public bool IsValid(IPAddress value) =>
+        !_privateCheck.IsValid(value) && !_loopbackCheck.IsValid(value);
 
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
@@ -193,7 +202,8 @@ public class NotLoopbackIpRule(string? customMessage = null) : IValidationRule<I
 /// <param name="network">The network address.</param>
 /// <param name="prefixLength">The subnet prefix length.</param>
 /// <param name="customMessage">An optional custom error message.</param>
-public class SubnetRule(IPAddress network, int prefixLength, string? customMessage = null) : IValidationRule<IPAddress>
+public class SubnetRule(IPAddress network, int prefixLength, string? customMessage = null)
+    : IValidationRule<IPAddress>
 {
     /// <summary>
     /// Determines whether the specified IP address is within the subnet.
@@ -219,7 +229,8 @@ public class SubnetRule(IPAddress network, int prefixLength, string? customMessa
         }
 
         // Check remaining bits
-        if (bitsToCheck <= 0) return true;
+        if (bitsToCheck <= 0)
+            return true;
 
         byte mask = (byte)(0xFF << (8 - bitsToCheck)); // Create a mask for the remaining bits
 
@@ -229,7 +240,8 @@ public class SubnetRule(IPAddress network, int prefixLength, string? customMessa
     /// <summary>
     /// Gets the error message that should be displayed when validation fails.
     /// </summary>
-    public string errorMessage { get; } = customMessage ?? $"IP address must be within subnet {network}/{prefixLength}";
+    public string errorMessage { get; } =
+        customMessage ?? $"IP address must be within subnet {network}/{prefixLength}";
 }
 
 /// <summary>
@@ -237,9 +249,12 @@ public class SubnetRule(IPAddress network, int prefixLength, string? customMessa
 /// </summary>
 /// <param name="allowedAddresses">The collection of allowed IP addresses.</param>
 /// <param name="customMessage">An optional custom error message.</param>
-public class AllowedIpAddressesRule(IEnumerable<IPAddress> allowedAddresses, string? customMessage = null) : IValidationRule<IPAddress>
+public class AllowedIpAddressesRule(
+    IEnumerable<IPAddress> allowedAddresses,
+    string? customMessage = null
+) : IValidationRule<IPAddress>
 {
-    private readonly HashSet<IPAddress> _allowed = [..allowedAddresses];
+    private readonly HashSet<IPAddress> _allowed = [.. allowedAddresses];
 
     /// <summary>
     /// Determines whether the specified IP address is in the allowed list.
@@ -259,9 +274,12 @@ public class AllowedIpAddressesRule(IEnumerable<IPAddress> allowedAddresses, str
 /// </summary>
 /// <param name="blockedAddresses">The collection of blocked IP addresses.</param>
 /// <param name="customMessage">An optional custom error message.</param>
-public class BlockedIpAddressesRule(IEnumerable<IPAddress> blockedAddresses, string? customMessage = null) : IValidationRule<IPAddress>
+public class BlockedIpAddressesRule(
+    IEnumerable<IPAddress> blockedAddresses,
+    string? customMessage = null
+) : IValidationRule<IPAddress>
 {
-    private readonly HashSet<IPAddress> _blocked = [..blockedAddresses];
+    private readonly HashSet<IPAddress> _blocked = [.. blockedAddresses];
 
     /// <summary>
     /// Determines whether the specified IP address is not in the blocked list.

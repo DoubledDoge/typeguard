@@ -18,7 +18,12 @@ public class TimeSpanBuilder(
     IOutputProvider outputProvider
 )
 {
-    private readonly TimeSpanValidator _validator = new(inputProvider, outputProvider, prompt, format);
+    private readonly TimeSpanValidator _validator = new(
+        inputProvider,
+        outputProvider,
+        prompt,
+        format
+    );
 
     /// <summary>
     /// Adds a range validation rule to the validator.
