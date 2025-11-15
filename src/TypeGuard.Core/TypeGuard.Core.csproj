@@ -1,16 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- General Settings -->
   <PropertyGroup>
-    <!-- General Settings -->
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
+    <PlatformTarget>AnyCpu</PlatformTarget>
+    <OutputType>Library</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <Nullable>enable</Nullable>
     <Optimize>True</Optimize>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
 
-    <!-- Package Metadata -->
+  <!-- Package Metadata -->
+  <PropertyGroup>
     <PackageId>TypeGuard.Core</PackageId>
     <Version>0.1.1</Version>
     <Authors>DoubledDoge</Authors>
@@ -24,8 +30,6 @@
     <PackageTags>validation;input-validation;typesafe;validation-library;csharp</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>https://github.com/DoubledDoge/typeguard/releases</PackageReleaseNotes>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <!-- External inclusions -->
