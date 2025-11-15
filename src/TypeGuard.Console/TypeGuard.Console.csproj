@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <!-- General Settings -->
   <PropertyGroup>
     <AssemblyName>TypeGuard.Console</AssemblyName>
