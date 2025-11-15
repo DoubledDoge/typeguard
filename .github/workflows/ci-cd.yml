@@ -58,19 +58,6 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-# Todo: Add later when tests are available
-#      - name: Test
-#        run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ./test-results
-#
-#      - name: Test Report
-#        if: always()
-#        uses: dorny/test-reporter@v2
-#        with:
-#          name: Test Results
-#          path: test-results/*.trx
-#          reporter: dotnet-trx
-#          fail-on-error: true
-
   validate-package:
     name: Validate Package
     runs-on: ubuntu-latest

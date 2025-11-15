@@ -216,7 +216,6 @@ Contributions welcome! Feel free to:
 **Planned Features:**
 -  WinForms implementation
 -  WPF implementation
--  Comprehensive unit tests?
 -  Interactive demo application?
 
 ---
