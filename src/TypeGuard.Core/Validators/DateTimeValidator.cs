@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 
-
 namespace TypeGuard.Core.Validators;
 using Abstractions;
 
@@ -42,7 +41,7 @@ public class DateTimeValidator(
 			return true;
 		}
 
-		errorMessage = $"Please enter a valid date in the format {format}";
+		errorMessage = $"Please enter a valid date and/or time in the format {format}";
 		value = default(DateTime);
 		return false;
 	}

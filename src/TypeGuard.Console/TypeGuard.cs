@@ -1,5 +1,6 @@
 ﻿namespace TypeGuard.Console;
 
+using System.Net;
 using System.Numerics;
 using Core.Builders;
 using Core.Validators;
@@ -258,7 +259,7 @@ public static class TypeGuard
     public static string GetString(string prompt)
     {
         StringValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
-        return validator.GetValidInput();
+        return validator .GetValidInput();
     }
 
     /// <summary>
@@ -283,6 +284,45 @@ public static class TypeGuard
     /// <returns>A <see cref="StringBuilder"/> instance for configuring validation rules.</returns>
     public static StringBuilder ForString(string prompt) =>
         new(prompt, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for a DateTime value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="format">The expected date/time format string. If null, any valid DateTime format is accepted.</param>
+    /// <returns>The validated datetime in the specified format.</returns>
+    public static DateTime GetDateTime(string prompt, string? format = null)
+    {
+        DateTimeValidator validator = new(
+            DefaultInputProvider,
+            DefaultOutputProvider,
+            prompt,
+            format
+        );
+        return validator.GetValidInput();
+    }
+
+    /// <summary>
+    /// Asynchronously prompts the user for a DateTime value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="format">The expected date/time format string. If null, any valid DateTime format is accepted.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated datetime in the specified format.</returns>
+    public static async Task<DateTime> GetDateTimeAsync(
+        string prompt,
+        string? format = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        DateTimeValidator validator = new(
+            DefaultInputProvider,
+            DefaultOutputProvider,
+            prompt,
+            format
+        );
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
 
     /// <summary>
     /// Creates a fluent builder for constructing a DateTime validator with custom validation rules.
@@ -359,5 +399,234 @@ public static class TypeGuard
     /// <param name="prompt">The prompt message to display to the user.</param>
     /// <returns>A <see cref="CharBuilder"/> instance for configuring validation rules.</returns>
     public static CharBuilder ForChar(string prompt) =>
+        new(prompt, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for a TimeSpan value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated TimeSpan.</returns>
+    public static TimeSpan GetTimeSpan(string prompt)
+    {
+        TimeSpanValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return validator.GetValidInput();
+    }
+
+    /// <summary>
+    /// Asynchronously prompts the user for a TimeSpan value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated TimeSpan.</returns>
+    public static async Task<TimeSpan> GetTimeSpanAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        TimeSpanValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing a TimeSpan validator with custom validation rules.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="format">Optional format hint for parsing. If null, accepts any valid TimeSpan format.</param>
+    /// <returns>A <see cref="TimeSpanBuilder"/> instance for configuring validation rules.</returns>
+    public static TimeSpanBuilder ForTimeSpan(string prompt, string? format = null) =>
+        new(prompt, format, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for a Uri value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated Uri.</returns>
+    public static Uri GetUri(string prompt)
+    {
+        UriValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return validator.GetValidInput();
+    }
+
+    /// <summary>
+    /// Asynchronously prompts the user for a Uri value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated Uri.</returns>
+    public static async Task<Uri> GetUriAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        UriValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing a Uri validator with custom validation rules.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="uriKind">The type of URI to accept. Default is Absolute.</param>
+    /// <returns>A <see cref="UriBuilder"/> instance for configuring validation rules.</returns>
+    public static UriBuilder ForUri(string prompt, UriKind uriKind = UriKind.Absolute) =>
+        new(prompt, uriKind, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for an enum value from the console.
+    /// </summary>
+    /// <typeparam name="TEnum">The enum type to validate.</typeparam>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="ignoreCase">If true, enum name parsing is case-insensitive. Default is true.</param>
+    /// <returns>The validated enum.</returns>
+    public static TEnum GetEnum<TEnum>(string prompt, bool ignoreCase = true)
+        where TEnum : struct, Enum
+    {
+        EnumValidator<TEnum> validator = new(
+            DefaultInputProvider,
+            DefaultOutputProvider,
+            prompt,
+            ignoreCase
+        );
+        return validator.GetValidInput();
+    }
+
+    ///  <summary>
+    ///  Synchronously prompts the user for an enum value from the console.
+    ///  </summary>
+    ///  <typeparam name="TEnum">The enum type to validate.</typeparam>
+    ///  <param name="prompt">The prompt message to display to the user.</param>
+    ///  <param name="ignoreCase">If true, enum name parsing is case-insensitive. Default is true.</param>
+    ///  <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    ///  <returns>The validated enum.</returns>
+    public static async Task<TEnum> GetEnumAsync<TEnum>(
+        string prompt,
+        bool ignoreCase = true,
+        CancellationToken cancellationToken = default
+    )
+        where TEnum : struct, Enum
+    {
+        EnumValidator<TEnum> validator = new(
+            DefaultInputProvider,
+            DefaultOutputProvider,
+            prompt,
+            ignoreCase
+        );
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing an enum validator with custom validation rules.
+    /// </summary>
+    /// <typeparam name="TEnum">The enum type to validate.</typeparam>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="ignoreCase">If true, enum name parsing is case-insensitive. Default is true.</param>
+    /// <returns>An <see cref="EnumBuilder{TEnum}"/> instance for configuring validation rules.</returns>
+    public static EnumBuilder<TEnum> ForEnum<TEnum>(string prompt, bool ignoreCase = true)
+        where TEnum : struct, Enum =>
+        new(prompt, ignoreCase, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for a DateOnly value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated DateOnly.</returns>
+    public static DateOnly GetDateOnly(string prompt)
+    {
+        DateOnlyValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return validator.GetValidInput();
+    }
+
+    /// <summary>
+    /// Asynchronously prompts the user for a DateOnly value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated DateOnly.</returns>
+    public static async Task<DateOnly> GetDateOnlyAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        DateOnlyValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing a DateOnly validator with custom validation rules.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="format">The expected date format string. If null, any valid DateOnly format is accepted.</param>
+    /// <returns>A <see cref="DateOnlyBuilder"/> instance for configuring validation rules.</returns>
+    public static DateOnlyBuilder ForDateOnly(string prompt, string? format = null) =>
+        new(prompt, format, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for a TimeOnly value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated TimeOnly.</returns>
+    public static TimeOnly GetTimeOnly(string prompt)
+    {
+        TimeOnlyValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return validator.GetValidInput();
+    }
+
+    /// <summary>
+    /// Asynchronously prompts the user for a TimeOnly value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated TimeOnly.</returns>
+    public static async Task<TimeOnly> GetTimeOnlyAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        TimeOnlyValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing a TimeOnly validator with custom validation rules.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="format">The expected time format string. If null, any valid TimeOnly format is accepted.</param>
+    /// <returns>A <see cref="TimeOnlyBuilder"/> instance for configuring validation rules.</returns>
+    public static TimeOnlyBuilder ForTimeOnly(string prompt, string? format = null) =>
+        new(prompt, format, DefaultInputProvider, DefaultOutputProvider);
+
+    /// <summary>
+    /// Synchronously prompts the user for an IPAddress value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>The validated IPAddress.</returns>
+    public static IPAddress GetIpAddress(string prompt)
+    {
+        IpAddressValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return validator.GetValidInput();
+    }
+
+
+    /// <summary>
+    /// Asynchronously prompts the user for an IPAddress value from the console.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the validated IPAddress.</returns>
+    public static async Task<IPAddress> GetIpAddressAsync(
+        string prompt,
+        CancellationToken cancellationToken = default
+    )
+    {
+        IpAddressValidator validator = new(DefaultInputProvider, DefaultOutputProvider, prompt);
+        return await validator.GetValidInputAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Creates a fluent builder for constructing an IP address validator with custom validation rules.
+    /// </summary>
+    /// <param name="prompt">The prompt message to display to the user.</param>
+    /// <returns>A <see cref="IpAddressBuilder"/> instance for configuring validation rules.</returns>
+    public static IpAddressBuilder ForIpAddress(string prompt) =>
         new(prompt, DefaultInputProvider, DefaultOutputProvider);
 }
