@@ -1,6 +1,7 @@
-﻿namespace TypeGuard.Core.Builders;
+﻿using System.Numerics;
 
-using System.Numerics;
+namespace TypeGuard.Core.Builders;
+
 using Abstractions;
 using Rules;
 using Validators;

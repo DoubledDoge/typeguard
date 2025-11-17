@@ -1,7 +1,8 @@
-﻿namespace TypeGuard.Console;
-
-using System.Net;
+﻿using System.Net;
 using System.Numerics;
+
+namespace TypeGuard.Console;
+
 using Core.Builders;
 using Core.Validators;
 

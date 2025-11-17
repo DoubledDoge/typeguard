@@ -1,7 +1,7 @@
-﻿namespace TypeGuard.Core.Rules;
-
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
+
+namespace TypeGuard.Core.Rules;
 
 /// <summary>
 /// A validation rule that ensures an IP address is IPv4.

@@ -1,6 +1,7 @@
-﻿namespace TypeGuard.Core.Builders;
+﻿using System.Net;
 
-using System.Net;
+namespace TypeGuard.Core.Builders;
+
 using Abstractions;
 using Rules;
 using Validators;
