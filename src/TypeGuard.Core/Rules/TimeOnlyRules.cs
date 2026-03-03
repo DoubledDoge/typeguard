@@ -1,12 +1,14 @@
 ﻿namespace TypeGuard.Core.Rules;
 
+using Interfaces;
+
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a time is within standard business hours.
+/// Provides factory methods for creating validation rules that ensure a time falls within standard business hours (9 AM to 5 PM).
 /// </summary>
 public static class BusinessHoursRule
 {
     /// <summary>
-    /// Creates a validation rule for DateTime values that ensures the time is within business hours.
+    /// Creates a validation rule for DateTime values that ensures the time is within business hours (9 AM to 5 PM).
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
@@ -14,7 +16,7 @@ public static class BusinessHoursRule
         new BusinessHoursRuleImpl<DateTime>(v => v.TimeOfDay, customMessage);
 
     /// <summary>
-    /// Creates a validation rule for TimeOnly values that ensures the time is within business hours.
+    /// Creates a validation rule for TimeOnly values that ensures the time is within business hours (9 AM to 5 PM).
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
@@ -24,17 +26,17 @@ public static class BusinessHoursRule
     private class BusinessHoursRuleImpl<T>(Func<T, TimeSpan> converter, string? customMessage)
         : IValidationRule<T>
     {
-        private readonly TimeSpan _minBusinessHours = TimeSpan.FromHours(9);
-        private readonly TimeSpan _maxBusinessHours = TimeSpan.FromHours(17);
+        private readonly TimeSpan _open = TimeSpan.FromHours(9);
+        private readonly TimeSpan _close = TimeSpan.FromHours(17);
 
         public bool IsValid(T value)
         {
             TimeSpan time = converter(value);
-            return time >= _minBusinessHours && time <= _maxBusinessHours;
+            return time >= _open && time <= _close;
         }
 
-        public string errorMessage { get; } =
-            customMessage ?? "Time must be within business hours (9 AM - 5 PM)";
+        public string ErrorMessage { get; } =
+            customMessage ?? "Time must be within business hours (9 AM to 5 PM)";
     }
 }
 
@@ -46,7 +48,7 @@ public static class BeforeTimeRule
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the time is before the specified time.
     /// </summary>
-    /// <param name="maxTime">The maximum time.</param>
+    /// <param name="maxTime">The upper time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidationRule<DateTime> ForDateTime(
@@ -57,7 +59,7 @@ public static class BeforeTimeRule
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is before the specified time.
     /// </summary>
-    /// <param name="maxTime">The maximum time.</param>
+    /// <param name="maxTime">The upper time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidationRule<TimeOnly> ForTimeOnly(
@@ -73,7 +75,7 @@ public static class BeforeTimeRule
     {
         public bool IsValid(T value) => converter(value) < maxTime;
 
-        public string errorMessage { get; } =
+        public string ErrorMessage { get; } =
             customMessage ?? $"Time must be before {maxTime:hh\\:mm}";
     }
 }
@@ -86,7 +88,7 @@ public static class AfterTimeRule
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the time is after the specified time.
     /// </summary>
-    /// <param name="minTime">The minimum time.</param>
+    /// <param name="minTime">The lower time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidationRule<DateTime> ForDateTime(
@@ -97,7 +99,7 @@ public static class AfterTimeRule
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is after the specified time.
     /// </summary>
-    /// <param name="minTime">The minimum time.</param>
+    /// <param name="minTime">The lower time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidationRule<TimeOnly> ForTimeOnly(
@@ -113,7 +115,7 @@ public static class AfterTimeRule
     {
         public bool IsValid(T value) => converter(value) > minTime;
 
-        public string errorMessage { get; } =
+        public string ErrorMessage { get; } =
             customMessage ?? $"Time must be after {minTime:hh\\:mm}";
     }
 }
@@ -126,37 +128,57 @@ public static class HourRule
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the time is at the specified hour.
     /// </summary>
-    /// <param name="hour">The required hour.</param>
+    /// <param name="hour">The required hour (0-23).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(int hour, string? customMessage = null) =>
-        new HourRuleImpl<DateTime>(v => v.Hour, hour, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hour"/> is not between 0 and 23.</exception>
+    public static IValidationRule<DateTime> ForDateTime(int hour, string? customMessage = null)
+    {
+        ValidateHour(hour);
+        return new HourRuleImpl<DateTime>(v => v.Hour, hour, customMessage);
+    }
 
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is at the specified hour.
     /// </summary>
-    /// <param name="hour">The required hour.</param>
+    /// <param name="hour">The required hour (0-23).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(int hour, string? customMessage = null) =>
-        new HourRuleImpl<TimeOnly>(v => v.Hour, hour, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hour"/> is not between 0 and 23.</exception>
+    public static IValidationRule<TimeOnly> ForTimeOnly(int hour, string? customMessage = null)
+    {
+        ValidateHour(hour);
+        return new HourRuleImpl<TimeOnly>(v => v.Hour, hour, customMessage);
+    }
+
+    private static void ValidateHour(int hour)
+    {
+        if (hour is < 0 or > 23)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(hour),
+                hour,
+                "hour must be between 0 and 23."
+            );
+        }
+    }
 
     private class HourRuleImpl<T>(Func<T, int> hourGetter, int hour, string? customMessage)
         : IValidationRule<T>
     {
         public bool IsValid(T value) => hourGetter(value) == hour;
 
-        public string errorMessage { get; } = customMessage ?? $"Time must be at the hour {hour}";
+        public string ErrorMessage { get; } = customMessage ?? $"Time must be at hour {hour}";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a time represents whole hours.
+/// Provides factory methods for creating validation rules that ensure a time represents a whole hour (zero minutes and seconds).
 /// </summary>
 public static class WholeHourRule
 {
     /// <summary>
-    /// Creates a validation rule for DateTime values that ensures the time represents whole hours.
+    /// Creates a validation rule for DateTime values that ensures the time represents a whole hour.
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
@@ -167,7 +189,7 @@ public static class WholeHourRule
         );
 
     /// <summary>
-    /// Creates a validation rule for TimeOnly values that ensures the time represents whole hours.
+    /// Creates a validation rule for TimeOnly values that ensures the time represents a whole hour.
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
@@ -182,18 +204,18 @@ public static class WholeHourRule
     {
         public bool IsValid(T value) => validator(value);
 
-        public string errorMessage { get; } =
-            customMessage ?? "Time must be in whole hours (no minutes or seconds)";
+        public string ErrorMessage { get; } =
+            customMessage ?? "Time must be a whole hour (no minutes or seconds)";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a time represents whole minutes.
+/// Provides factory methods for creating validation rules that ensure a time represents a whole minute (zero seconds).
 /// </summary>
 public static class WholeMinuteRule
 {
     /// <summary>
-    /// Creates a validation rule for DateTime values that ensures the time represents whole minutes.
+    /// Creates a validation rule for DateTime values that ensures the time represents a whole minute.
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
@@ -201,7 +223,7 @@ public static class WholeMinuteRule
         new WholeMinuteRuleImpl<DateTime>(v => v is { Second: 0, Millisecond: 0 }, customMessage);
 
     /// <summary>
-    /// Creates a validation rule for TimeOnly values that ensures the time represents whole minutes.
+    /// Creates a validation rule for TimeOnly values that ensures the time represents a whole minute.
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
@@ -213,8 +235,8 @@ public static class WholeMinuteRule
     {
         public bool IsValid(T value) => validator(value);
 
-        public string errorMessage { get; } =
-            customMessage ?? "Time must be in whole minutes (no seconds)";
+        public string ErrorMessage { get; } =
+            customMessage ?? "Time must be a whole minute (no seconds)";
     }
 }
 
@@ -226,24 +248,46 @@ public static class TimeIncrementRule
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the time is a multiple of the specified interval.
     /// </summary>
-    /// <param name="increment">The time increment.</param>
+    /// <param name="increment">The required time increment. Must be greater than zero.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="increment"/> is less than or equal to zero.</exception>
     public static IValidationRule<DateTime> ForDateTime(
         TimeSpan increment,
         string? customMessage = null
-    ) => new TimeIncrementRuleImpl<DateTime>(v => v.TimeOfDay, increment, customMessage);
+    )
+    {
+        ValidateIncrement(increment);
+        return new TimeIncrementRuleImpl<DateTime>(v => v.TimeOfDay, increment, customMessage);
+    }
 
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is a multiple of the specified interval.
     /// </summary>
-    /// <param name="increment">The time increment.</param>
+    /// <param name="increment">The required time increment. Must be greater than zero.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="increment"/> is less than or equal to zero.</exception>
     public static IValidationRule<TimeOnly> ForTimeOnly(
         TimeSpan increment,
         string? customMessage = null
-    ) => new TimeIncrementRuleImpl<TimeOnly>(v => v.ToTimeSpan(), increment, customMessage);
+    )
+    {
+        ValidateIncrement(increment);
+        return new TimeIncrementRuleImpl<TimeOnly>(v => v.ToTimeSpan(), increment, customMessage);
+    }
+
+    private static void ValidateIncrement(TimeSpan increment)
+    {
+        if (increment <= TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(increment),
+                increment,
+                "increment must be greater than zero."
+            );
+        }
+    }
 
     private class TimeIncrementRuleImpl<T>(
         Func<T, TimeSpan> converter,
@@ -253,13 +297,13 @@ public static class TimeIncrementRule
     {
         public bool IsValid(T value) => converter(value).Ticks % increment.Ticks == 0;
 
-        public string errorMessage { get; } =
+        public string ErrorMessage { get; } =
             customMessage ?? $"Time must be in increments of {increment}";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a time is in the AM period.
+/// Provides factory methods for creating validation rules that ensure a time is in the AM period (midnight to noon).
 /// </summary>
 public static class AmRule
 {
@@ -283,13 +327,13 @@ public static class AmRule
     {
         public bool IsValid(T value) => validator(value);
 
-        public string errorMessage { get; } =
+        public string ErrorMessage { get; } =
             customMessage ?? "Time must be in the AM period (midnight to noon)";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a time is in the PM period.
+/// Provides factory methods for creating validation rules that ensure a time is in the PM period (noon to midnight).
 /// </summary>
 public static class PmRule
 {
@@ -313,18 +357,18 @@ public static class PmRule
     {
         public bool IsValid(T value) => validator(value);
 
-        public string errorMessage { get; } =
+        public string ErrorMessage { get; } =
             customMessage ?? "Time must be in the PM period (noon to midnight)";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a time is midnight.
+/// Provides factory methods for creating validation rules that ensure a time is exactly midnight (00:00:00).
 /// </summary>
 public static class MidnightRule
 {
     /// <summary>
-    /// Creates a validation rule for DateTime values that ensures the time is midnight.
+    /// Creates a validation rule for DateTime values that ensures the time is midnight (00:00:00).
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
@@ -332,48 +376,51 @@ public static class MidnightRule
         new MidnightRuleImpl<DateTime>(v => v.TimeOfDay == TimeSpan.Zero, customMessage);
 
     /// <summary>
-    /// Creates a validation rule for TimeOnly values that ensures the time is midnight.
+    /// Creates a validation rule for TimeOnly values that ensures the time is midnight (00:00:00).
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new MidnightRuleImpl<TimeOnly>(v => v.ToTimeSpan() == TimeSpan.Zero, customMessage);
+        new MidnightRuleImpl<TimeOnly>(v => v == TimeOnly.MinValue, customMessage);
 
     private class MidnightRuleImpl<T>(Func<T, bool> validator, string? customMessage)
         : IValidationRule<T>
     {
         public bool IsValid(T value) => validator(value);
 
-        public string errorMessage { get; } = customMessage ?? "Time must be midnight";
+        public string ErrorMessage { get; } = customMessage ?? "Time must be midnight (00:00:00)";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a time is noon.
+/// Provides factory methods for creating validation rules that ensure a time is exactly noon (12:00:00).
 /// </summary>
 public static class NoonRule
 {
+    private static readonly TimeSpan _noon = TimeSpan.FromHours(12);
+    private static readonly TimeOnly _noonTimeOnly = new(12, 0, 0);
+
     /// <summary>
-    /// Creates a validation rule for DateTime values that ensures the time is noon.
+    /// Creates a validation rule for DateTime values that ensures the time is noon (12:00:00).
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new NoonRuleImpl<DateTime>(v => v.TimeOfDay == TimeSpan.FromHours(12), customMessage);
+        new NoonRuleImpl<DateTime>(v => v.TimeOfDay == _noon, customMessage);
 
     /// <summary>
-    /// Creates a validation rule for TimeOnly values that ensures the time is noon.
+    /// Creates a validation rule for TimeOnly values that ensures the time is noon (12:00:00).
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new NoonRuleImpl<TimeOnly>(v => v.ToTimeSpan() == TimeSpan.FromHours(12), customMessage);
+        new NoonRuleImpl<TimeOnly>(v => v == _noonTimeOnly, customMessage);
 
     private class NoonRuleImpl<T>(Func<T, bool> validator, string? customMessage)
         : IValidationRule<T>
     {
         public bool IsValid(T value) => validator(value);
 
-        public string errorMessage { get; } = customMessage ?? "Time must be noon (12:00:00)";
+        public string ErrorMessage { get; } = customMessage ?? "Time must be noon (12:00:00)";
     }
 }

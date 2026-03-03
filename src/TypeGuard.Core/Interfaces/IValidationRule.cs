@@ -1,9 +1,9 @@
-﻿namespace TypeGuard.Core.Rules;
+﻿namespace TypeGuard.Core.Interfaces;
 
 /// <summary>
 /// Defines a contract for a validation rule that can be applied to values of a specific type.
 /// </summary>
-/// <typeparam name="T">The type of value that this rule can validate. (Generic Type)</typeparam>
+/// <typeparam name="T">The type of value this rule validates.</typeparam>
 public interface IValidationRule<in T>
 {
     /// <summary>
@@ -14,7 +14,7 @@ public interface IValidationRule<in T>
     bool IsValid(T value);
 
     /// <summary>
-    /// Gets the error message that should be displayed when validation fails.
+    /// Gets the error message displayed when validation fails.
     /// </summary>
-    string errorMessage { get; }
+    string ErrorMessage { get; }
 }

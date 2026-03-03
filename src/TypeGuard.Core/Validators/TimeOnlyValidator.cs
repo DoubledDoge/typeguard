@@ -2,7 +2,7 @@
 
 namespace TypeGuard.Core.Validators;
 
-using Abstractions;
+using Interfaces;
 
 /// <summary>
 /// A validator that prompts for and validates TimeOnly input according to a specified format.
@@ -10,9 +10,9 @@ using Abstractions;
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
-/// <param name="format">The expected date format string. If null, any valid DateTime format is accepted.</param>
-/// <param name="formatProvider">The format provider to use for parsing. If null, the current culture is used.</param>
-/// <param name="dateTimeStyles">The styles to use for parsing. Default is <see cref="DateTimeStyles.None"/>.</param>
+/// <param name="format">The expected time format string. If null, any valid TimeOnly format is accepted.</param>
+/// <param name="formatProvider">The format provider to use for parsing. Defaults to the current culture.</param>
+/// <param name="dateTimeStyles">The styles to use for parsing. Defaults to <see cref="DateTimeStyles.None"/>.</param>
 public class TimeOnlyValidator(
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
@@ -22,13 +22,8 @@ public class TimeOnlyValidator(
     DateTimeStyles dateTimeStyles = DateTimeStyles.None
 ) : ValidatorBase<TimeOnly>(inputProvider, outputProvider, prompt)
 {
-    /// <summary>
-    /// Attempts to parse the raw user input into a TimeOnly value using the configured format. (Overrides <see cref="ValidatorBase{T}.TryParse"/>)
-    /// </summary>
-    /// <param name="input">The raw input string from the user.</param>
-    /// <param name="value">When this method returns, contains the parsed TimeOnly if parsing succeeded, or the default TimeOnly value if parsing failed.</param>
-    /// <param name="errorMessage">When this method returns, contains the error message if parsing failed, or null if parsing succeeded.</param>
-    /// <returns><c>true</c> if the input matches the expected format and is a valid TimeOnly; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc cref="ValidatorBase{T}.TryParse"/>
+    /// <returns><c>true</c> if the input is a valid TimeOnly matching the expected format; otherwise, <c>false</c>.</returns>
     protected override bool TryParse(string? input, out TimeOnly value, out string? errorMessage)
     {
         if (TimeOnly.TryParseExact(input, format, formatProvider, dateTimeStyles, out value))
@@ -37,8 +32,10 @@ public class TimeOnlyValidator(
             return true;
         }
 
-        errorMessage = $"Please enter a valid time in the format {format}";
-        value = default(TimeOnly);
+        value = default;
+        errorMessage = format is null
+            ? "Please enter a valid time."
+            : $"Please enter a valid time in the format '{format}'.";
         return false;
     }
 }

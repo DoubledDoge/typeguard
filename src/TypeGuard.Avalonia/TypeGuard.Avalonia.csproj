@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>AnyCpu</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Optimize>true</Optimize>
+    <Deterministic>true</Deterministic>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>TypeGuard.Avalonia</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>DoubledDoge</Authors>
+    <Description>Avalonia implementation for TypeGuard, supporting Windows, macOS, iOS, and Android.</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>desktop;validation;input-validation;gui;</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../icon.png" Pack="true" PackagePath="/" />
+    <ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
+    <PackageReference Include="Avalonia" Version="11.3.12" />
+  </ItemGroup>
+</Project>

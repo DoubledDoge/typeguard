@@ -1,26 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- General Settings -->
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <OutputType>Library</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <Nullable>enable</Nullable>
-    <Optimize>True</Optimize>
+    <Optimize>true</Optimize>
     <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
-  <!-- Package Metadata -->
   <PropertyGroup>
     <PackageId>TypeGuard.Core</PackageId>
-    <Version>0.1.1</Version>
+    <Version>1.0.0</Version>
     <Authors>DoubledDoge</Authors>
-    <Company>Personal</Company>
     <Description>Core validation library for TypeGuard.</Description>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -29,15 +28,11 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>validation;input-validation;typesafe;validation-library;csharp</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>https://github.com/DoubledDoge/typeguard/releases</PackageReleaseNotes>
+    <PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- External inclusions -->
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="../../icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿namespace TypeGuard.Core.Validators;
 
-using Abstractions;
+using Interfaces;
 
 /// <summary>
 /// A validator that prompts for and validates single character input.
@@ -14,19 +14,14 @@ public class CharValidator(
     string prompt
 ) : ValidatorBase<char>(inputProvider, outputProvider, prompt)
 {
-    /// <summary>
-    /// Attempts to parse the raw user input into a single character. (Overrides <see cref="ValidatorBase{T}.TryParse"/>)
-    /// </summary>
-    /// <param name="input">The raw input string from the user.</param>
-    /// <param name="value">When this method returns, contains the parsed character if parsing succeeded, or the null character if parsing failed.</param>
-    /// <param name="errorMessage">When this method returns, contains the error message if parsing failed, or null if parsing succeeded.</param>
+    /// <inheritdoc cref="ValidatorBase{T}.TryParse"/>
     /// <returns><c>true</c> if the input is exactly one character; otherwise, <c>false</c>.</returns>
     protected override bool TryParse(string? input, out char value, out string? errorMessage)
     {
         if (string.IsNullOrEmpty(input) || input.Length != 1)
         {
-            errorMessage = "Please enter a single character";
-            value = '\0';
+            value = default;
+            errorMessage = "Please enter a single character.";
             return false;
         }
 

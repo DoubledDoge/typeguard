@@ -1,4 +1,4 @@
-﻿namespace TypeGuard.Core.Abstractions;
+﻿namespace TypeGuard.Core.Interfaces;
 
 /// <summary>
 /// Defines a contract for reading user input from various sources.
@@ -16,5 +16,5 @@ public interface IInputProvider
     /// Synchronously retrieves user input as a string.
     /// </summary>
     /// <returns>The input string, or null if no input was provided.</returns>
-    string? GetInput(); // Sync wrapper
+    string? GetInput();
 }

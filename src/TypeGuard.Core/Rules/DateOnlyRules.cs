@@ -1,8 +1,14 @@
 ﻿namespace TypeGuard.Core.Rules;
 
+using Interfaces;
+
 /// <summary>
 /// Provides factory methods for creating validation rules that ensure a date is in the future.
 /// </summary>
+/// <remarks>
+/// Validation is performed against <see cref="DateTime.Now"/>, so the rule is sensitive to the
+/// current time of day, not just the current date.
+/// </remarks>
 public static class FutureDateRule
 {
     /// <summary>
@@ -26,13 +32,17 @@ public static class FutureDateRule
     {
         public bool IsValid(T value) => converter(value) > DateTime.Now;
 
-        public string errorMessage { get; } = customMessage ?? "Date must be in the future";
+        public string ErrorMessage { get; } = customMessage ?? "Date must be in the future";
     }
 }
 
 /// <summary>
 /// Provides factory methods for creating validation rules that ensure a date is in the past.
 /// </summary>
+/// <remarks>
+/// Validation is performed against <see cref="DateTime.Now"/>, so the rule is sensitive to the
+/// current time of day, not just the current date.
+/// </remarks>
 public static class PastDateRule
 {
     /// <summary>
@@ -56,13 +66,17 @@ public static class PastDateRule
     {
         public bool IsValid(T value) => converter(value) < DateTime.Now;
 
-        public string errorMessage { get; } = customMessage ?? "Date must be in the past";
+        public string ErrorMessage { get; } = customMessage ?? "Date must be in the past";
     }
 }
 
 /// <summary>
 /// Provides factory methods for creating validation rules that ensure a date is today.
 /// </summary>
+/// <remarks>
+/// Validation is performed against <see cref="DateTime.Today"/>, so the rule is sensitive to the
+/// current date boundary only, not the current time of day.
+/// </remarks>
 public static class TodayRule
 {
     /// <summary>
@@ -86,13 +100,17 @@ public static class TodayRule
     {
         public bool IsValid(T value) => converter(value) == DateTime.Today;
 
-        public string errorMessage { get; } = customMessage ?? "Date must be today";
+        public string ErrorMessage { get; } = customMessage ?? "Date must be today";
     }
 }
 
 /// <summary>
 /// Provides factory methods for creating validation rules that ensure a date is not today.
 /// </summary>
+/// <remarks>
+/// Validation is performed against <see cref="DateTime.Today"/>, so the rule is sensitive to the
+/// current date boundary only, not the current time of day.
+/// </remarks>
 public static class NotTodayRule
 {
     /// <summary>
@@ -116,7 +134,7 @@ public static class NotTodayRule
     {
         public bool IsValid(T value) => converter(value) != DateTime.Today;
 
-        public string errorMessage { get; } = customMessage ?? "Date must not be today";
+        public string ErrorMessage { get; } = customMessage ?? "Date must not be today";
     }
 }
 
@@ -146,11 +164,11 @@ public static class WeekdayRule
     {
         public bool IsValid(T value)
         {
-            DateTime dt = converter(value);
-            return dt.DayOfWeek is not DayOfWeek.Saturday and DayOfWeek.Sunday;
+            DayOfWeek day = converter(value).DayOfWeek;
+            return day is not (DayOfWeek.Saturday or DayOfWeek.Sunday);
         }
 
-        public string errorMessage { get; } = customMessage ?? "Date must be a weekday";
+        public string ErrorMessage { get; } = customMessage ?? "Date must be a weekday";
     }
 }
 
@@ -180,11 +198,11 @@ public static class WeekendRule
     {
         public bool IsValid(T value)
         {
-            DateTime dt = converter(value);
-            return dt.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
+            DayOfWeek day = converter(value).DayOfWeek;
+            return day is DayOfWeek.Saturday or DayOfWeek.Sunday;
         }
 
-        public string errorMessage { get; } = customMessage ?? "Date must be a weekend day";
+        public string ErrorMessage { get; } = customMessage ?? "Date must be a weekend day";
     }
 }
 
@@ -228,7 +246,7 @@ public static class DayOfWeekRule
     {
         public bool IsValid(T value) => converter(value).DayOfWeek == dayOfWeek;
 
-        public string errorMessage { get; } = customMessage ?? $"Date must be a {dayOfWeek}";
+        public string ErrorMessage { get; } = customMessage ?? $"Date must be a {dayOfWeek}";
     }
 }
 
@@ -240,20 +258,42 @@ public static class WithinDaysRule
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the date is within the specified number of days from now.
     /// </summary>
-    /// <param name="days">The maximum number of days from the current date.</param>
+    /// <param name="days">The maximum number of days from the current date. Must be greater than zero.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(int days, string? customMessage = null) =>
-        new WithinDaysRuleImpl<DateTime>(v => v, days, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="days"/> is less than or equal to zero.</exception>
+    public static IValidationRule<DateTime> ForDateTime(int days, string? customMessage = null)
+    {
+        return days <= 0
+            ? throw new ArgumentOutOfRangeException(
+                nameof(days),
+                days,
+                "days must be greater than zero."
+            )
+            : new WithinDaysRuleImpl<DateTime>(v => v, days, customMessage);
+    }
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date is within the specified number of days from now.
     /// </summary>
-    /// <param name="days">The maximum number of days from the current date.</param>
+    /// <param name="days">The maximum number of days from the current date. Must be greater than zero.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
-    public static IValidationRule<DateOnly> ForDateOnly(int days, string? customMessage = null) =>
-        new WithinDaysRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), days, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="days"/> is less than or equal to zero.</exception>
+    public static IValidationRule<DateOnly> ForDateOnly(int days, string? customMessage = null)
+    {
+        return days <= 0
+            ? throw new ArgumentOutOfRangeException(
+                nameof(days),
+                days,
+                "days must be greater than zero."
+            )
+            : new WithinDaysRuleImpl<DateOnly>(
+                v => v.ToDateTime(TimeOnly.MinValue),
+                days,
+                customMessage
+            );
+    }
 
     private class WithinDaysRuleImpl<T>(
         Func<T, DateTime> converter,
@@ -267,40 +307,58 @@ public static class WithinDaysRule
             return Math.Abs(difference.TotalDays) <= days;
         }
 
-        public string errorMessage { get; } =
+        public string ErrorMessage { get; } =
             customMessage ?? $"Date must be within {days} days from now";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a date represents a specific year.
+/// Provides factory methods for creating validation rules that ensure a date falls within a specific year.
 /// </summary>
 public static class YearRule
 {
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the date is in the specified year.
     /// </summary>
-    /// <param name="year">The required year.</param>
+    /// <param name="year">The required year. Must be between <see cref="DateTime.MinValue"/>.Year and <see cref="DateTime.MaxValue"/>.Year.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(int year, string? customMessage = null) =>
-        new YearRuleImpl<DateTime>(v => v, year, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="year"/> is outside the valid DateTime year range.</exception>
+    public static IValidationRule<DateTime> ForDateTime(int year, string? customMessage = null)
+    {
+        return year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year
+            ? throw new ArgumentOutOfRangeException(
+                nameof(year),
+                year,
+                $"year must be between {DateTime.MinValue.Year} and {DateTime.MaxValue.Year}."
+            )
+            : new YearRuleImpl<DateTime>(v => v, year, customMessage);
+    }
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date is in the specified year.
     /// </summary>
-    /// <param name="year">The required year.</param>
+    /// <param name="year">The required year. Must be between <see cref="DateTime.MinValue"/>.Year and <see cref="DateTime.MaxValue"/>.Year.</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
-    public static IValidationRule<DateOnly> ForDateOnly(int year, string? customMessage = null) =>
-        new YearRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), year, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="year"/> is outside the valid DateTime year range.</exception>
+    public static IValidationRule<DateOnly> ForDateOnly(int year, string? customMessage = null)
+    {
+        return year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year
+            ? throw new ArgumentOutOfRangeException(
+                nameof(year),
+                year,
+                $"year must be between {DateTime.MinValue.Year} and {DateTime.MaxValue.Year}."
+            )
+            : new YearRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), year, customMessage);
+    }
 
     private class YearRuleImpl<T>(Func<T, DateTime> converter, int year, string? customMessage)
         : IValidationRule<T>
     {
         public bool IsValid(T value) => converter(value).Year == year;
 
-        public string errorMessage { get; } = customMessage ?? $"Date must be in the year {year}";
+        public string ErrorMessage { get; } = customMessage ?? $"Date must be in the year {year}";
     }
 }
 
@@ -330,38 +388,60 @@ public static class LeapYearRule
     {
         public bool IsValid(T value) => DateTime.IsLeapYear(converter(value).Year);
 
-        public string errorMessage { get; } = customMessage ?? "Date must be in a valid leap year";
+        public string ErrorMessage { get; } = customMessage ?? "Date must be in a leap year";
     }
 }
 
 /// <summary>
-/// Provides factory methods for creating validation rules that ensure a date represents a specific month.
+/// Provides factory methods for creating validation rules that ensure a date falls within a specific month.
 /// </summary>
 public static class MonthRule
 {
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the date is in the specified month.
     /// </summary>
-    /// <param name="month">The required month.</param>
-    /// <param name="customMessage">An optional custom error message</param>
+    /// <param name="month">The required month (1-12).</param>
+    /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(int month, string? customMessage = null) =>
-        new MonthRuleImpl<DateTime>(v => v, month, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="month"/> is not between 1 and 12.</exception>
+    public static IValidationRule<DateTime> ForDateTime(int month, string? customMessage = null)
+    {
+        return month is < 1 or > 12
+            ? throw new ArgumentOutOfRangeException(
+                nameof(month),
+                month,
+                "month must be between 1 and 12."
+            )
+            : new MonthRuleImpl<DateTime>(v => v, month, customMessage);
+    }
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date is in the specified month.
     /// </summary>
-    /// <param name="month">The required month.</param>
+    /// <param name="month">The required month (1-12).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
-    public static IValidationRule<DateOnly> ForDateOnly(int month, string? customMessage = null) =>
-        new MonthRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), month, customMessage);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="month"/> is not between 1 and 12.</exception>
+    public static IValidationRule<DateOnly> ForDateOnly(int month, string? customMessage = null)
+    {
+        return month is < 1 or > 12
+            ? throw new ArgumentOutOfRangeException(
+                nameof(month),
+                month,
+                "month must be between 1 and 12."
+            )
+            : new MonthRuleImpl<DateOnly>(
+                v => v.ToDateTime(TimeOnly.MinValue),
+                month,
+                customMessage
+            );
+    }
 
     private class MonthRuleImpl<T>(Func<T, DateTime> converter, int month, string? customMessage)
         : IValidationRule<T>
     {
         public bool IsValid(T value) => converter(value).Month == month;
 
-        public string errorMessage { get; } = customMessage ?? $"Date must be in month {month}";
+        public string ErrorMessage { get; } = customMessage ?? $"Date must be in month {month}";
     }
 }

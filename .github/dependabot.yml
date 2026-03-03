@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # NuGet dependencies
   - package-ecosystem: 'nuget'
     directory: '/'
     schedule:
@@ -25,7 +24,19 @@ updates:
     commit-message:
       prefix: 'chore'
 
-  # GitHub Actions
+  - package-ecosystem: 'devcontainers'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    reviewers:
+      - 'DoubledDoge'
+    assignees:
+      - 'DoubledDoge'
+    commit-message:
+      prefix: 'chore'
+
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
@@ -46,4 +57,3 @@ updates:
           - 'major'
     commit-message:
       prefix: 'chore'
-

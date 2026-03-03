@@ -4,13 +4,14 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  release:
+    types: [published]
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
   DOTNET_VERSION: |
-    8.0.x
     9.0.x
     10.0.x
 
@@ -43,8 +44,8 @@ jobs:
             echo "is-prerelease=false" >> $GITHUB_OUTPUT
           fi
 
-  build-and-test:
-    name: Build & Test
+  build-and-pack:
+    name: Build & Pack
     runs-on: ubuntu-latest
     needs: validate-tag
     permissions:
@@ -61,43 +62,9 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Run tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
-
-  pack-and-publish:
-    name: Pack & Publish
-    runs-on: ubuntu-latest
-    needs: [validate-tag, build-and-test]
-    permissions:
-      contents: write
-      packages: write
-    environment:
-      name: nuget-production
-      url: https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install MAUI workload
+        run: dotnet workload install maui
+        continue-on-error: true
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -117,17 +84,54 @@ jobs:
           VERSION=${{ needs.validate-tag.outputs.version }}
           echo "Packing version: $VERSION"
 
-          dotnet pack src/TypeGuard.Core/TypeGuard.Core.csproj \
-            --configuration Release \
-            --no-build \
-            --output ./artifacts \
-            /p:PackageVersion=$VERSION
+          PROJECTS=(
+            "src/TypeGuard.Core/TypeGuard.Core.csproj"
+            "src/TypeGuard.Console/TypeGuard.Console.csproj"
+            "src/TypeGuard.Avalonia/TypeGuard.Avalonia.csproj"
+            "src/TypeGuard.Wpf/TypeGuard.Wpf.csproj"
+            "src/TypeGuard.Winforms/TypeGuard.Winforms.csproj"
+            "src/TypeGuard.Maui/TypeGuard.Maui.csproj"
+            "src/TypeGuard.Blazor/TypeGuard.Blazor.csproj"
+          )
 
-          dotnet pack src/TypeGuard.Console/TypeGuard.Console.csproj \
-            --configuration Release \
-            --no-build \
-            --output ./artifacts \
-            /p:PackageVersion=$VERSION
+          for project in "${PROJECTS[@]}"; do
+            echo "Packing $project"
+            dotnet pack "$project" \
+              --configuration Release \
+              --no-build \
+              --output ./artifacts \
+              /p:PackageVersion=$VERSION
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages-${{ github.sha }}
+          path: ./artifacts/*.nupkg
+          retention-days: 7
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: [validate-tag, build-and-pack]
+    permissions:
+      contents: write
+      packages: write
+    environment:
+      name: nuget-production
+      url: https://www.nuget.org/packages/TypeGuard.Core/${{ needs.validate-tag.outputs.version }}
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages-${{ github.sha }}
+          path: ./artifacts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Verify package signatures
         run: |
@@ -140,6 +144,18 @@ jobs:
         if: needs.validate-tag.outputs.is-prerelease == 'false'
         run: |
           echo "Publishing stable packages to NuGet.org"
+          for package in ./artifacts/*.nupkg; do
+            echo "Publishing $(basename "$package")"
+            dotnet nuget push "$package" \
+              --api-key ${{ secrets.NUGET_API_KEY }} \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done
+
+      - name: Publish pre-release to NuGet.org
+        if: needs.validate-tag.outputs.is-prerelease == 'true'
+        run: |
+          echo "Publishing pre-release packages to NuGet.org"
           for package in ./artifacts/*.nupkg; do
             echo "Publishing $(basename "$package")"
             dotnet nuget push "$package" \
@@ -163,18 +179,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ./artifacts/*.nupkg
-          generate_release_notes: true
           draft: false
           prerelease: ${{ needs.validate-tag.outputs.is-prerelease == 'true' }}
           fail_on_unmatched_files: true
-          body: |
-            ## Release v${{ needs.validate-tag.outputs.version }}
-
-            ### Installation
-            ```bash
-            dotnet add package TypeGuard.Console --version ${{ needs.validate-tag.outputs.version }}
-            ```
-
-            ### Packages
-            - [TypeGuard.Core v${{ needs.validate-tag.outputs.version }}](https://www.nuget.org/packages/TypeGuard.Core/${{ needs.validate-tag.outputs.version }})
-            - [TypeGuard.Console v${{ needs.validate-tag.outputs.version }}](https://www.nuget.org/packages/TypeGuard.Console/${{ needs.validate-tag.outputs.version }})

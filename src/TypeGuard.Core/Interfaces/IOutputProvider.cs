@@ -1,4 +1,4 @@
-﻿namespace TypeGuard.Core.Abstractions;
+﻿namespace TypeGuard.Core.Interfaces;
 
 /// <summary>
 /// Defines a contract for displaying messages and prompts to the user.
@@ -9,7 +9,8 @@ public interface IOutputProvider
     /// Asynchronously displays a prompt message to the user.
     /// </summary>
     /// <param name="message">The prompt message to display.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.
+    /// When cancelled, the display operation should terminate gracefully without completing the message output.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task DisplayPromptAsync(string message, CancellationToken cancellationToken = default);
 
@@ -17,7 +18,8 @@ public interface IOutputProvider
     /// Asynchronously displays an error message to the user.
     /// </summary>
     /// <param name="message">The error message to display.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.
+    /// When cancelled, the display operation should terminate gracefully without completing the message output.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task DisplayErrorAsync(string message, CancellationToken cancellationToken = default);
 

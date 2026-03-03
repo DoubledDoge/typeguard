@@ -1,22 +1,23 @@
 ﻿namespace TypeGuard.Core.Rules;
 
+using Interfaces;
+
 /// <summary>
 /// A validation rule that uses a custom predicate function to determine validity.
 /// </summary>
-/// <typeparam name="T">The type of value that this rule can validate.</typeparam>
-/// <param name="predicate">The function that determines whether a value is valid.</param>
-/// <param name="errorMessage">The error message to display when validation fails. (Generic Type)</param>
+/// <typeparam name="T">The type of value this rule validates.</typeparam>
+/// <param name="predicate">The function that determines whether a value is valid. Cannot be null.</param>
+/// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
+/// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="errorMessage"/> is null.</exception>
 public class CustomRule<T>(Func<T, bool> predicate, string errorMessage) : IValidationRule<T>
 {
-    /// <summary>
-    /// Determines whether the specified value passes this validation rule by executing the custom predicate.
-    /// </summary>
-    /// <param name="value">The value to validate.</param>
-    /// <returns><c>true</c> if the predicate returns true; otherwise, <c>false</c>.</returns>
-    public bool IsValid(T value) => predicate(value);
+    private readonly Func<T, bool> _predicate =
+        predicate ?? throw new ArgumentNullException(nameof(predicate));
 
-    /// <summary>
-    /// Gets the error message that should be displayed when validation fails.
-    /// </summary>
-    public string errorMessage { get; } = errorMessage;
+    /// <inheritdoc/>
+    public bool IsValid(T value) => _predicate(value);
+
+    /// <inheritdoc/>
+    public string ErrorMessage { get; } =
+        errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
 }

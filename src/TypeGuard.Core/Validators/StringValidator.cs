@@ -1,6 +1,6 @@
 ﻿namespace TypeGuard.Core.Validators;
 
-using Abstractions;
+using Interfaces;
 
 /// <summary>
 /// A validator that prompts for and validates string input, ensuring it is not empty or whitespace.
@@ -14,19 +14,14 @@ public class StringValidator(
     string prompt
 ) : ValidatorBase<string>(inputProvider, outputProvider, prompt)
 {
-    /// <summary>
-    /// Attempts to parse the raw user input into a trimmed, non-empty string. (Overrides <see cref="ValidatorBase{T}.TryParse"/>)
-    /// </summary>
-    /// <param name="input">The raw input string from the user.</param>
-    /// <param name="value">When this method returns, contains the trimmed string if parsing succeeded, or null if parsing failed.</param>
-    /// <param name="errorMessage">When this method returns, contains the error message if parsing failed, or null if parsing succeeded.</param>
+    /// <inheritdoc cref="ValidatorBase{T}.TryParse"/>
     /// <returns><c>true</c> if the input is not null, empty, or whitespace; otherwise, <c>false</c>.</returns>
     protected override bool TryParse(string? input, out string? value, out string? errorMessage)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
-            errorMessage = "Input cannot be empty or whitespace";
             value = null;
+            errorMessage = "Input cannot be empty or whitespace.";
             return false;
         }
 
