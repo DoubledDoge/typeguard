@@ -83,7 +83,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Install MAUI workload
-        run: dotnet workload install maui
+        run: dotnet workload install maui maui-tizen
         continue-on-error: true
 
       - name: Restore dependencies

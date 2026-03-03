@@ -12,6 +12,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AnalysisLevel>latest</AnalysisLevel>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
     <UseWPF>true</UseWPF>
