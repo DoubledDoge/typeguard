@@ -43,9 +43,8 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install MAUI workload
-        run: dotnet workload install maui
-        continue-on-error: true
+      - name: Install MAUI workloads
+        run: dotnet workload restore
 
       - name: Cache NuGet packages
         uses: actions/cache@v5
