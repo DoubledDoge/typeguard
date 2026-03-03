@@ -28,7 +28,7 @@
     <Project Path="src/TypeGuard.Console/TypeGuard.Console.csproj" />
     <Project Path="src/TypeGuard.Core/TypeGuard.Core.csproj" />
     <Project Path="src/TypeGuard.Maui/TypeGuard.Maui.csproj" />
-    <Project Path="src/TypeGuard.WinForms/TypeGuard.WinForms.csproj" />
+    <Project Path="src/TypeGuard.Winforms/TypeGuard.Winforms.csproj" />
     <Project Path="src/TypeGuard.Wpf/TypeGuard.Wpf.csproj" />
   </Folder>
 </Solution>
