@@ -19,7 +19,7 @@ public abstract class CharValidationRule(
 
     /// <inheritdoc/>
     public string ErrorMessage { get; } = customMessage ?? defaultMessage;
-} // TODO: EXPAND THIS TO OTHER FILES
+}
 
 /// <summary>
 /// A validation rule that ensures a character is a letter.
