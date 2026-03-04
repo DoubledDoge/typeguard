@@ -6,7 +6,7 @@ using Interfaces;
 /// A validation rule that ensures a TimeSpan is positive (greater than zero).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class PositiveTimeSpanRule(string? customMessage = null) : IValidationRule<TimeSpan>
+public class PositiveTimeSpanRule(string? customMessage = null) : IValidatorRule<TimeSpan>
 {
     /// <inheritdoc/>
     public bool IsValid(TimeSpan value) => value > TimeSpan.Zero;
@@ -21,7 +21,7 @@ public class PositiveTimeSpanRule(string? customMessage = null) : IValidationRul
 /// <param name="maximum">The maximum acceptable duration (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class MaxDurationRule(TimeSpan maximum, string? customMessage = null)
-    : IValidationRule<TimeSpan>
+    : IValidatorRule<TimeSpan>
 {
     /// <inheritdoc/>
     public bool IsValid(TimeSpan value) => value <= maximum;
@@ -36,7 +36,7 @@ public class MaxDurationRule(TimeSpan maximum, string? customMessage = null)
 /// <param name="minimum">The minimum acceptable duration (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class MinDurationRule(TimeSpan minimum, string? customMessage = null)
-    : IValidationRule<TimeSpan>
+    : IValidatorRule<TimeSpan>
 {
     /// <inheritdoc/>
     public bool IsValid(TimeSpan value) => value >= minimum;
@@ -52,7 +52,7 @@ public class MinDurationRule(TimeSpan minimum, string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxHours"/> is less than or equal to zero.</exception>
 public class WorkingHoursRule(int maxHours = 8, string? customMessage = null)
-    : IValidationRule<TimeSpan>
+    : IValidatorRule<TimeSpan>
 {
     private readonly TimeSpan _maxDuration =
         maxHours <= 0
@@ -75,7 +75,7 @@ public class WorkingHoursRule(int maxHours = 8, string? customMessage = null)
 /// A validation rule that ensures a TimeSpan represents a duration in whole hours (no minutes or seconds).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class WholeHoursRule(string? customMessage = null) : IValidationRule<TimeSpan>
+public class WholeHoursRule(string? customMessage = null) : IValidatorRule<TimeSpan>
 {
     /// <inheritdoc/>
     public bool IsValid(TimeSpan value) => value is { Minutes: 0, Seconds: 0, Milliseconds: 0 };
@@ -89,7 +89,7 @@ public class WholeHoursRule(string? customMessage = null) : IValidationRule<Time
 /// A validation rule that ensures a TimeSpan represents a duration in whole minutes (no seconds).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class WholeMinutesRule(string? customMessage = null) : IValidationRule<TimeSpan>
+public class WholeMinutesRule(string? customMessage = null) : IValidatorRule<TimeSpan>
 {
     /// <inheritdoc/>
     public bool IsValid(TimeSpan value) => value is { Seconds: 0, Milliseconds: 0 };
@@ -106,7 +106,7 @@ public class WholeMinutesRule(string? customMessage = null) : IValidationRule<Ti
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="unit"/> is less than or equal to zero.</exception>
 public class DurationIncrementRule(TimeSpan unit, string? customMessage = null)
-    : IValidationRule<TimeSpan>
+    : IValidatorRule<TimeSpan>
 {
     private readonly TimeSpan _unit =
         unit <= TimeSpan.Zero
@@ -129,7 +129,7 @@ public class DurationIncrementRule(TimeSpan unit, string? customMessage = null)
 /// A validation rule that ensures a TimeSpan represents a duration within a single day (less than 24 hours).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class WithinDayRule(string? customMessage = null) : IValidationRule<TimeSpan>
+public class WithinDayRule(string? customMessage = null) : IValidatorRule<TimeSpan>
 {
     /// <inheritdoc/>
     public bool IsValid(TimeSpan value) => value >= TimeSpan.Zero && value < TimeSpan.FromDays(1);

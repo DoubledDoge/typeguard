@@ -6,7 +6,7 @@ using Interfaces;
 /// A validation rule that ensures a GUID is not empty (not <see cref="Guid.Empty"/>).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NonEmptyGuidRule(string? customMessage = null) : IValidationRule<Guid>
+public class NonEmptyGuidRule(string? customMessage = null) : IValidatorRule<Guid>
 {
     /// <inheritdoc/>
     public bool IsValid(Guid value) => value != Guid.Empty;
@@ -21,7 +21,7 @@ public class NonEmptyGuidRule(string? customMessage = null) : IValidationRule<Gu
 /// <param name="version">The GUID version to validate against (1-5).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="version"/> is not between 1 and 5.</exception>
-public class GuidVersionRule(int version, string? customMessage = null) : IValidationRule<Guid>
+public class GuidVersionRule(int version, string? customMessage = null) : IValidatorRule<Guid>
 {
     private readonly int _version = version is < 1 or > 5
         ? throw new ArgumentOutOfRangeException(
@@ -51,7 +51,7 @@ public class GuidVersionRule(int version, string? customMessage = null) : IValid
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="excludedGuids"/> is null.</exception>
 /// <exception cref="ArgumentException">Thrown when <paramref name="excludedGuids"/> is empty.</exception>
 public class ExcludedGuidRule(IEnumerable<Guid> excludedGuids, string? customMessage = null)
-    : IValidationRule<Guid>
+    : IValidatorRule<Guid>
 {
     private readonly HashSet<Guid> _excluded = BuildSet(excludedGuids, nameof(excludedGuids));
 
@@ -77,7 +77,7 @@ public class ExcludedGuidRule(IEnumerable<Guid> excludedGuids, string? customMes
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedGuids"/> is null.</exception>
 /// <exception cref="ArgumentException">Thrown when <paramref name="allowedGuids"/> is empty.</exception>
 public class AllowedGuidRule(IEnumerable<Guid> allowedGuids, string? customMessage = null)
-    : IValidationRule<Guid>
+    : IValidatorRule<Guid>
 {
     private readonly HashSet<Guid> _allowed = BuildSet(allowedGuids, nameof(allowedGuids));
 

@@ -7,7 +7,7 @@ using Interfaces;
 /// </summary>
 /// <typeparam name="TEnum">The enum type to validate.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class DefinedEnumRule<TEnum>(string? customMessage = null) : IValidationRule<TEnum>
+public class DefinedEnumRule<TEnum>(string? customMessage = null) : IValidatorRule<TEnum>
     where TEnum : struct, Enum
 {
     /// <inheritdoc/>
@@ -23,7 +23,7 @@ public class DefinedEnumRule<TEnum>(string? customMessage = null) : IValidationR
 /// </summary>
 /// <typeparam name="TEnum">The enum type to validate.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NotDefaultEnumRule<TEnum>(string? customMessage = null) : IValidationRule<TEnum>
+public class NotDefaultEnumRule<TEnum>(string? customMessage = null) : IValidatorRule<TEnum>
     where TEnum : struct, Enum
 {
     /// <inheritdoc/>
@@ -45,7 +45,7 @@ public class NotDefaultEnumRule<TEnum>(string? customMessage = null) : IValidati
 public class AllowedEnumValuesRule<TEnum>(
     IEnumerable<TEnum> allowedValues,
     string? customMessage = null
-) : IValidationRule<TEnum>
+) : IValidatorRule<TEnum>
     where TEnum : struct, Enum
 {
     private readonly (HashSet<TEnum> Set, string Joined) _built = BuildSet(
@@ -83,7 +83,7 @@ public class AllowedEnumValuesRule<TEnum>(
 public class ExcludedEnumValuesRule<TEnum>(
     IEnumerable<TEnum> excludedValues,
     string? customMessage = null
-) : IValidationRule<TEnum>
+) : IValidatorRule<TEnum>
     where TEnum : struct, Enum
 {
     private readonly (HashSet<TEnum> Set, string Joined) _built = BuildSet(
@@ -118,7 +118,7 @@ public class ExcludedEnumValuesRule<TEnum>(
 /// <param name="requiredFlag">The flag that must be set.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class HasFlagRule<TEnum>(TEnum requiredFlag, string? customMessage = null)
-    : IValidationRule<TEnum>
+    : IValidatorRule<TEnum>
     where TEnum : struct, Enum
 {
     /// <inheritdoc/>
@@ -137,7 +137,7 @@ public class HasFlagRule<TEnum>(TEnum requiredFlag, string? customMessage = null
 /// <param name="forbiddenFlag">The flag that must not be set.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class NotHasFlagRule<TEnum>(TEnum forbiddenFlag, string? customMessage = null)
-    : IValidationRule<TEnum>
+    : IValidatorRule<TEnum>
     where TEnum : struct, Enum
 {
     /// <inheritdoc/>

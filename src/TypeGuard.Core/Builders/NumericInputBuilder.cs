@@ -2,12 +2,12 @@
 
 namespace TypeGuard.Core.Builders;
 
+using Handlers;
 using Interfaces;
 using Rules;
-using Validators;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a numeric validator with validation rules.
+/// A fluent builder for constructing and configuring a numeric input handler with validation rules.
 /// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
 /// in the order they are added.
 /// Supports int, long, float, double, decimal, byte, short, sbyte, ushort, uint, ulong, nint, nuint, and Half.
@@ -17,17 +17,17 @@ using Validators;
 /// <param name="inputProvider">The provider responsible for reading user input.</param>
 /// <param name="outputProvider">The provider responsible for displaying output messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="NumericValidator{T}"/>.
-/// Defaults to constructing a standard <see cref="NumericValidator{T}"/> from the provided providers.
+/// An optional factory for creating the internal <see cref="NumericHandler{T}"/>.
+/// Defaults to constructing a standard <see cref="NumericHandler{T}"/> from the provided providers.
 /// </param>
 public class NumericInputBuilder<T>(
     string prompt,
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    Func<string, IInputProvider, IOutputProvider, NumericValidator<T>>? validatorFactory = null
+    Func<string, IInputProvider, IOutputProvider, NumericHandler<T>>? validatorFactory = null
 )
     : BuilderBase<T, NumericInputBuilder<T>>(
-        (validatorFactory ?? ((p, i, o) => new NumericValidator<T>(i, o, p)))(
+        (validatorFactory ?? ((p, i, o) => new NumericHandler<T>(i, o, p)))(
             prompt ?? throw new ArgumentNullException(nameof(prompt)),
             inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
             outputProvider ?? throw new ArgumentNullException(nameof(outputProvider))
@@ -102,7 +102,7 @@ public class NumericInputBuilder<T>(
         this.AddRule(new MaximumRule<T>(max, customMessage));
 
     /// <summary>
-    /// Adds a custom validation rule to the validator.
+    /// Adds a custom validation rule to the input handler.
     /// </summary>
     /// <param name="predicate">The function that determines whether a numeric value is valid. Cannot be null.</param>
     /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
@@ -119,7 +119,7 @@ public class NumericInputBuilder<T>(
 }
 
 /// <summary>
-/// A fluent builder for constructing and configuring a validator for integer types, extending
+/// A fluent builder for constructing and configuring an input handler for integer types, extending
 /// <see cref="NumericInputBuilder{T}"/> with integer-specific validation rules.
 /// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
 /// in the order they are added.

@@ -1,11 +1,11 @@
 ﻿namespace TypeGuard.Core.Builders;
 
+using Handlers;
 using Interfaces;
 using Rules;
-using Validators;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a TimeOnly validator with validation rules.
+/// A fluent builder for constructing and configuring a TimeOnly input handler with validation rules.
 /// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
 /// in the order they are added.
 /// </summary>
@@ -14,19 +14,18 @@ using Validators;
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="TimeOnlyValidator"/>.
-/// Defaults to constructing a standard <see cref="TimeOnlyValidator"/> from the provided providers.
+/// An optional factory for creating the internal <see cref="TimeOnlyHandler"/>.
+/// Defaults to constructing a standard <see cref="TimeOnlyHandler"/> from the provided providers.
 /// </param>
 public class TimeOnlyInputBuilder(
     string prompt,
     string? format,
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    Func<string, string, IInputProvider, IOutputProvider, TimeOnlyValidator>? validatorFactory =
-        null
+    Func<string, string, IInputProvider, IOutputProvider, TimeOnlyHandler>? validatorFactory = null
 )
     : BuilderBase<TimeOnly, TimeOnlyInputBuilder>(
-        (validatorFactory ?? ((p, f, i, o) => new TimeOnlyValidator(i, o, p, f)))(
+        (validatorFactory ?? ((p, f, i, o) => new TimeOnlyHandler(i, o, p, f)))(
             prompt ?? throw new ArgumentNullException(nameof(prompt)),
             format ?? throw new ArgumentNullException(nameof(format)),
             inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -175,7 +174,7 @@ public class TimeOnlyInputBuilder(
         AddRule(NoonRule.ForTimeOnly(customMessage));
 
     /// <summary>
-    /// Adds a custom validation rule to the validator.
+    /// Adds a custom validation rule to the input handler.
     /// </summary>
     /// <param name="predicate">The function that determines whether a TimeOnly value is valid. Cannot be null.</param>
     /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>

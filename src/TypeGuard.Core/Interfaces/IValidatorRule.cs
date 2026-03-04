@@ -4,7 +4,7 @@
 /// Defines a contract for a validation rule that can be applied to values of a specific type.
 /// </summary>
 /// <typeparam name="T">The type of value this rule validates.</typeparam>
-public interface IValidationRule<in T>
+public interface IValidatorRule<in T>
 {
     /// <summary>
     /// Determines whether the specified value passes this validation rule.

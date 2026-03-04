@@ -1,23 +1,23 @@
 ﻿using TypeGuard.Core.Interfaces;
 
-namespace TypeGuard.Core.Validators;
+namespace TypeGuard.Core.Handlers;
 
 /// <summary>
-/// A validator that prompts for and validates TimeSpan input.
+/// An input handler that prompts for and validates TimeSpan input.
 /// Accepts various formats including "hh:mm:ss", "d.hh:mm:ss", or total units like "5.5".
 /// </summary>
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 /// <param name="format">The expected time span format string. If null, any valid TimeSpan format is accepted.</param>
-public class TimeSpanValidator(
+public class TimeSpanHandler(
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
     string prompt,
     string? format = null
-) : ValidatorBase<TimeSpan>(inputProvider, outputProvider, prompt)
+) : HandlerBase<TimeSpan>(inputProvider, outputProvider, prompt)
 {
-    /// <inheritdoc cref="ValidatorBase{T}.TryParse"/>
+    /// <inheritdoc cref="HandlerBase{T}.TryParse"/>
     /// <returns><c>true</c> if the input is a valid TimeSpan matching the expected format; otherwise, <c>false</c>.</returns>
     protected override bool TryParse(string? input, out TimeSpan value, out string? errorMessage)
     {

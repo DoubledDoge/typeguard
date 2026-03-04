@@ -1,11 +1,11 @@
 ﻿namespace TypeGuard.Core.Builders;
 
+using Handlers;
 using Interfaces;
 using Rules;
-using Validators;
 
 /// <summary>
-/// A fluent builder for constructing and configuring an enum validator with validation rules.
+/// A fluent builder for constructing and configuring an enum input handler with validation rules.
 /// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
 /// in the order they are added.
 /// </summary>
@@ -15,19 +15,18 @@ using Validators;
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="EnumValidator{TEnum}"/>.
-/// Defaults to constructing a standard <see cref="EnumValidator{TEnum}"/> from the provided providers.
+/// An optional factory for creating the internal <see cref="EnumHandler{TEnum}"/>.
+/// Defaults to constructing a standard <see cref="EnumHandler{TEnum}"/> from the provided providers.
 /// </param>
 public class EnumInputBuilder<TEnum>(
     string prompt,
     bool ignoreCase,
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    Func<string, bool, IInputProvider, IOutputProvider, EnumValidator<TEnum>>? validatorFactory =
-        null
+    Func<string, bool, IInputProvider, IOutputProvider, EnumHandler<TEnum>>? validatorFactory = null
 )
     : BuilderBase<TEnum, EnumInputBuilder<TEnum>>(
-        (validatorFactory ?? ((p, ig, i, o) => new EnumValidator<TEnum>(i, o, p, ig)))(
+        (validatorFactory ?? ((p, ig, i, o) => new EnumHandler<TEnum>(i, o, p, ig)))(
             prompt ?? throw new ArgumentNullException(nameof(prompt)),
             ignoreCase,
             inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -121,7 +120,7 @@ public class EnumInputBuilder<TEnum>(
     ) => this.AddRule(new NotHasFlagRule<TEnum>(forbiddenFlag, customMessage));
 
     /// <summary>
-    /// Adds a custom validation rule to the validator.
+    /// Adds a custom validation rule to the handler.
     /// </summary>
     /// <param name="predicate">The function that determines whether an enum value is valid. Cannot be null.</param>
     /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>

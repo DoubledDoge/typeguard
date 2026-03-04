@@ -1,11 +1,11 @@
 ﻿namespace TypeGuard.Core.Builders;
 
+using Handlers;
 using Interfaces;
 using Rules;
-using Validators;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a URI validator with validation rules.
+/// A fluent builder for constructing and configuring a URI input handler with validation rules.
 /// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
 /// in the order they are added.
 /// </summary>
@@ -14,18 +14,18 @@ using Validators;
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="UriValidator"/>.
-/// Defaults to constructing a standard <see cref="UriValidator"/> from the provided providers.
+/// An optional factory for creating the internal <see cref="UriHandler"/>.
+/// Defaults to constructing a standard <see cref="UriHandler"/> from the provided providers.
 /// </param>
 public class UriInputBuilder(
     string prompt,
     UriKind uriKind,
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    Func<string, UriKind, IInputProvider, IOutputProvider, UriValidator>? validatorFactory = null
+    Func<string, UriKind, IInputProvider, IOutputProvider, UriHandler>? validatorFactory = null
 )
     : BuilderBase<Uri, UriInputBuilder>(
-        (validatorFactory ?? ((p, u, i, o) => new UriValidator(i, o, p, u)))(
+        (validatorFactory ?? ((p, u, i, o) => new UriHandler(i, o, p, u)))(
             prompt ?? throw new ArgumentNullException(nameof(prompt)),
             uriKind,
             inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -183,7 +183,7 @@ public class UriInputBuilder(
         this.AddRule(new LocalhostRule(customMessage));
 
     /// <summary>
-    /// Adds a custom validation rule to the validator.
+    /// Adds a custom validation rule to the input handler.
     /// </summary>
     /// <param name="predicate">The function that determines whether a URI is valid. Cannot be null.</param>
     /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>

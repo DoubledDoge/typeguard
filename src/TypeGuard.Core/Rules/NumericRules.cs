@@ -12,7 +12,7 @@ using Interfaces;
 /// <param name="max">The maximum acceptable value (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
-public class RangeRule<T>(T min, T max, string? customMessage = null) : IValidationRule<T>
+public class RangeRule<T>(T min, T max, string? customMessage = null) : IValidatorRule<T>
     where T : IComparable<T>
 {
     private readonly T _min =
@@ -35,7 +35,7 @@ public class RangeRule<T>(T min, T max, string? customMessage = null) : IValidat
 /// </summary>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class PositiveRule<T>(string? customMessage = null) : IValidationRule<T>
+public class PositiveRule<T>(string? customMessage = null) : IValidatorRule<T>
     where T : INumber<T>
 {
     /// <inheritdoc/>
@@ -50,7 +50,7 @@ public class PositiveRule<T>(string? customMessage = null) : IValidationRule<T>
 /// </summary>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NonNegativeRule<T>(string? customMessage = null) : IValidationRule<T>
+public class NonNegativeRule<T>(string? customMessage = null) : IValidatorRule<T>
     where T : INumber<T>
 {
     /// <inheritdoc/>
@@ -65,7 +65,7 @@ public class NonNegativeRule<T>(string? customMessage = null) : IValidationRule<
 /// </summary>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NegativeRule<T>(string? customMessage = null) : IValidationRule<T>
+public class NegativeRule<T>(string? customMessage = null) : IValidatorRule<T>
     where T : INumber<T>
 {
     /// <inheritdoc/>
@@ -81,7 +81,7 @@ public class NegativeRule<T>(string? customMessage = null) : IValidationRule<T>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="IComparable{T}"/>.</typeparam>
 /// <param name="min">The minimum acceptable value (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class MinimumRule<T>(T min, string? customMessage = null) : IValidationRule<T>
+public class MinimumRule<T>(T min, string? customMessage = null) : IValidatorRule<T>
     where T : IComparable<T>
 {
     /// <inheritdoc/>
@@ -97,7 +97,7 @@ public class MinimumRule<T>(T min, string? customMessage = null) : IValidationRu
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="IComparable{T}"/>.</typeparam>
 /// <param name="max">The maximum acceptable value (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class MaximumRule<T>(T max, string? customMessage = null) : IValidationRule<T>
+public class MaximumRule<T>(T max, string? customMessage = null) : IValidatorRule<T>
     where T : IComparable<T>
 {
     /// <inheritdoc/>
@@ -112,7 +112,7 @@ public class MaximumRule<T>(T max, string? customMessage = null) : IValidationRu
 /// </summary>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/> and <see cref="IModulusOperators{TSelf, TOther, TResult}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class EvenRule<T>(string? customMessage = null) : IValidationRule<T>
+public class EvenRule<T>(string? customMessage = null) : IValidatorRule<T>
     where T : INumber<T>, IModulusOperators<T, T, T>
 {
     /// <inheritdoc/>
@@ -127,7 +127,7 @@ public class EvenRule<T>(string? customMessage = null) : IValidationRule<T>
 /// </summary>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/> and <see cref="IModulusOperators{TSelf, TOther, TResult}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class OddRule<T>(string? customMessage = null) : IValidationRule<T>
+public class OddRule<T>(string? customMessage = null) : IValidatorRule<T>
     where T : INumber<T>, IModulusOperators<T, T, T>
 {
     /// <inheritdoc/>
@@ -144,7 +144,7 @@ public class OddRule<T>(string? customMessage = null) : IValidationRule<T>
 /// <param name="divisor">The divisor the value must be a multiple of. Cannot be zero.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="divisor"/> is zero.</exception>
-public class MultipleOfRule<T>(T divisor, string? customMessage = null) : IValidationRule<T>
+public class MultipleOfRule<T>(T divisor, string? customMessage = null) : IValidatorRule<T>
     where T : INumber<T>, IModulusOperators<T, T, T>
 {
     private readonly T _divisor = T.IsZero(divisor)
@@ -165,7 +165,7 @@ public class MultipleOfRule<T>(T divisor, string? customMessage = null) : IValid
 /// <param name="divisor">The divisor the value must not be a multiple of. Cannot be zero.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="divisor"/> is zero.</exception>
-public class NotMultipleOfRule<T>(T divisor, string? customMessage = null) : IValidationRule<T>
+public class NotMultipleOfRule<T>(T divisor, string? customMessage = null) : IValidatorRule<T>
     where T : INumber<T>, IModulusOperators<T, T, T>
 {
     private readonly T _divisor = T.IsZero(divisor)
@@ -192,7 +192,7 @@ public class NotMultipleOfRule<T>(T divisor, string? customMessage = null) : IVa
 /// </remarks>
 /// <typeparam name="T">The integer type to validate. Must implement <see cref="IBinaryInteger{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class LuhnRule<T>(string? customMessage = null) : IValidationRule<T>
+public class LuhnRule<T>(string? customMessage = null) : IValidatorRule<T>
     where T : IBinaryInteger<T>
 {
     /// <inheritdoc/>

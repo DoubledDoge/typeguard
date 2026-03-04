@@ -9,7 +9,7 @@ using Interfaces;
 /// <param name="predicate">The function that determines whether a value is valid. Cannot be null.</param>
 /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="errorMessage"/> is null.</exception>
-public class CustomRule<T>(Func<T, bool> predicate, string errorMessage) : IValidationRule<T>
+public class CustomRule<T>(Func<T, bool> predicate, string errorMessage) : IValidatorRule<T>
 {
     private readonly Func<T, bool> _predicate =
         predicate ?? throw new ArgumentNullException(nameof(predicate));

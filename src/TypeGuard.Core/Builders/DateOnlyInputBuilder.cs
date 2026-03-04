@@ -1,11 +1,11 @@
 ﻿namespace TypeGuard.Core.Builders;
 
+using Handlers;
 using Interfaces;
 using Rules;
-using Validators;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a DateOnly validator with validation rules.
+/// A fluent builder for constructing and configuring a DateOnly input handler with validation rules.
 /// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
 /// in the order they are added.
 /// </summary>
@@ -14,19 +14,18 @@ using Validators;
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="DateOnlyValidator"/>.
-/// Defaults to constructing a standard <see cref="DateOnlyValidator"/> from the provided providers.
+/// An optional factory for creating the internal <see cref="DateOnlyHandler"/>.
+/// Defaults to constructing a standard <see cref="DateOnlyHandler"/> from the provided providers.
 /// </param>
 public class DateOnlyInputBuilder(
     string prompt,
     string? format,
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    Func<string, string, IInputProvider, IOutputProvider, DateOnlyValidator>? validatorFactory =
-        null
+    Func<string, string, IInputProvider, IOutputProvider, DateOnlyHandler>? validatorFactory = null
 )
     : BuilderBase<DateOnly, DateOnlyInputBuilder>(
-        (validatorFactory ?? ((p, f, i, o) => new DateOnlyValidator(i, o, p, f)))(
+        (validatorFactory ?? ((p, f, i, o) => new DateOnlyHandler(i, o, p, f)))(
             prompt ?? throw new ArgumentNullException(nameof(prompt)),
             format ?? throw new ArgumentNullException(nameof(format)),
             inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -166,7 +165,7 @@ public class DateOnlyInputBuilder(
         this.AddRule(MonthRule.ForDateOnly(month, customMessage));
 
     /// <summary>
-    /// Adds a custom validation rule to the validator.
+    /// Adds a custom validation rule to the handler.
     /// </summary>
     /// <param name="predicate">The function that determines whether a DateOnly value is valid. Cannot be null.</param>
     /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>

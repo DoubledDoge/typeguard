@@ -1,11 +1,11 @@
 ﻿namespace TypeGuard.Core.Builders;
 
+using Handlers;
 using Interfaces;
 using Rules;
-using Validators;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a TimeSpan validator with validation rules.
+/// A fluent builder for constructing and configuring a TimeSpan input handler with validation rules.
 /// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
 /// in the order they are added.
 /// </summary>
@@ -14,19 +14,18 @@ using Validators;
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="TimeSpanValidator"/>.
-/// Defaults to constructing a standard <see cref="TimeSpanValidator"/> from the provided providers.
+/// An optional factory for creating the internal <see cref="TimeSpanHandler"/>.
+/// Defaults to constructing a standard <see cref="TimeSpanHandler"/> from the provided providers.
 /// </param>
 public class TimeSpanInputBuilder(
     string prompt,
     string? format,
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    Func<string, string, IInputProvider, IOutputProvider, TimeSpanValidator>? validatorFactory =
-        null
+    Func<string, string, IInputProvider, IOutputProvider, TimeSpanHandler>? validatorFactory = null
 )
     : BuilderBase<TimeSpan, TimeSpanInputBuilder>(
-        (validatorFactory ?? ((p, f, i, o) => new TimeSpanValidator(i, o, p, f)))(
+        (validatorFactory ?? ((p, f, i, o) => new TimeSpanHandler(i, o, p, f)))(
             prompt ?? throw new ArgumentNullException(nameof(prompt)),
             format ?? throw new ArgumentNullException(nameof(format)),
             inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -148,7 +147,7 @@ public class TimeSpanInputBuilder(
         this.AddRule(new WithinDayRule(customMessage));
 
     /// <summary>
-    /// Adds a custom validation rule to the validator.
+    /// Adds a custom validation rule to the input handler.
     /// </summary>
     /// <param name="predicate">The function that determines whether a TimeSpan is valid. Cannot be null.</param>
     /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>

@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-9.0%20%7C%2010.0-512BD4)](https://dotnet.microsoft.com)
 
-A fluent, type-safe user input validation library for .NET with platform-specific implementations for Console, WinForms, WPF, Avalonia, MAUI, and Blazor.
+A fluent, type-safe user input handler and validation library for .NET with platform-specific implementations for Console, WinForms, WPF, Avalonia, MAUI, and Blazor.
 
 </div>
 
@@ -31,10 +31,10 @@ A fluent, type-safe user input validation library for .NET with platform-specifi
 
 ## 🚀 Features
 
-- **Type-Safe Validation** - Built-in validators for all common C# types
-- **Composable Rules** - Chain validation rules fluently, similar to LINQ
+- **Type-Safe Validation** - Built-in input handlers + validators for all common C# types
+- **Composable Rules** - Chain validation rules, similarly to LINQ
 - **Async Support** - Full async/await support with cancellation tokens
-- **Extensible** - Add custom validators and rules with ease
+- **Extensible** - Add custom handlers and rules with ease
 - **Multi-Platform** - Dedicated implementations for Console, WinForms, WPF, Avalonia, MAUI, and Blazor
 
 ---
@@ -88,12 +88,10 @@ dotnet add reference path/to/TypeGuard.Console/TypeGuard.Console.csproj  # or yo
 ```csharp
 using TypeGuard.Console;
 
-// Simple integer input
-int age = await Guard.Int("Enter your age")
+int age = Guard.Int("Enter your age")
     .WithRange(1, 120)
     .GetAsync();
 
-// String with validation rules
 string name = await Guard.String("Enter your name")
     .WithNoDigits()
     .WithLengthRange(2, 50)
@@ -124,28 +122,23 @@ private async void submitButton_Click(object sender, EventArgs e)
 
 ## 📚 Usage Guide
 
-### Simple Validation
+### Simple Input Handling
 
 ```csharp
-// Integer
 int count = await Guard.Int("How many items?").GetAsync();
 
-// String
 string username = await Guard.String("Enter username").GetAsync();
 
-// DateTime
 DateTime date = await Guard.DateTime("Enter a date", "dd/MM/yyyy").GetAsync();
 ```
 
-### Validation with Rules
+### Adding Rules
 
 ```csharp
-// Age: must be between 18 and 120
 int age = await Guard.Int("Enter your age")
     .WithRange(18, 120)
     .GetAsync();
 
-// Username: 3–20 characters, letters only
 string username = await Guard.String("Choose a username")
     .WithLengthRange(3, 20)
     .WithNoDigits()
@@ -155,7 +148,6 @@ string username = await Guard.String("Choose a username")
 ### Custom Validation Rules
 
 ```csharp
-// Password strength
 string password = await Guard.String("Create a password")
     .WithLengthRange(8, null)
     .WithRegex(@"[A-Z]", "Must contain at least one uppercase letter")
@@ -167,22 +159,19 @@ string password = await Guard.String("Create a password")
     .GetAsync();
 ```
 
-### DateTime Validation
+### DateTime Handling
 
 ```csharp
-// Strict format
 DateTime appointment = await Guard.DateTime("Enter appointment date", "dd/MM/yyyy")
     .WithRange(DateTime.Today, DateTime.Today.AddMonths(6))
     .GetAsync();
 
-// Flexible parsing
 DateTime birthday = await Guard.DateTime("Enter birthday")
     .WithCustomRule(
         d => DateTime.Today.Year - d.Year >= 18,
         "Must be 18 or older")
     .GetAsync();
 
-// Weekdays only
 DateTime meeting = await Guard.DateTime("Select meeting date", "yyyy-MM-dd")
     .WithWeekday()
     .GetAsync();
@@ -308,9 +297,9 @@ int age = await _guard.Int("Enter your age")
 ## 🏗️ Architecture
 
 ```
-TypeGuard.Core              → Platform-agnostic validation logic
+TypeGuard.Core              → Platform-agnostic logic
 ├── Abstractions            → Interfaces
-├── Validators              → Type-specific validators
+├── Handlers                → Type-specific handlers
 ├── Rules                   → Validation rules
 └── Builders                → Fluent API builders
 
@@ -320,8 +309,8 @@ TypeGuard.Console           → Console implementation
 └── Guard                   → Main entry point
 
 TypeGuard.Winforms          → WinForms implementation (TextBox, TextBlock)
-├── WinformsInput            → Reads from Control.Text
-├── WinformsOutput           → Writes prompts and errors
+├── WinformsInput           → Reads from Control.Text
+├── WinformsOutput          → Writes prompts and errors
 └── Guard                   → Main entry point
 
 TypeGuard.Wpf               → WPF implementation (TextBox, TextBlock)
@@ -330,8 +319,8 @@ TypeGuard.Wpf               → WPF implementation (TextBox, TextBlock)
 └── Guard                   → Main entry point
 
 TypeGuard.Avalonia          → Avalonia implementation (TextBox, TextBlock)
-├── AvaloniaInput            → Reads from Textbox.Text
-├── AvaloniaOutput           → Writes prompts and errors
+├── AvaloniaInput           → Reads from Textbox.Text
+├── AvaloniaOutput          → Writes prompts and errors
 └── Guard                   → Main entry point
 
 TypeGuard.Maui              → MAUI implementation (Entry, Label, Button)
@@ -354,15 +343,14 @@ TypeGuard.Blazor            → Blazor implementation (InputText, DI-injected Gu
 ```csharp
 using TypeGuard.Core.Interfaces;
 
-public class EmailRule : IValidationRule<string>
+public class EmailRule : IHandlingRule<string>
 {
     public bool IsValid(string value) =>
         value.Contains('@') && value.Contains('.');
 
     public string ErrorMessage => "Must be a valid email address";
 }
-
-// Usage
+ 
 string email = await Guard.String("Enter email")
     .WithCustomRule(new EmailRule())
     .GetAsync();
@@ -375,7 +363,7 @@ string email = await Guard.String("Enter email")
 ## 💻 Requirements
 
 - .NET 9.0 or .NET 10.0
-- Windows, macOS, or Linux (platform packages may have OS restrictions)
+- Windows, macOS, or Linux (certain packages may have OS restrictions)
 
 ---
 
@@ -392,4 +380,4 @@ Contributions are welcome! You can:
 - Report bugs or request features via [Issues](https://github.com/DoubledDoge/TypeGuard/issues)
 - Submit pull requests
 - Suggest improvements to the API
-- Add new type validators/builders/rules
+- Adding new type handlers/builders/rules

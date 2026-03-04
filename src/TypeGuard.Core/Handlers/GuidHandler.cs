@@ -1,20 +1,20 @@
-﻿namespace TypeGuard.Core.Validators;
+﻿namespace TypeGuard.Core.Handlers;
 
 using Interfaces;
 
 /// <summary>
-/// A validator that prompts for and validates GUID input.
+/// An input handler that prompts for and validates GUID input.
 /// </summary>
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
-public class GuidValidator(
+public class GuidHandler(
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
     string prompt
-) : ValidatorBase<Guid>(inputProvider, outputProvider, prompt)
+) : HandlerBase<Guid>(inputProvider, outputProvider, prompt)
 {
-    /// <inheritdoc cref="ValidatorBase{T}.TryParse"/>
+    /// <inheritdoc cref="HandlerBase{T}.TryParse"/>
     /// <returns><c>true</c> if the input is a valid GUID; otherwise, <c>false</c>.</returns>
     protected override bool TryParse(string? input, out Guid value, out string? errorMessage)
     {

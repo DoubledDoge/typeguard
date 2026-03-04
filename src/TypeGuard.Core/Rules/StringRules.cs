@@ -16,7 +16,7 @@ public class StringLengthRule(
     int? minLength = null,
     int? maxLength = null,
     string? customMessage = null
-) : IValidationRule<string>
+) : IValidatorRule<string>
 {
     private readonly int? _minLength = ValidateArgs(minLength, maxLength);
 
@@ -69,7 +69,7 @@ public class StringLengthRule(
 /// <param name="pattern">The regular expression pattern the string must match. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="pattern"/> is null or empty.</exception>
-public class RegexRule(string pattern, string? customMessage = null) : IValidationRule<string>
+public class RegexRule(string pattern, string? customMessage = null) : IValidatorRule<string>
 {
     private readonly Regex _regex = string.IsNullOrEmpty(pattern)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(pattern))
@@ -86,7 +86,7 @@ public class RegexRule(string pattern, string? customMessage = null) : IValidati
 /// A validation rule that ensures a string contains only letters.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AlphabeticRule(string? customMessage = null) : IValidationRule<string>
+public class AlphabeticRule(string? customMessage = null) : IValidatorRule<string>
 {
     /// <inheritdoc/>
     public bool IsValid(string value) => value.All(char.IsLetter);
@@ -99,7 +99,7 @@ public class AlphabeticRule(string? customMessage = null) : IValidationRule<stri
 /// A validation rule that ensures a string contains only letters and digits.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AlphanumericStringRule(string? customMessage = null) : IValidationRule<string>
+public class AlphanumericStringRule(string? customMessage = null) : IValidatorRule<string>
 {
     /// <inheritdoc/>
     public bool IsValid(string value) => value.All(char.IsLetterOrDigit);
@@ -113,7 +113,7 @@ public class AlphanumericStringRule(string? customMessage = null) : IValidationR
 /// A validation rule that ensures a string contains only digits.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NumericRule(string? customMessage = null) : IValidationRule<string>
+public class NumericRule(string? customMessage = null) : IValidatorRule<string>
 {
     /// <inheritdoc/>
     public bool IsValid(string value) => value.All(char.IsDigit);
@@ -127,7 +127,7 @@ public class NumericRule(string? customMessage = null) : IValidationRule<string>
 /// Non-letter characters are permitted.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class UpperCaseStringRule(string? customMessage = null) : IValidationRule<string>
+public class UpperCaseStringRule(string? customMessage = null) : IValidatorRule<string>
 {
     /// <inheritdoc/>
     public bool IsValid(string value) => value.All(c => !char.IsLetter(c) || char.IsUpper(c));
@@ -141,7 +141,7 @@ public class UpperCaseStringRule(string? customMessage = null) : IValidationRule
 /// Non-letter characters are permitted.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class LowerCaseStringRule(string? customMessage = null) : IValidationRule<string>
+public class LowerCaseStringRule(string? customMessage = null) : IValidatorRule<string>
 {
     /// <inheritdoc/>
     public bool IsValid(string value) => value.All(c => !char.IsLetter(c) || char.IsLower(c));
@@ -156,7 +156,7 @@ public class LowerCaseStringRule(string? customMessage = null) : IValidationRule
 /// <param name="prefix">The required prefix. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="prefix"/> is null or empty.</exception>
-public class StartsWithRule(string prefix, string? customMessage = null) : IValidationRule<string>
+public class StartsWithRule(string prefix, string? customMessage = null) : IValidatorRule<string>
 {
     private readonly string _prefix = string.IsNullOrEmpty(prefix)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(prefix))
@@ -175,7 +175,7 @@ public class StartsWithRule(string prefix, string? customMessage = null) : IVali
 /// <param name="suffix">The required suffix. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="suffix"/> is null or empty.</exception>
-public class EndsWithRule(string suffix, string? customMessage = null) : IValidationRule<string>
+public class EndsWithRule(string suffix, string? customMessage = null) : IValidatorRule<string>
 {
     private readonly string _suffix = string.IsNullOrEmpty(suffix)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(suffix))
@@ -194,7 +194,7 @@ public class EndsWithRule(string suffix, string? customMessage = null) : IValida
 /// <param name="substring">The required substring. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="substring"/> is null or empty.</exception>
-public class ContainsRule(string substring, string? customMessage = null) : IValidationRule<string>
+public class ContainsRule(string substring, string? customMessage = null) : IValidatorRule<string>
 {
     private readonly string _substring = string.IsNullOrEmpty(substring)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
@@ -214,7 +214,7 @@ public class ContainsRule(string substring, string? customMessage = null) : IVal
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="substring"/> is null or empty.</exception>
 public class NotContainsRule(string substring, string? customMessage = null)
-    : IValidationRule<string>
+    : IValidatorRule<string>
 {
     private readonly string _substring = string.IsNullOrEmpty(substring)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
@@ -235,7 +235,7 @@ public class NotContainsRule(string substring, string? customMessage = null)
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedValues"/> is null.</exception>
 /// <exception cref="ArgumentException">Thrown when <paramref name="allowedValues"/> is empty.</exception>
 public class AllowedValuesRule(IEnumerable<string> allowedValues, string? customMessage = null)
-    : IValidationRule<string>
+    : IValidatorRule<string>
 {
     private readonly (HashSet<string> Set, string Joined) _built = BuildSet(
         allowedValues,
@@ -269,7 +269,7 @@ public class AllowedValuesRule(IEnumerable<string> allowedValues, string? custom
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="excludedValues"/> is null.</exception>
 /// <exception cref="ArgumentException">Thrown when <paramref name="excludedValues"/> is empty.</exception>
 public class ExcludedValuesRule(IEnumerable<string> excludedValues, string? customMessage = null)
-    : IValidationRule<string>
+    : IValidatorRule<string>
 {
     private readonly (HashSet<string> Set, string Joined) _built = BuildSet(
         excludedValues,
@@ -300,7 +300,7 @@ public class ExcludedValuesRule(IEnumerable<string> excludedValues, string? cust
 /// Uses a pattern that covers most common email formats.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public partial class EmailRule(string? customMessage = null) : IValidationRule<string>
+public partial class EmailRule(string? customMessage = null) : IValidatorRule<string>
 {
     [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex EmailRegex();
@@ -317,7 +317,7 @@ public partial class EmailRule(string? customMessage = null) : IValidationRule<s
 /// Permits digits, spaces, hyphens, parentheses, and plus signs to support international formats.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public partial class PhoneRule(string? customMessage = null) : IValidationRule<string>
+public partial class PhoneRule(string? customMessage = null) : IValidatorRule<string>
 {
     [GeneratedRegex(@"^[\d\s\-\(\)\+]+$", RegexOptions.Compiled)]
     private static partial Regex PhoneRegex();
@@ -335,7 +335,7 @@ public partial class PhoneRule(string? customMessage = null) : IValidationRule<s
 /// <param name="mustExist">If true, validates that the file actually exists on the file system. Defaults to false.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class FilePathRule(bool mustExist = false, string? customMessage = null)
-    : IValidationRule<string>
+    : IValidatorRule<string>
 {
     /// <inheritdoc/>
     public bool IsValid(string value)

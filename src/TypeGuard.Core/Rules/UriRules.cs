@@ -8,7 +8,7 @@ using Interfaces;
 /// <param name="scheme">The required URI scheme. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="scheme"/> is null or empty.</exception>
-public class UriSchemeRule(string scheme, string? customMessage = null) : IValidationRule<Uri>
+public class UriSchemeRule(string scheme, string? customMessage = null) : IValidatorRule<Uri>
 {
     private readonly string _scheme = string.IsNullOrEmpty(scheme)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(scheme))
@@ -26,7 +26,7 @@ public class UriSchemeRule(string scheme, string? customMessage = null) : IValid
 /// A validation rule that ensures a URI uses HTTPS only.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HttpsOnlyRule(string? customMessage = null) : IValidationRule<Uri>
+public class HttpsOnlyRule(string? customMessage = null) : IValidatorRule<Uri>
 {
     /// <inheritdoc/>
     public bool IsValid(Uri value) =>
@@ -40,7 +40,7 @@ public class HttpsOnlyRule(string? customMessage = null) : IValidationRule<Uri>
 /// A validation rule that ensures a URI uses either HTTP or HTTPS.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HttpOrHttpsRule(string? customMessage = null) : IValidationRule<Uri>
+public class HttpOrHttpsRule(string? customMessage = null) : IValidatorRule<Uri>
 {
     /// <inheritdoc/>
     public bool IsValid(Uri value) =>
@@ -57,7 +57,7 @@ public class HttpOrHttpsRule(string? customMessage = null) : IValidationRule<Uri
 /// <param name="domain">The required domain (e.g. "example.com"). Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="domain"/> is null or empty.</exception>
-public class DomainRule(string domain, string? customMessage = null) : IValidationRule<Uri>
+public class DomainRule(string domain, string? customMessage = null) : IValidatorRule<Uri>
 {
     private readonly string _domain = string.IsNullOrEmpty(domain)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(domain))
@@ -79,7 +79,7 @@ public class DomainRule(string domain, string? customMessage = null) : IValidati
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedDomains"/> is null.</exception>
 /// <exception cref="ArgumentException">Thrown when <paramref name="allowedDomains"/> is empty.</exception>
 public class AllowedDomainsRule(IEnumerable<string> allowedDomains, string? customMessage = null)
-    : IValidationRule<Uri>
+    : IValidatorRule<Uri>
 {
     private readonly (HashSet<string> Set, string Joined) _built = BuildSet(
         allowedDomains,
@@ -111,7 +111,7 @@ public class AllowedDomainsRule(IEnumerable<string> allowedDomains, string? cust
 /// <param name="port">The required port number. Must be between 0 and 65535.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="port"/> is not between 0 and 65535.</exception>
-public class PortRule(int port, string? customMessage = null) : IValidationRule<Uri>
+public class PortRule(int port, string? customMessage = null) : IValidatorRule<Uri>
 {
     private readonly int _port = port is < 0 or > 65535
         ? throw new ArgumentOutOfRangeException(
@@ -132,7 +132,7 @@ public class PortRule(int port, string? customMessage = null) : IValidationRule<
 /// A validation rule that ensures a URI is absolute (has a scheme and host).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AbsoluteUriRule(string? customMessage = null) : IValidationRule<Uri>
+public class AbsoluteUriRule(string? customMessage = null) : IValidatorRule<Uri>
 {
     /// <inheritdoc/>
     public bool IsValid(Uri value) => value.IsAbsoluteUri;
@@ -147,7 +147,7 @@ public class AbsoluteUriRule(string? customMessage = null) : IValidationRule<Uri
 /// <param name="pathPrefix">The required path prefix (e.g. "/api/v1"). Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="pathPrefix"/> is null or empty.</exception>
-public class PathPrefixRule(string pathPrefix, string? customMessage = null) : IValidationRule<Uri>
+public class PathPrefixRule(string pathPrefix, string? customMessage = null) : IValidatorRule<Uri>
 {
     private readonly string _pathPrefix = string.IsNullOrEmpty(pathPrefix)
         ? throw new ArgumentException("Cannot be null or empty.", nameof(pathPrefix))
@@ -166,7 +166,7 @@ public class PathPrefixRule(string pathPrefix, string? customMessage = null) : I
 /// A validation rule that ensures the URI includes a query string.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HasQueryStringRule(string? customMessage = null) : IValidationRule<Uri>
+public class HasQueryStringRule(string? customMessage = null) : IValidatorRule<Uri>
 {
     /// <inheritdoc/>
     public bool IsValid(Uri value) => !string.IsNullOrEmpty(value.Query);
@@ -179,7 +179,7 @@ public class HasQueryStringRule(string? customMessage = null) : IValidationRule<
 /// A validation rule that ensures the URI does not include a query string.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NoQueryStringRule(string? customMessage = null) : IValidationRule<Uri>
+public class NoQueryStringRule(string? customMessage = null) : IValidatorRule<Uri>
 {
     /// <inheritdoc/>
     public bool IsValid(Uri value) => string.IsNullOrEmpty(value.Query);
@@ -192,7 +192,7 @@ public class NoQueryStringRule(string? customMessage = null) : IValidationRule<U
 /// A validation rule that ensures the URI includes a fragment (the portion after #).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HasFragmentRule(string? customMessage = null) : IValidationRule<Uri>
+public class HasFragmentRule(string? customMessage = null) : IValidatorRule<Uri>
 {
     /// <inheritdoc/>
     public bool IsValid(Uri value) => !string.IsNullOrEmpty(value.Fragment);
@@ -205,7 +205,7 @@ public class HasFragmentRule(string? customMessage = null) : IValidationRule<Uri
 /// A validation rule that ensures the URI is a localhost address.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class LocalhostRule(string? customMessage = null) : IValidationRule<Uri>
+public class LocalhostRule(string? customMessage = null) : IValidatorRule<Uri>
 {
     /// <inheritdoc/>
     public bool IsValid(Uri value) =>

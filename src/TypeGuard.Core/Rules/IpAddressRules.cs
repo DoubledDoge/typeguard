@@ -9,7 +9,7 @@ using Interfaces;
 /// A validation rule that ensures an IP address is IPv4.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class Ipv4Rule(string? customMessage = null) : IValidationRule<IPAddress>
+public class Ipv4Rule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value) => value.AddressFamily == AddressFamily.InterNetwork;
@@ -22,7 +22,7 @@ public class Ipv4Rule(string? customMessage = null) : IValidationRule<IPAddress>
 /// A validation rule that ensures an IP address is IPv6.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class Ipv6Rule(string? customMessage = null) : IValidationRule<IPAddress>
+public class Ipv6Rule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value) => value.AddressFamily == AddressFamily.InterNetworkV6;
@@ -36,7 +36,7 @@ public class Ipv6Rule(string? customMessage = null) : IValidationRule<IPAddress>
 /// Covers 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, and 169.254.0.0/16 (APIPA).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class PrivateIpRule(string? customMessage = null) : IValidationRule<IPAddress>
+public class PrivateIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value)
@@ -64,7 +64,7 @@ public class PrivateIpRule(string? customMessage = null) : IValidationRule<IPAdd
 /// A validation rule that ensures an IP address is an APIPA address (169.254.0.0/16).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class ApipaRule(string? customMessage = null) : IValidationRule<IPAddress>
+public class ApipaRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value)
@@ -88,7 +88,7 @@ public class ApipaRule(string? customMessage = null) : IValidationRule<IPAddress
 /// Useful for rejecting self-assigned addresses that indicate DHCP failure.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NotApipaRule(string? customMessage = null) : IValidationRule<IPAddress>
+public class NotApipaRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value)
@@ -111,7 +111,7 @@ public class NotApipaRule(string? customMessage = null) : IValidationRule<IPAddr
 /// A validation rule that ensures an IP address is a loopback address.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class LoopbackIpRule(string? customMessage = null) : IValidationRule<IPAddress>
+public class LoopbackIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value) => IPAddress.IsLoopback(value);
@@ -126,7 +126,7 @@ public class LoopbackIpRule(string? customMessage = null) : IValidationRule<IPAd
 /// Rejects private ranges, APIPA addresses, and loopback addresses.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class PublicIpRule(string? customMessage = null) : IValidationRule<IPAddress>
+public class PublicIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value)
@@ -159,7 +159,7 @@ public class PublicIpRule(string? customMessage = null) : IValidationRule<IPAddr
 /// A validation rule that ensures an IP address is not a loopback address.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NotLoopbackIpRule(string? customMessage = null) : IValidationRule<IPAddress>
+public class NotLoopbackIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
     /// <inheritdoc/>
     public bool IsValid(IPAddress value) => !IPAddress.IsLoopback(value);
@@ -180,7 +180,7 @@ public class NotLoopbackIpRule(string? customMessage = null) : IValidationRule<I
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="network"/> is null.</exception>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="prefixLength"/> is invalid for the address family of <paramref name="network"/>.</exception>
 public class SubnetRule(IPAddress network, int prefixLength, string? customMessage = null)
-    : IValidationRule<IPAddress>
+    : IValidatorRule<IPAddress>
 {
     private readonly IPAddress _network = ValidateArgs(network, prefixLength);
 
@@ -244,7 +244,7 @@ public class SubnetRule(IPAddress network, int prefixLength, string? customMessa
 public class AllowedIpAddressesRule(
     IEnumerable<IPAddress> allowedAddresses,
     string? customMessage = null
-) : IValidationRule<IPAddress>
+) : IValidatorRule<IPAddress>
 {
     private readonly HashSet<IPAddress> _allowed = BuildSet(
         allowedAddresses,
@@ -275,7 +275,7 @@ public class AllowedIpAddressesRule(
 public class BlockedIpAddressesRule(
     IEnumerable<IPAddress> blockedAddresses,
     string? customMessage = null
-) : IValidationRule<IPAddress>
+) : IValidatorRule<IPAddress>
 {
     private readonly HashSet<IPAddress> _blocked = BuildSet(
         blockedAddresses,

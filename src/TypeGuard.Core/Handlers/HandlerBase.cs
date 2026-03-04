@@ -1,9 +1,9 @@
-﻿namespace TypeGuard.Core.Validators;
+﻿namespace TypeGuard.Core.Handlers;
 
 using Interfaces;
 
 /// <summary>
-/// Provides a base implementation for validators that prompt users for input, parse it,
+/// Provides a base implementation for input handlers that prompt users for input, parse it,
 /// and validate it against configured rules.
 /// </summary>
 /// <typeparam name="T">The type of value this validator produces after successful parsing and validation.</typeparam>
@@ -11,11 +11,11 @@ using Interfaces;
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="inputProvider"/>, <paramref name="outputProvider"/>, or <paramref name="prompt"/> is null.</exception>
-public abstract class ValidatorBase<T>(
+public abstract class HandlerBase<T>(
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
     string prompt
-) : IValidator<T>
+) : IHandler<T>
 {
     private readonly IInputProvider _inputProvider =
         inputProvider ?? throw new ArgumentNullException(nameof(inputProvider));
@@ -25,10 +25,10 @@ public abstract class ValidatorBase<T>(
 
     private readonly string _prompt = prompt ?? throw new ArgumentNullException(nameof(prompt));
 
-    private readonly List<IValidationRule<T>> _rules = [];
+    private readonly List<IValidatorRule<T>> _rules = [];
 
     /// <inheritdoc/>
-    public IValidator<T> AddRule(IValidationRule<T> rule)
+    public IHandler<T> AddRule(IValidatorRule<T> rule)
     {
         ArgumentNullException.ThrowIfNull(rule);
         _rules.Add(rule);
@@ -52,7 +52,7 @@ public abstract class ValidatorBase<T>(
             }
 
             bool allRulesPassed = true;
-            foreach (IValidationRule<T> rule in _rules.Where(rule => !rule.IsValid(value!)))
+            foreach (IValidatorRule<T> rule in _rules.Where(rule => !rule.IsValid(value!)))
             {
                 await _outputProvider.DisplayErrorAsync(rule.ErrorMessage, cancellationToken);
                 allRulesPassed = false;

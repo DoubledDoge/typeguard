@@ -13,7 +13,7 @@ using Interfaces;
 /// <typeparam name="T">The type of value to validate.</typeparam>
 public sealed class Validator<T>
 {
-    private readonly List<IValidationRule<T>> _rules = [];
+    private readonly List<IValidatorRule<T>> _rules = [];
 
     /// <summary>
     /// Adds a validation rule to this validator.
@@ -21,7 +21,7 @@ public sealed class Validator<T>
     /// <param name="rule">The rule to add. Cannot be null.</param>
     /// <returns>The current <see cref="Validator{T}"/> instance for method chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="rule"/> is null.</exception>
-    public Validator<T> AddRule(IValidationRule<T> rule)
+    public Validator<T> AddRule(IValidatorRule<T> rule)
     {
         ArgumentNullException.ThrowIfNull(rule);
         _rules.Add(rule);
@@ -38,7 +38,7 @@ public sealed class Validator<T>
     /// </returns>
     public ValidationResult Validate(T value)
     {
-        foreach (IValidationRule<T> rule in _rules.Where(rule => !rule.IsValid(value)))
+        foreach (IValidatorRule<T> rule in _rules.Where(rule => !rule.IsValid(value)))
         {
             return ValidationResult.Failure(rule.ErrorMessage);
         }

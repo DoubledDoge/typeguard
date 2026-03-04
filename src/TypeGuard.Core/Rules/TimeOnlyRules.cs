@@ -12,7 +12,7 @@ public static class BusinessHoursRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
+    public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
         new BusinessHoursRuleImpl<DateTime>(v => v.TimeOfDay, customMessage);
 
     /// <summary>
@@ -20,11 +20,11 @@ public static class BusinessHoursRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
+    public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
         new BusinessHoursRuleImpl<TimeOnly>(v => v.ToTimeSpan(), customMessage);
 
     private class BusinessHoursRuleImpl<T>(Func<T, TimeSpan> converter, string? customMessage)
-        : IValidationRule<T>
+        : IValidatorRule<T>
     {
         private readonly TimeSpan _open = TimeSpan.FromHours(9);
         private readonly TimeSpan _close = TimeSpan.FromHours(17);
@@ -51,7 +51,7 @@ public static class BeforeTimeRule
     /// <param name="maxTime">The upper time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(
+    public static IValidatorRule<DateTime> ForDateTime(
         TimeSpan maxTime,
         string? customMessage = null
     ) => new BeforeTimeRuleImpl<DateTime>(v => v.TimeOfDay, maxTime, customMessage);
@@ -62,7 +62,7 @@ public static class BeforeTimeRule
     /// <param name="maxTime">The upper time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(
+    public static IValidatorRule<TimeOnly> ForTimeOnly(
         TimeSpan maxTime,
         string? customMessage = null
     ) => new BeforeTimeRuleImpl<TimeOnly>(v => v.ToTimeSpan(), maxTime, customMessage);
@@ -71,7 +71,7 @@ public static class BeforeTimeRule
         Func<T, TimeSpan> converter,
         TimeSpan maxTime,
         string? customMessage
-    ) : IValidationRule<T>
+    ) : IValidatorRule<T>
     {
         public bool IsValid(T value) => converter(value) < maxTime;
 
@@ -91,7 +91,7 @@ public static class AfterTimeRule
     /// <param name="minTime">The lower time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(
+    public static IValidatorRule<DateTime> ForDateTime(
         TimeSpan minTime,
         string? customMessage = null
     ) => new AfterTimeRuleImpl<DateTime>(v => v.TimeOfDay, minTime, customMessage);
@@ -102,7 +102,7 @@ public static class AfterTimeRule
     /// <param name="minTime">The lower time boundary (exclusive).</param>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(
+    public static IValidatorRule<TimeOnly> ForTimeOnly(
         TimeSpan minTime,
         string? customMessage = null
     ) => new AfterTimeRuleImpl<TimeOnly>(v => v.ToTimeSpan(), minTime, customMessage);
@@ -111,7 +111,7 @@ public static class AfterTimeRule
         Func<T, TimeSpan> converter,
         TimeSpan minTime,
         string? customMessage
-    ) : IValidationRule<T>
+    ) : IValidatorRule<T>
     {
         public bool IsValid(T value) => converter(value) > minTime;
 
@@ -132,7 +132,7 @@ public static class HourRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hour"/> is not between 0 and 23.</exception>
-    public static IValidationRule<DateTime> ForDateTime(int hour, string? customMessage = null)
+    public static IValidatorRule<DateTime> ForDateTime(int hour, string? customMessage = null)
     {
         ValidateHour(hour);
         return new HourRuleImpl<DateTime>(v => v.Hour, hour, customMessage);
@@ -145,7 +145,7 @@ public static class HourRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hour"/> is not between 0 and 23.</exception>
-    public static IValidationRule<TimeOnly> ForTimeOnly(int hour, string? customMessage = null)
+    public static IValidatorRule<TimeOnly> ForTimeOnly(int hour, string? customMessage = null)
     {
         ValidateHour(hour);
         return new HourRuleImpl<TimeOnly>(v => v.Hour, hour, customMessage);
@@ -164,7 +164,7 @@ public static class HourRule
     }
 
     private class HourRuleImpl<T>(Func<T, int> hourGetter, int hour, string? customMessage)
-        : IValidationRule<T>
+        : IValidatorRule<T>
     {
         public bool IsValid(T value) => hourGetter(value) == hour;
 
@@ -182,7 +182,7 @@ public static class WholeHourRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
+    public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
         new WholeHourRuleImpl<DateTime>(
             v => v is { Minute: 0, Second: 0, Millisecond: 0 },
             customMessage
@@ -193,14 +193,14 @@ public static class WholeHourRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
+    public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
         new WholeHourRuleImpl<TimeOnly>(
             v => v is { Minute: 0, Second: 0, Millisecond: 0 },
             customMessage
         );
 
     private class WholeHourRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidationRule<T>
+        : IValidatorRule<T>
     {
         public bool IsValid(T value) => validator(value);
 
@@ -219,7 +219,7 @@ public static class WholeMinuteRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
+    public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
         new WholeMinuteRuleImpl<DateTime>(v => v is { Second: 0, Millisecond: 0 }, customMessage);
 
     /// <summary>
@@ -227,11 +227,11 @@ public static class WholeMinuteRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
+    public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
         new WholeMinuteRuleImpl<TimeOnly>(v => v is { Second: 0, Millisecond: 0 }, customMessage);
 
     private class WholeMinuteRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidationRule<T>
+        : IValidatorRule<T>
     {
         public bool IsValid(T value) => validator(value);
 
@@ -252,7 +252,7 @@ public static class TimeIncrementRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="increment"/> is less than or equal to zero.</exception>
-    public static IValidationRule<DateTime> ForDateTime(
+    public static IValidatorRule<DateTime> ForDateTime(
         TimeSpan increment,
         string? customMessage = null
     )
@@ -268,7 +268,7 @@ public static class TimeIncrementRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="increment"/> is less than or equal to zero.</exception>
-    public static IValidationRule<TimeOnly> ForTimeOnly(
+    public static IValidatorRule<TimeOnly> ForTimeOnly(
         TimeSpan increment,
         string? customMessage = null
     )
@@ -293,7 +293,7 @@ public static class TimeIncrementRule
         Func<T, TimeSpan> converter,
         TimeSpan increment,
         string? customMessage
-    ) : IValidationRule<T>
+    ) : IValidatorRule<T>
     {
         public bool IsValid(T value) => converter(value).Ticks % increment.Ticks == 0;
 
@@ -312,7 +312,7 @@ public static class AmRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
+    public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
         new AmRuleImpl<DateTime>(v => v.Hour < 12, customMessage);
 
     /// <summary>
@@ -320,10 +320,10 @@ public static class AmRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
+    public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
         new AmRuleImpl<TimeOnly>(v => v.Hour < 12, customMessage);
 
-    private class AmRuleImpl<T>(Func<T, bool> validator, string? customMessage) : IValidationRule<T>
+    private class AmRuleImpl<T>(Func<T, bool> validator, string? customMessage) : IValidatorRule<T>
     {
         public bool IsValid(T value) => validator(value);
 
@@ -342,7 +342,7 @@ public static class PmRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
+    public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
         new PmRuleImpl<DateTime>(v => v.Hour >= 12, customMessage);
 
     /// <summary>
@@ -350,10 +350,10 @@ public static class PmRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
+    public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
         new PmRuleImpl<TimeOnly>(v => v.Hour >= 12, customMessage);
 
-    private class PmRuleImpl<T>(Func<T, bool> validator, string? customMessage) : IValidationRule<T>
+    private class PmRuleImpl<T>(Func<T, bool> validator, string? customMessage) : IValidatorRule<T>
     {
         public bool IsValid(T value) => validator(value);
 
@@ -372,7 +372,7 @@ public static class MidnightRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
+    public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
         new MidnightRuleImpl<DateTime>(v => v.TimeOfDay == TimeSpan.Zero, customMessage);
 
     /// <summary>
@@ -380,11 +380,11 @@ public static class MidnightRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
+    public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
         new MidnightRuleImpl<TimeOnly>(v => v == TimeOnly.MinValue, customMessage);
 
     private class MidnightRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidationRule<T>
+        : IValidatorRule<T>
     {
         public bool IsValid(T value) => validator(value);
 
@@ -405,7 +405,7 @@ public static class NoonRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
-    public static IValidationRule<DateTime> ForDateTime(string? customMessage = null) =>
+    public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
         new NoonRuleImpl<DateTime>(v => v.TimeOfDay == _noon, customMessage);
 
     /// <summary>
@@ -413,11 +413,11 @@ public static class NoonRule
     /// </summary>
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
-    public static IValidationRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
+    public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
         new NoonRuleImpl<TimeOnly>(v => v == _noonTimeOnly, customMessage);
 
     private class NoonRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidationRule<T>
+        : IValidatorRule<T>
     {
         public bool IsValid(T value) => validator(value);
 

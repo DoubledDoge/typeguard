@@ -1,12 +1,12 @@
 ﻿namespace TypeGuard.Core.Builders;
 
+using Handlers;
 using Interfaces;
 using Rules;
-using Validators;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a DateTime validator with validation rules.
-/// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
+/// A fluent builder for constructing and configuring a DateTime input handler with validation rules.
+/// Each <c>With*</c> method accumulates a rule onto the internal handler while the rules are evaluated
 /// in the order they are added.
 /// </summary>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
@@ -14,19 +14,18 @@ using Validators;
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="DateTimeValidator"/>.
-/// Defaults to constructing a standard <see cref="DateTimeValidator"/> from the provided providers.
+/// An optional factory for creating the internal <see cref="DateTimeHandler"/>.
+/// Defaults to constructing a standard <see cref="DateTimeHandler"/> from the provided providers.
 /// </param>
 public class DateTimeInputBuilder(
     string prompt,
     string? format,
     IInputProvider inputProvider,
     IOutputProvider outputProvider,
-    Func<string, string, IInputProvider, IOutputProvider, DateTimeValidator>? validatorFactory =
-        null
+    Func<string, string, IInputProvider, IOutputProvider, DateTimeHandler>? validatorFactory = null
 )
     : BuilderBase<DateTime, DateTimeInputBuilder>(
-        (validatorFactory ?? ((p, f, i, o) => new DateTimeValidator(i, o, p, f)))(
+        (validatorFactory ?? ((p, f, i, o) => new DateTimeHandler(i, o, p, f)))(
             prompt ?? throw new ArgumentNullException(nameof(prompt)),
             format ?? throw new ArgumentNullException(nameof(format)),
             inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -287,7 +286,7 @@ public class DateTimeInputBuilder(
         this.AddRule(NoonRule.ForDateTime(customMessage));
 
     /// <summary>
-    /// Adds a custom validation rule to the validator.
+    /// Adds a custom validation rule to the handler.
     /// </summary>
     /// <param name="predicate">The function that determines whether a DateTime value is valid. Cannot be null.</param>
     /// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
