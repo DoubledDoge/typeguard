@@ -7,6 +7,7 @@
 [![NuGet](https://img.shields.io/nuget/v/TypeGuard.Core.svg?label=NuGet)](https://www.nuget.org/packages/TypeGuard.Core)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-9.0%20%7C%2010.0-512BD4)](https://dotnet.microsoft.com)
+[![Downloads](https://img.shields.io/nuget/dt/TypeGuard.Core.svg)](https://www.nuget.org/packages/TypeGuard.Core)
 
 A fluent, type-safe user input handler and validation library for .NET with platform-specific implementations for Console, WinForms, WPF, Avalonia, MAUI, and Blazor.
 
