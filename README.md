@@ -73,11 +73,7 @@ dotnet add package TypeGuard.Maui
 dotnet add package TypeGuard.Blazor
 ```
 
-### ASP.NET / Razor Pages (server-side Blazor)
-ASP.NET and Razor Pages use the core library directly but is currently unfinished:
-```bash
-dotnet add package TypeGuard.Core
-```
+(Note: ASP.NET are planned but isn't fully ready yet)
 
 ### Manual Installation
 ```bash
