@@ -17,7 +17,7 @@ public static class FutureDateRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new FutureDateRuleImpl<DateTime>(v => v, customMessage);
+        new RulesBase<DateTime>(v => v > DateTime.Now, "Date must be in the future", customMessage);
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date is in the future.
@@ -25,15 +25,11 @@ public static class FutureDateRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
     public static IValidatorRule<DateOnly> ForDateOnly(string? customMessage = null) =>
-        new FutureDateRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), customMessage);
-
-    private class FutureDateRuleImpl<T>(Func<T, DateTime> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value) > DateTime.Now;
-
-        public string ErrorMessage { get; } = customMessage ?? "Date must be in the future";
-    }
+        new RulesBase<DateOnly>(
+            v => v.ToDateTime(TimeOnly.MinValue) > DateTime.Now,
+            "Date must be in the future",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -51,7 +47,7 @@ public static class PastDateRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new PastDateRuleImpl<DateTime>(v => v, customMessage);
+        new RulesBase<DateTime>(v => v < DateTime.Now, "Date must be in the past", customMessage);
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date is in the past.
@@ -59,15 +55,11 @@ public static class PastDateRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
     public static IValidatorRule<DateOnly> ForDateOnly(string? customMessage = null) =>
-        new PastDateRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), customMessage);
-
-    private class PastDateRuleImpl<T>(Func<T, DateTime> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value) < DateTime.Now;
-
-        public string ErrorMessage { get; } = customMessage ?? "Date must be in the past";
-    }
+        new RulesBase<DateOnly>(
+            v => v.ToDateTime(TimeOnly.MinValue) < DateTime.Now,
+            "Date must be in the past",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -85,7 +77,7 @@ public static class TodayRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new TodayRuleImpl<DateTime>(v => v.Date, customMessage);
+        new RulesBase<DateTime>(v => v.Date == DateTime.Today, "Date must be today", customMessage);
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date is today.
@@ -93,15 +85,11 @@ public static class TodayRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
     public static IValidatorRule<DateOnly> ForDateOnly(string? customMessage = null) =>
-        new TodayRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue).Date, customMessage);
-
-    private class TodayRuleImpl<T>(Func<T, DateTime> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value) == DateTime.Today;
-
-        public string ErrorMessage { get; } = customMessage ?? "Date must be today";
-    }
+        new RulesBase<DateOnly>(
+            v => v.ToDateTime(TimeOnly.MinValue).Date == DateTime.Today,
+            "Date must be today",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -119,7 +107,11 @@ public static class NotTodayRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new NotTodayRuleImpl<DateTime>(v => v.Date, customMessage);
+        new RulesBase<DateTime>(
+            v => v.Date != DateTime.Today,
+            "Date must not be today",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date is not today.
@@ -127,15 +119,11 @@ public static class NotTodayRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
     public static IValidatorRule<DateOnly> ForDateOnly(string? customMessage = null) =>
-        new NotTodayRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue).Date, customMessage);
-
-    private class NotTodayRuleImpl<T>(Func<T, DateTime> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value) != DateTime.Today;
-
-        public string ErrorMessage { get; } = customMessage ?? "Date must not be today";
-    }
+        new RulesBase<DateOnly>(
+            v => v.ToDateTime(TimeOnly.MinValue).Date != DateTime.Today,
+            "Date must not be today",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -149,7 +137,11 @@ public static class WeekdayRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new WeekdayRuleImpl<DateTime>(v => v, customMessage);
+        new RulesBase<DateTime>(
+            v => v.DayOfWeek is not (DayOfWeek.Saturday or DayOfWeek.Sunday),
+            "Date must be a weekday",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date falls on a weekday.
@@ -157,19 +149,11 @@ public static class WeekdayRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
     public static IValidatorRule<DateOnly> ForDateOnly(string? customMessage = null) =>
-        new WeekdayRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), customMessage);
-
-    private class WeekdayRuleImpl<T>(Func<T, DateTime> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value)
-        {
-            DayOfWeek day = converter(value).DayOfWeek;
-            return day is not (DayOfWeek.Saturday or DayOfWeek.Sunday);
-        }
-
-        public string ErrorMessage { get; } = customMessage ?? "Date must be a weekday";
-    }
+        new RulesBase<DateOnly>(
+            v => v.DayOfWeek is not (DayOfWeek.Saturday or DayOfWeek.Sunday),
+            "Date must be a weekday",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -183,7 +167,11 @@ public static class WeekendRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new WeekendRuleImpl<DateTime>(v => v, customMessage);
+        new RulesBase<DateTime>(
+            v => v.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday,
+            "Date must be a weekend day",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date falls on a weekend.
@@ -191,19 +179,11 @@ public static class WeekendRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
     public static IValidatorRule<DateOnly> ForDateOnly(string? customMessage = null) =>
-        new WeekendRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), customMessage);
-
-    private class WeekendRuleImpl<T>(Func<T, DateTime> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value)
-        {
-            DayOfWeek day = converter(value).DayOfWeek;
-            return day is DayOfWeek.Saturday or DayOfWeek.Sunday;
-        }
-
-        public string ErrorMessage { get; } = customMessage ?? "Date must be a weekend day";
-    }
+        new RulesBase<DateOnly>(
+            v => v.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday,
+            "Date must be a weekend day",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -242,12 +222,12 @@ public static class DayOfWeekRule
         Func<T, DateTime> converter,
         DayOfWeek dayOfWeek,
         string? customMessage
-    ) : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value).DayOfWeek == dayOfWeek;
-
-        public string ErrorMessage { get; } = customMessage ?? $"Date must be a {dayOfWeek}";
-    }
+    )
+        : RulesBase<T>(
+            v => converter(v).DayOfWeek == dayOfWeek,
+            $"Date must be a {dayOfWeek}",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -299,17 +279,12 @@ public static class WithinDaysRule
         Func<T, DateTime> converter,
         int days,
         string? customMessage
-    ) : IValidatorRule<T>
-    {
-        public bool IsValid(T value)
-        {
-            TimeSpan difference = converter(value) - DateTime.Now;
-            return Math.Abs(difference.TotalDays) <= days;
-        }
-
-        public string ErrorMessage { get; } =
-            customMessage ?? $"Date must be within {days} days from now";
-    }
+    )
+        : RulesBase<T>(
+            v => Math.Abs((converter(v) - DateTime.Now).TotalDays) <= days,
+            $"Date must be within {days} days from now",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -354,12 +329,11 @@ public static class YearRule
     }
 
     private class YearRuleImpl<T>(Func<T, DateTime> converter, int year, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value).Year == year;
-
-        public string ErrorMessage { get; } = customMessage ?? $"Date must be in the year {year}";
-    }
+        : RulesBase<T>(
+            v => converter(v).Year == year,
+            $"Date must be in the year {year}",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -373,7 +347,11 @@ public static class LeapYearRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new LeapYearRuleImpl<DateTime>(v => v, customMessage);
+        new RulesBase<DateTime>(
+            v => DateTime.IsLeapYear(v.Year),
+            "Date must be in a leap year",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for DateOnly values that ensures the date falls within a leap year.
@@ -381,15 +359,11 @@ public static class LeapYearRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateOnly.</returns>
     public static IValidatorRule<DateOnly> ForDateOnly(string? customMessage = null) =>
-        new LeapYearRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), customMessage);
-
-    private class LeapYearRuleImpl<T>(Func<T, DateTime> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => DateTime.IsLeapYear(converter(value).Year);
-
-        public string ErrorMessage { get; } = customMessage ?? "Date must be in a leap year";
-    }
+        new RulesBase<DateOnly>(
+            v => DateTime.IsLeapYear(v.Year),
+            "Date must be in a leap year",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -438,10 +412,9 @@ public static class MonthRule
     }
 
     private class MonthRuleImpl<T>(Func<T, DateTime> converter, int month, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value).Month == month;
-
-        public string ErrorMessage { get; } = customMessage ?? $"Date must be in month {month}";
-    }
+        : RulesBase<T>(
+            v => converter(v).Month == month,
+            $"Date must be in month {month}",
+            customMessage
+        );
 }

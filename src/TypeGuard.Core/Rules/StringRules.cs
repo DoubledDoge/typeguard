@@ -86,69 +86,54 @@ public class RegexRule(string pattern, string? customMessage = null) : IValidato
 /// A validation rule that ensures a string contains only letters.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AlphabeticRule(string? customMessage = null) : IValidatorRule<string>
-{
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.All(char.IsLetter);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Input must contain only letters";
-}
+public class AlphabeticRule(string? customMessage = null)
+    : RulesBase<string>(
+        v => v.All(char.IsLetter),
+        "Input must contain only letters",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a string contains only letters and digits.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AlphanumericStringRule(string? customMessage = null) : IValidatorRule<string>
-{
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.All(char.IsLetterOrDigit);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "Input must contain only letters and digits";
-}
+public class AlphanumericStringRule(string? customMessage = null)
+    : RulesBase<string>(
+        v => v.All(char.IsLetterOrDigit),
+        "Input must contain only letters and digits",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a string contains only digits.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NumericRule(string? customMessage = null) : IValidatorRule<string>
-{
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.All(char.IsDigit);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Input must contain only digits";
-}
+public class NumericRule(string? customMessage = null)
+    : RulesBase<string>(v => v.All(char.IsDigit), "Input must contain only digits", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a string contains only uppercase letters.
 /// Non-letter characters are permitted.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class UpperCaseStringRule(string? customMessage = null) : IValidatorRule<string>
-{
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.All(c => !char.IsLetter(c) || char.IsUpper(c));
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Input must be uppercase";
-}
+public class UpperCaseStringRule(string? customMessage = null)
+    : RulesBase<string>(
+        v => v.All(c => !char.IsLetter(c) || char.IsUpper(c)),
+        "Input must be uppercase",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a string contains only lowercase letters.
 /// Non-letter characters are permitted.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class LowerCaseStringRule(string? customMessage = null) : IValidatorRule<string>
-{
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.All(c => !char.IsLetter(c) || char.IsLower(c));
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Input must be lowercase";
-}
+public class LowerCaseStringRule(string? customMessage = null)
+    : RulesBase<string>(
+        v => v.All(c => !char.IsLetter(c) || char.IsLower(c)),
+        "Input must be lowercase",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a string starts with a specific prefix.

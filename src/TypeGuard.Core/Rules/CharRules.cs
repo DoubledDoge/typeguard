@@ -1,7 +1,5 @@
 ﻿namespace TypeGuard.Core.Rules;
 
-using Interfaces;
-
 /// <summary>
 /// A validation rule that ensures a character is a letter.
 /// </summary>
@@ -61,18 +59,22 @@ public class PunctuationRule(string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="allowedChars"/> is null or empty.</exception>
 public class AllowedCharsRule(string allowedChars, string? customMessage = null)
-    : IValidatorRule<char>
+    : RulesBase<char>(
+        BuildPredicate(allowedChars),
+        $"Character must be one of: {allowedChars}",
+        customMessage
+    )
 {
-    private readonly HashSet<char> _allowed = string.IsNullOrEmpty(allowedChars)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(allowedChars))
-        : [.. allowedChars];
+    private static Func<char, bool> BuildPredicate(string allowedChars)
+    {
+        if (string.IsNullOrEmpty(allowedChars))
+        {
+            throw new ArgumentException("Cannot be null or empty.", nameof(allowedChars));
+        }
 
-    /// <inheritdoc/>
-    public bool IsValid(char value) => _allowed.Contains(value);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? $"Character must be one of: {allowedChars}";
+        HashSet<char> set = [.. allowedChars];
+        return c => set.Contains(c);
+    }
 }
 
 /// <summary>
@@ -85,16 +87,20 @@ public class AllowedCharsRule(string allowedChars, string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="excludedChars"/> is null or empty.</exception>
 public class ExcludedCharsRule(string excludedChars, string? customMessage = null)
-    : IValidatorRule<char>
+    : RulesBase<char>(
+        BuildPredicate(excludedChars),
+        $"Character cannot be one of: {excludedChars}",
+        customMessage
+    )
 {
-    private readonly HashSet<char> _excluded = string.IsNullOrEmpty(excludedChars)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(excludedChars))
-        : [.. excludedChars];
+    private static Func<char, bool> BuildPredicate(string excludedChars)
+    {
+        if (string.IsNullOrEmpty(excludedChars))
+        {
+            throw new ArgumentException("Cannot be null or empty.", nameof(excludedChars));
+        }
 
-    /// <inheritdoc/>
-    public bool IsValid(char value) => !_excluded.Contains(value);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? $"Character cannot be one of: {excludedChars}";
+        HashSet<char> set = [.. excludedChars];
+        return c => !set.Contains(c);
+    }
 }

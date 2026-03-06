@@ -6,14 +6,8 @@ using Interfaces;
 /// A validation rule that ensures a GUID is not empty (not <see cref="Guid.Empty"/>).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NonEmptyGuidRule(string? customMessage = null) : IValidatorRule<Guid>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Guid value) => value != Guid.Empty;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "GUID cannot be empty";
-}
+public class NonEmptyGuidRule(string? customMessage = null)
+    : RulesBase<Guid>(v => v != Guid.Empty, "GUID cannot be empty", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a GUID matches a specific version.

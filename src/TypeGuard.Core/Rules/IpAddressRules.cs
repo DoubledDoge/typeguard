@@ -9,27 +9,23 @@ using Interfaces;
 /// A validation rule that ensures an IP address is IPv4.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class Ipv4Rule(string? customMessage = null) : IValidatorRule<IPAddress>
-{
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value) => value.AddressFamily == AddressFamily.InterNetwork;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "IP address must be IPv4";
-}
+public class Ipv4Rule(string? customMessage = null)
+    : RulesBase<IPAddress>(
+        v => v.AddressFamily == AddressFamily.InterNetwork,
+        "IP address must be IPv4",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures an IP address is IPv6.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class Ipv6Rule(string? customMessage = null) : IValidatorRule<IPAddress>
-{
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value) => value.AddressFamily == AddressFamily.InterNetworkV6;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "IP address must be IPv6";
-}
+public class Ipv6Rule(string? customMessage = null)
+    : RulesBase<IPAddress>(
+        v => v.AddressFamily == AddressFamily.InterNetworkV6,
+        "IP address must be IPv6",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures an IP address is a private address.
@@ -111,15 +107,12 @@ public class NotApipaRule(string? customMessage = null) : IValidatorRule<IPAddre
 /// A validation rule that ensures an IP address is a loopback address.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class LoopbackIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
-{
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value) => IPAddress.IsLoopback(value);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "IP address must be a loopback address (127.0.0.1 or ::1)";
-}
+public class LoopbackIpRule(string? customMessage = null)
+    : RulesBase<IPAddress>(
+        IPAddress.IsLoopback,
+        "IP address must be a loopback address (127.0.0.1 or ::1)",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures an IP address is a public address.
@@ -159,15 +152,12 @@ public class PublicIpRule(string? customMessage = null) : IValidatorRule<IPAddre
 /// A validation rule that ensures an IP address is not a loopback address.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NotLoopbackIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
-{
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value) => !IPAddress.IsLoopback(value);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "IP address cannot be a loopback address";
-}
+public class NotLoopbackIpRule(string? customMessage = null)
+    : RulesBase<IPAddress>(
+        v => !IPAddress.IsLoopback(v),
+        "IP address cannot be a loopback address",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures an IP address falls within a specific subnet.

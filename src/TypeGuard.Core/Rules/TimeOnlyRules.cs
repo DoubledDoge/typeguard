@@ -7,6 +7,9 @@ using Interfaces;
 /// </summary>
 public static class BusinessHoursRule
 {
+    private static readonly TimeSpan _open = TimeSpan.FromHours(9);
+    private static readonly TimeSpan _close = TimeSpan.FromHours(17);
+
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the time is within business hours (9 AM to 5 PM).
     /// </summary>
@@ -24,20 +27,11 @@ public static class BusinessHoursRule
         new BusinessHoursRuleImpl<TimeOnly>(v => v.ToTimeSpan(), customMessage);
 
     private class BusinessHoursRuleImpl<T>(Func<T, TimeSpan> converter, string? customMessage)
-        : IValidatorRule<T>
-    {
-        private readonly TimeSpan _open = TimeSpan.FromHours(9);
-        private readonly TimeSpan _close = TimeSpan.FromHours(17);
-
-        public bool IsValid(T value)
-        {
-            TimeSpan time = converter(value);
-            return time >= _open && time <= _close;
-        }
-
-        public string ErrorMessage { get; } =
-            customMessage ?? "Time must be within business hours (9 AM to 5 PM)";
-    }
+        : RulesBase<T>(
+            v => converter(v) >= _open && converter(v) <= _close,
+            "Time must be within business hours (9 AM to 5 PM)",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -71,13 +65,12 @@ public static class BeforeTimeRule
         Func<T, TimeSpan> converter,
         TimeSpan maxTime,
         string? customMessage
-    ) : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value) < maxTime;
-
-        public string ErrorMessage { get; } =
-            customMessage ?? $"Time must be before {maxTime:hh\\:mm}";
-    }
+    )
+        : RulesBase<T>(
+            v => converter(v) < maxTime,
+            $"Time must be before {maxTime:hh\\:mm}",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -111,13 +104,12 @@ public static class AfterTimeRule
         Func<T, TimeSpan> converter,
         TimeSpan minTime,
         string? customMessage
-    ) : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value) > minTime;
-
-        public string ErrorMessage { get; } =
-            customMessage ?? $"Time must be after {minTime:hh\\:mm}";
-    }
+    )
+        : RulesBase<T>(
+            v => converter(v) > minTime,
+            $"Time must be after {minTime:hh\\:mm}",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -164,12 +156,7 @@ public static class HourRule
     }
 
     private class HourRuleImpl<T>(Func<T, int> hourGetter, int hour, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => hourGetter(value) == hour;
-
-        public string ErrorMessage { get; } = customMessage ?? $"Time must be at hour {hour}";
-    }
+        : RulesBase<T>(v => hourGetter(v) == hour, $"Time must be at hour {hour}", customMessage);
 }
 
 /// <summary>
@@ -183,8 +170,9 @@ public static class WholeHourRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new WholeHourRuleImpl<DateTime>(
+        new RulesBase<DateTime>(
             v => v is { Minute: 0, Second: 0, Millisecond: 0 },
+            "Time must be a whole hour (no minutes or seconds)",
             customMessage
         );
 
@@ -194,19 +182,11 @@ public static class WholeHourRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new WholeHourRuleImpl<TimeOnly>(
+        new RulesBase<TimeOnly>(
             v => v is { Minute: 0, Second: 0, Millisecond: 0 },
+            "Time must be a whole hour (no minutes or seconds)",
             customMessage
         );
-
-    private class WholeHourRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => validator(value);
-
-        public string ErrorMessage { get; } =
-            customMessage ?? "Time must be a whole hour (no minutes or seconds)";
-    }
 }
 
 /// <summary>
@@ -220,7 +200,11 @@ public static class WholeMinuteRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new WholeMinuteRuleImpl<DateTime>(v => v is { Second: 0, Millisecond: 0 }, customMessage);
+        new RulesBase<DateTime>(
+            v => v is { Second: 0, Millisecond: 0 },
+            "Time must be a whole minute (no seconds)",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time represents a whole minute.
@@ -228,16 +212,11 @@ public static class WholeMinuteRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new WholeMinuteRuleImpl<TimeOnly>(v => v is { Second: 0, Millisecond: 0 }, customMessage);
-
-    private class WholeMinuteRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => validator(value);
-
-        public string ErrorMessage { get; } =
-            customMessage ?? "Time must be a whole minute (no seconds)";
-    }
+        new RulesBase<TimeOnly>(
+            v => v is { Second: 0, Millisecond: 0 },
+            "Time must be a whole minute (no seconds)",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -293,13 +272,12 @@ public static class TimeIncrementRule
         Func<T, TimeSpan> converter,
         TimeSpan increment,
         string? customMessage
-    ) : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => converter(value).Ticks % increment.Ticks == 0;
-
-        public string ErrorMessage { get; } =
-            customMessage ?? $"Time must be in increments of {increment}";
-    }
+    )
+        : RulesBase<T>(
+            v => converter(v).Ticks % increment.Ticks == 0,
+            $"Time must be in increments of {increment}",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -313,7 +291,11 @@ public static class AmRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new AmRuleImpl<DateTime>(v => v.Hour < 12, customMessage);
+        new RulesBase<DateTime>(
+            v => v.Hour < 12,
+            "Time must be in the AM period (midnight to noon)",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is in the AM period.
@@ -321,15 +303,11 @@ public static class AmRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new AmRuleImpl<TimeOnly>(v => v.Hour < 12, customMessage);
-
-    private class AmRuleImpl<T>(Func<T, bool> validator, string? customMessage) : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => validator(value);
-
-        public string ErrorMessage { get; } =
-            customMessage ?? "Time must be in the AM period (midnight to noon)";
-    }
+        new RulesBase<TimeOnly>(
+            v => v.Hour < 12,
+            "Time must be in the AM period (midnight to noon)",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -343,7 +321,11 @@ public static class PmRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new PmRuleImpl<DateTime>(v => v.Hour >= 12, customMessage);
+        new RulesBase<DateTime>(
+            v => v.Hour >= 12,
+            "Time must be in the PM period (noon to midnight)",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is in the PM period.
@@ -351,15 +333,11 @@ public static class PmRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new PmRuleImpl<TimeOnly>(v => v.Hour >= 12, customMessage);
-
-    private class PmRuleImpl<T>(Func<T, bool> validator, string? customMessage) : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => validator(value);
-
-        public string ErrorMessage { get; } =
-            customMessage ?? "Time must be in the PM period (noon to midnight)";
-    }
+        new RulesBase<TimeOnly>(
+            v => v.Hour >= 12,
+            "Time must be in the PM period (noon to midnight)",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -373,7 +351,11 @@ public static class MidnightRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new MidnightRuleImpl<DateTime>(v => v.TimeOfDay == TimeSpan.Zero, customMessage);
+        new RulesBase<DateTime>(
+            v => v.TimeOfDay == TimeSpan.Zero,
+            "Time must be midnight (00:00:00)",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is midnight (00:00:00).
@@ -381,15 +363,11 @@ public static class MidnightRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new MidnightRuleImpl<TimeOnly>(v => v == TimeOnly.MinValue, customMessage);
-
-    private class MidnightRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => validator(value);
-
-        public string ErrorMessage { get; } = customMessage ?? "Time must be midnight (00:00:00)";
-    }
+        new RulesBase<TimeOnly>(
+            v => v == TimeOnly.MinValue,
+            "Time must be midnight (00:00:00)",
+            customMessage
+        );
 }
 
 /// <summary>
@@ -406,7 +384,11 @@ public static class NoonRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for DateTime.</returns>
     public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
-        new NoonRuleImpl<DateTime>(v => v.TimeOfDay == _noon, customMessage);
+        new RulesBase<DateTime>(
+            v => v.TimeOfDay == _noon,
+            "Time must be noon (12:00:00)",
+            customMessage
+        );
 
     /// <summary>
     /// Creates a validation rule for TimeOnly values that ensures the time is noon (12:00:00).
@@ -414,13 +396,9 @@ public static class NoonRule
     /// <param name="customMessage">An optional custom error message.</param>
     /// <returns>A validation rule for TimeOnly.</returns>
     public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
-        new NoonRuleImpl<TimeOnly>(v => v == _noonTimeOnly, customMessage);
-
-    private class NoonRuleImpl<T>(Func<T, bool> validator, string? customMessage)
-        : IValidatorRule<T>
-    {
-        public bool IsValid(T value) => validator(value);
-
-        public string ErrorMessage { get; } = customMessage ?? "Time must be noon (12:00:00)";
-    }
+        new RulesBase<TimeOnly>(
+            v => v == _noonTimeOnly,
+            "Time must be noon (12:00:00)",
+            customMessage
+        );
 }

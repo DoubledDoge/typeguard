@@ -3,12 +3,13 @@
 using Interfaces;
 
 /// <summary>
-/// A base class for character validation rules that apply a single predicate.
+/// A base class for validation rules that apply a single predicate.
+/// Can be used directly or subclassed for named rule types.
 /// </summary>
-/// <param name="predicate">The function that determines whether a character is valid.</param>
+/// <param name="predicate">The function that determines whether a value is valid.</param>
 /// <param name="defaultMessage">The default error message used when no custom message is provided.</param>
 /// <param name="customMessage">An optional custom error message.</param>
-public abstract class RulesBase<T>(
+public class RulesBase<T>(
     Func<T, bool> predicate,
     string defaultMessage,
     string? customMessage = null

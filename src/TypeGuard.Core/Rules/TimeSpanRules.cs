@@ -6,14 +6,8 @@ using Interfaces;
 /// A validation rule that ensures a TimeSpan is positive (greater than zero).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class PositiveTimeSpanRule(string? customMessage = null) : IValidatorRule<TimeSpan>
-{
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value > TimeSpan.Zero;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Duration must be positive";
-}
+public class PositiveTimeSpanRule(string? customMessage = null)
+    : RulesBase<TimeSpan>(v => v > TimeSpan.Zero, "Duration must be positive", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a TimeSpan does not exceed the specified maximum duration.
@@ -21,14 +15,7 @@ public class PositiveTimeSpanRule(string? customMessage = null) : IValidatorRule
 /// <param name="maximum">The maximum acceptable duration (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class MaxDurationRule(TimeSpan maximum, string? customMessage = null)
-    : IValidatorRule<TimeSpan>
-{
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value <= maximum;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Duration must not exceed {maximum}";
-}
+    : RulesBase<TimeSpan>(v => v <= maximum, $"Duration must not exceed {maximum}", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a TimeSpan meets the specified minimum duration.
@@ -36,14 +23,7 @@ public class MaxDurationRule(TimeSpan maximum, string? customMessage = null)
 /// <param name="minimum">The minimum acceptable duration (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class MinDurationRule(TimeSpan minimum, string? customMessage = null)
-    : IValidatorRule<TimeSpan>
-{
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value >= minimum;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Duration must be at least {minimum}";
-}
+    : RulesBase<TimeSpan>(v => v >= minimum, $"Duration must be at least {minimum}", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a TimeSpan does not exceed the specified number of working hours.
@@ -75,29 +55,23 @@ public class WorkingHoursRule(int maxHours = 8, string? customMessage = null)
 /// A validation rule that ensures a TimeSpan represents a duration in whole hours (no minutes or seconds).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class WholeHoursRule(string? customMessage = null) : IValidatorRule<TimeSpan>
-{
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value is { Minutes: 0, Seconds: 0, Milliseconds: 0 };
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "Duration must be in whole hours (no minutes or seconds)";
-}
+public class WholeHoursRule(string? customMessage = null)
+    : RulesBase<TimeSpan>(
+        v => v is { Minutes: 0, Seconds: 0, Milliseconds: 0 },
+        "Duration must be in whole hours (no minutes or seconds)",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a TimeSpan represents a duration in whole minutes (no seconds).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class WholeMinutesRule(string? customMessage = null) : IValidatorRule<TimeSpan>
-{
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value is { Seconds: 0, Milliseconds: 0 };
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "Duration must be in whole minutes (no seconds)";
-}
+public class WholeMinutesRule(string? customMessage = null)
+    : RulesBase<TimeSpan>(
+        v => v is { Seconds: 0, Milliseconds: 0 },
+        "Duration must be in whole minutes (no seconds)",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a TimeSpan is a multiple of the specified unit.
@@ -129,12 +103,9 @@ public class DurationIncrementRule(TimeSpan unit, string? customMessage = null)
 /// A validation rule that ensures a TimeSpan represents a duration within a single day (less than 24 hours).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class WithinDayRule(string? customMessage = null) : IValidatorRule<TimeSpan>
-{
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value >= TimeSpan.Zero && value < TimeSpan.FromDays(1);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "Duration must be within a single day (less than 24 hours)";
-}
+public class WithinDayRule(string? customMessage = null)
+    : RulesBase<TimeSpan>(
+        v => v >= TimeSpan.Zero && v < TimeSpan.FromDays(1),
+        "Duration must be within a single day (less than 24 hours)",
+        customMessage
+    );

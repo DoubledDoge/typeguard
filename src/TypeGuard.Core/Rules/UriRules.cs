@@ -26,30 +26,25 @@ public class UriSchemeRule(string scheme, string? customMessage = null) : IValid
 /// A validation rule that ensures a URI uses HTTPS only.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HttpsOnlyRule(string? customMessage = null) : IValidatorRule<Uri>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) =>
-        value.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "URI must use HTTPS";
-}
+public class HttpsOnlyRule(string? customMessage = null)
+    : RulesBase<Uri>(
+        v => v.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase),
+        "URI must use HTTPS",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a URI uses either HTTP or HTTPS.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HttpOrHttpsRule(string? customMessage = null) : IValidatorRule<Uri>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) =>
-        value.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase)
-        || value.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "URI must use HTTP or HTTPS";
-}
+public class HttpOrHttpsRule(string? customMessage = null)
+    : RulesBase<Uri>(
+        v =>
+            v.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase)
+            || v.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase),
+        "URI must use HTTP or HTTPS",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures a URI belongs to the specified domain.
@@ -132,14 +127,8 @@ public class PortRule(int port, string? customMessage = null) : IValidatorRule<U
 /// A validation rule that ensures a URI is absolute (has a scheme and host).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class AbsoluteUriRule(string? customMessage = null) : IValidatorRule<Uri>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) => value.IsAbsoluteUri;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "URI must be absolute";
-}
+public class AbsoluteUriRule(string? customMessage = null)
+    : RulesBase<Uri>(v => v.IsAbsoluteUri, "URI must be absolute", customMessage);
 
 /// <summary>
 /// A validation rule that ensures the URI path starts with the specified prefix.
@@ -166,51 +155,42 @@ public class PathPrefixRule(string pathPrefix, string? customMessage = null) : I
 /// A validation rule that ensures the URI includes a query string.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HasQueryStringRule(string? customMessage = null) : IValidatorRule<Uri>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) => !string.IsNullOrEmpty(value.Query);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "URI must include a query string";
-}
+public class HasQueryStringRule(string? customMessage = null)
+    : RulesBase<Uri>(
+        v => !string.IsNullOrEmpty(v.Query),
+        "URI must include a query string",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures the URI does not include a query string.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class NoQueryStringRule(string? customMessage = null) : IValidatorRule<Uri>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) => string.IsNullOrEmpty(value.Query);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "URI must not include a query string";
-}
+public class NoQueryStringRule(string? customMessage = null)
+    : RulesBase<Uri>(
+        v => string.IsNullOrEmpty(v.Query),
+        "URI must not include a query string",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures the URI includes a fragment (the portion after #).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class HasFragmentRule(string? customMessage = null) : IValidatorRule<Uri>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) => !string.IsNullOrEmpty(value.Fragment);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "URI must include a fragment";
-}
+public class HasFragmentRule(string? customMessage = null)
+    : RulesBase<Uri>(
+        v => !string.IsNullOrEmpty(v.Fragment),
+        "URI must include a fragment",
+        customMessage
+    );
 
 /// <summary>
 /// A validation rule that ensures the URI is a localhost address.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-public class LocalhostRule(string? customMessage = null) : IValidatorRule<Uri>
-{
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) =>
-        value.IsLoopback || value.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "URI must be a localhost address";
-}
+public class LocalhostRule(string? customMessage = null)
+    : RulesBase<Uri>(
+        v => v.IsLoopback || v.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase),
+        "URI must be a localhost address",
+        customMessage
+    );
