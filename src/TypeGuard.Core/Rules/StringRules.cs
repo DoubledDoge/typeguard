@@ -141,17 +141,15 @@ public class LowerCaseStringRule(string? customMessage = null)
 /// <param name="prefix">The required prefix. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="prefix"/> is null or empty.</exception>
-public class StartsWithRule(string prefix, string? customMessage = null) : IValidatorRule<string>
+public class StartsWithRule(string prefix, string? customMessage = null)
+    : RulesBase<string>(BuildPredicate(prefix), $"Input must start with '{prefix}'", customMessage)
 {
-    private readonly string _prefix = string.IsNullOrEmpty(prefix)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(prefix))
-        : prefix;
-
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.StartsWith(_prefix);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Input must start with '{prefix}'";
+    private static Func<string, bool> BuildPredicate(string prefix)
+    {
+        return string.IsNullOrEmpty(prefix)
+            ? throw new ArgumentException("Cannot be null or empty.", nameof(prefix))
+            : v => v.StartsWith(prefix);
+    }
 }
 
 /// <summary>
@@ -160,17 +158,15 @@ public class StartsWithRule(string prefix, string? customMessage = null) : IVali
 /// <param name="suffix">The required suffix. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="suffix"/> is null or empty.</exception>
-public class EndsWithRule(string suffix, string? customMessage = null) : IValidatorRule<string>
+public class EndsWithRule(string suffix, string? customMessage = null)
+    : RulesBase<string>(BuildPredicate(suffix), $"Input must end with '{suffix}'", customMessage)
 {
-    private readonly string _suffix = string.IsNullOrEmpty(suffix)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(suffix))
-        : suffix;
-
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.EndsWith(_suffix);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Input must end with '{suffix}'";
+    private static Func<string, bool> BuildPredicate(string suffix)
+    {
+        return string.IsNullOrEmpty(suffix)
+            ? throw new ArgumentException("Cannot be null or empty.", nameof(suffix))
+            : v => v.EndsWith(suffix);
+    }
 }
 
 /// <summary>
@@ -179,17 +175,19 @@ public class EndsWithRule(string suffix, string? customMessage = null) : IValida
 /// <param name="substring">The required substring. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="substring"/> is null or empty.</exception>
-public class ContainsRule(string substring, string? customMessage = null) : IValidatorRule<string>
+public class ContainsRule(string substring, string? customMessage = null)
+    : RulesBase<string>(
+        BuildPredicate(substring),
+        $"Input must contain '{substring}'",
+        customMessage
+    )
 {
-    private readonly string _substring = string.IsNullOrEmpty(substring)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
-        : substring;
-
-    /// <inheritdoc/>
-    public bool IsValid(string value) => value.Contains(_substring);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Input must contain '{substring}'";
+    private static Func<string, bool> BuildPredicate(string substring)
+    {
+        return string.IsNullOrEmpty(substring)
+            ? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
+            : v => v.Contains(substring);
+    }
 }
 
 /// <summary>
@@ -199,17 +197,18 @@ public class ContainsRule(string substring, string? customMessage = null) : IVal
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="substring"/> is null or empty.</exception>
 public class NotContainsRule(string substring, string? customMessage = null)
-    : IValidatorRule<string>
+    : RulesBase<string>(
+        BuildPredicate(substring),
+        $"Input must not contain '{substring}'",
+        customMessage
+    )
 {
-    private readonly string _substring = string.IsNullOrEmpty(substring)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
-        : substring;
-
-    /// <inheritdoc/>
-    public bool IsValid(string value) => !value.Contains(_substring);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Input must not contain '{substring}'";
+    private static Func<string, bool> BuildPredicate(string substring)
+    {
+        return string.IsNullOrEmpty(substring)
+            ? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
+            : v => !v.Contains(substring);
+    }
 }
 
 /// <summary>

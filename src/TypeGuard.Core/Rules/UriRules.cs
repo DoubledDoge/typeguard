@@ -8,18 +8,15 @@ using Interfaces;
 /// <param name="scheme">The required URI scheme. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="scheme"/> is null or empty.</exception>
-public class UriSchemeRule(string scheme, string? customMessage = null) : IValidatorRule<Uri>
+public class UriSchemeRule(string scheme, string? customMessage = null)
+    : RulesBase<Uri>(BuildPredicate(scheme), $"URI must use the {scheme} scheme", customMessage)
 {
-    private readonly string _scheme = string.IsNullOrEmpty(scheme)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(scheme))
-        : scheme;
-
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) =>
-        value.Scheme.Equals(_scheme, StringComparison.OrdinalIgnoreCase);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"URI must use the {scheme} scheme";
+    private static Func<Uri, bool> BuildPredicate(string scheme)
+    {
+        return string.IsNullOrEmpty(scheme)
+            ? throw new ArgumentException("Cannot be null or empty.", nameof(scheme))
+            : v => v.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase);
+    }
 }
 
 /// <summary>
@@ -52,18 +49,15 @@ public class HttpOrHttpsRule(string? customMessage = null)
 /// <param name="domain">The required domain (e.g. "example.com"). Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="domain"/> is null or empty.</exception>
-public class DomainRule(string domain, string? customMessage = null) : IValidatorRule<Uri>
+public class DomainRule(string domain, string? customMessage = null)
+    : RulesBase<Uri>(BuildPredicate(domain), $"URI must be from domain {domain}", customMessage)
 {
-    private readonly string _domain = string.IsNullOrEmpty(domain)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(domain))
-        : domain;
-
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) =>
-        value.Host.Equals(_domain, StringComparison.OrdinalIgnoreCase);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"URI must be from domain {domain}";
+    private static Func<Uri, bool> BuildPredicate(string domain)
+    {
+        return string.IsNullOrEmpty(domain)
+            ? throw new ArgumentException("Cannot be null or empty.", nameof(domain))
+            : v => v.Host.Equals(domain, StringComparison.OrdinalIgnoreCase);
+    }
 }
 
 /// <summary>
@@ -106,21 +100,19 @@ public class AllowedDomainsRule(IEnumerable<string> allowedDomains, string? cust
 /// <param name="port">The required port number. Must be between 0 and 65535.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="port"/> is not between 0 and 65535.</exception>
-public class PortRule(int port, string? customMessage = null) : IValidatorRule<Uri>
+public class PortRule(int port, string? customMessage = null)
+    : RulesBase<Uri>(BuildPredicate(port), $"URI must use port {port}", customMessage)
 {
-    private readonly int _port = port is < 0 or > 65535
-        ? throw new ArgumentOutOfRangeException(
-            nameof(port),
-            port,
-            "port must be between 0 and 65535."
-        )
-        : port;
-
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) => value.Port == _port;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"URI must use port {port}";
+    private static Func<Uri, bool> BuildPredicate(int port)
+    {
+        return port is < 0 or > 65535
+            ? throw new ArgumentOutOfRangeException(
+                nameof(port),
+                port,
+                "port must be between 0 and 65535."
+            )
+            : v => v.Port == port;
+    }
 }
 
 /// <summary>
@@ -136,19 +128,19 @@ public class AbsoluteUriRule(string? customMessage = null)
 /// <param name="pathPrefix">The required path prefix (e.g. "/api/v1"). Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="pathPrefix"/> is null or empty.</exception>
-public class PathPrefixRule(string pathPrefix, string? customMessage = null) : IValidatorRule<Uri>
+public class PathPrefixRule(string pathPrefix, string? customMessage = null)
+    : RulesBase<Uri>(
+        BuildPredicate(pathPrefix),
+        $"URI path must start with '{pathPrefix}'",
+        customMessage
+    )
 {
-    private readonly string _pathPrefix = string.IsNullOrEmpty(pathPrefix)
-        ? throw new ArgumentException("Cannot be null or empty.", nameof(pathPrefix))
-        : pathPrefix;
-
-    /// <inheritdoc/>
-    public bool IsValid(Uri value) =>
-        value.AbsolutePath.StartsWith(_pathPrefix, StringComparison.OrdinalIgnoreCase);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? $"URI path must start with '{pathPrefix}'";
+    private static Func<Uri, bool> BuildPredicate(string pathPrefix)
+    {
+        return string.IsNullOrEmpty(pathPrefix)
+            ? throw new ArgumentException("Cannot be null or empty.", nameof(pathPrefix))
+            : v => v.AbsolutePath.StartsWith(pathPrefix, StringComparison.OrdinalIgnoreCase);
+    }
 }
 
 /// <summary>

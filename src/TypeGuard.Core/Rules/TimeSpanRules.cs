@@ -1,7 +1,5 @@
 ﻿namespace TypeGuard.Core.Rules;
 
-using Interfaces;
-
 /// <summary>
 /// A validation rule that ensures a TimeSpan is positive (greater than zero).
 /// </summary>
@@ -32,23 +30,26 @@ public class MinDurationRule(TimeSpan minimum, string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxHours"/> is less than or equal to zero.</exception>
 public class WorkingHoursRule(int maxHours = 8, string? customMessage = null)
-    : IValidatorRule<TimeSpan>
+    : RulesBase<TimeSpan>(
+        BuildPredicate(maxHours),
+        $"Duration must be within {maxHours} working hours",
+        customMessage
+    )
 {
-    private readonly TimeSpan _maxDuration =
-        maxHours <= 0
-            ? throw new ArgumentOutOfRangeException(
+    private static Func<TimeSpan, bool> BuildPredicate(int maxHours)
+    {
+        if (maxHours <= 0)
+        {
+            throw new ArgumentOutOfRangeException(
                 nameof(maxHours),
                 maxHours,
                 "maxHours must be greater than zero."
-            )
-            : TimeSpan.FromHours(maxHours);
+            );
+        }
 
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value >= TimeSpan.Zero && value <= _maxDuration;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? $"Duration must be within {maxHours} working hours";
+        TimeSpan maxDuration = TimeSpan.FromHours(maxHours);
+        return v => v >= TimeSpan.Zero && v <= maxDuration;
+    }
 }
 
 /// <summary>
@@ -80,23 +81,22 @@ public class WholeMinutesRule(string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="unit"/> is less than or equal to zero.</exception>
 public class DurationIncrementRule(TimeSpan unit, string? customMessage = null)
-    : IValidatorRule<TimeSpan>
+    : RulesBase<TimeSpan>(
+        BuildPredicate(unit),
+        $"Duration must be in increments of {unit}",
+        customMessage
+    )
 {
-    private readonly TimeSpan _unit =
-        unit <= TimeSpan.Zero
+    private static Func<TimeSpan, bool> BuildPredicate(TimeSpan unit)
+    {
+        return unit <= TimeSpan.Zero
             ? throw new ArgumentOutOfRangeException(
                 nameof(unit),
                 unit,
                 "unit must be greater than zero."
             )
-            : unit;
-
-    /// <inheritdoc/>
-    public bool IsValid(TimeSpan value) => value.Ticks % _unit.Ticks == 0;
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? $"Duration must be in increments of {unit}";
+            : v => v.Ticks % unit.Ticks == 0;
+    }
 }
 
 /// <summary>

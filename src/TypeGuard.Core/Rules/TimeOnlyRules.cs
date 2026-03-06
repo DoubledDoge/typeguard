@@ -7,8 +7,8 @@ using Interfaces;
 /// </summary>
 public static class BusinessHoursRule
 {
-    private static readonly TimeSpan _open = TimeSpan.FromHours(9);
-    private static readonly TimeSpan _close = TimeSpan.FromHours(17);
+    private static readonly TimeSpan Open = TimeSpan.FromHours(9);
+    private static readonly TimeSpan Close = TimeSpan.FromHours(17);
 
     /// <summary>
     /// Creates a validation rule for DateTime values that ensures the time is within business hours (9 AM to 5 PM).
@@ -28,7 +28,7 @@ public static class BusinessHoursRule
 
     private class BusinessHoursRuleImpl<T>(Func<T, TimeSpan> converter, string? customMessage)
         : RulesBase<T>(
-            v => converter(v) >= _open && converter(v) <= _close,
+            v => converter(v) >= Open && converter(v) <= Close,
             "Time must be within business hours (9 AM to 5 PM)",
             customMessage
         );
