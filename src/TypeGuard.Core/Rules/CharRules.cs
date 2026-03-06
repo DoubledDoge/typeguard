@@ -3,72 +3,53 @@
 using Interfaces;
 
 /// <summary>
-/// A base class for character validation rules that apply a single predicate.
-/// </summary>
-/// <param name="predicate">The function that determines whether a character is valid.</param>
-/// <param name="defaultMessage">The default error message used when no custom message is provided.</param>
-/// <param name="customMessage">An optional custom error message.</param>
-public abstract class CharValidatorRule(
-    Func<char, bool> predicate,
-    string defaultMessage,
-    string? customMessage = null
-) : IValidatorRule<char>
-{
-    /// <inheritdoc/>
-    public bool IsValid(char value) => predicate(value);
-
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? defaultMessage;
-} // TODO: Will need to be applied to other types in the future.
-
-/// <summary>
 /// A validation rule that ensures a character is a letter.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class LetterRule(string? customMessage = null)
-    : CharValidatorRule(char.IsLetter, "Character must be a letter", customMessage);
+    : RulesBase<char>(char.IsLetter, "Character must be a letter", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a character is a digit.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class DigitRule(string? customMessage = null)
-    : CharValidatorRule(char.IsDigit, "Character must be a digit", customMessage);
+    : RulesBase<char>(char.IsDigit, "Character must be a digit", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a character is uppercase.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class UpperCaseRule(string? customMessage = null)
-    : CharValidatorRule(char.IsUpper, "Character must be uppercase", customMessage);
+    : RulesBase<char>(char.IsUpper, "Character must be uppercase", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a character is lowercase.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class LowerCaseRule(string? customMessage = null)
-    : CharValidatorRule(char.IsLower, "Character must be lowercase", customMessage);
+    : RulesBase<char>(char.IsLower, "Character must be lowercase", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a character is alphanumeric (letter or digit).
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class AlphanumericCharRule(string? customMessage = null)
-    : CharValidatorRule(char.IsLetterOrDigit, "Character must be alphanumeric", customMessage);
+    : RulesBase<char>(char.IsLetterOrDigit, "Character must be alphanumeric", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a character is whitespace.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class WhitespaceRule(string? customMessage = null)
-    : CharValidatorRule(char.IsWhiteSpace, "Character must be whitespace", customMessage);
+    : RulesBase<char>(char.IsWhiteSpace, "Character must be whitespace", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a character is a punctuation mark.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class PunctuationRule(string? customMessage = null)
-    : CharValidatorRule(char.IsPunctuation, "Character must be punctuation", customMessage);
+    : RulesBase<char>(char.IsPunctuation, "Character must be punctuation", customMessage);
 
 /// <summary>
 /// A validation rule that ensures a character is within a specified set of allowed characters.
