@@ -370,7 +370,7 @@ string email = await Guard.String("Enter email")
 
 ## 📄 License
 
-MIT Licence — see [LICENCE](LICENSE) for details.
+See [LICENCE](LICENSE) for details. (MIT Licence)
 
 ---
 
