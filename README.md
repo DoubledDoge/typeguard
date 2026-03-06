@@ -344,7 +344,7 @@ TypeGuard.Blazor            → Blazor implementation (InputText, DI-injected Gu
 ```csharp
 using TypeGuard.Core.Interfaces;
 
-public class EmailRule : IHandlingRule<string>
+public class EmailRule : IValidatorRule<string>
 {
     public bool IsValid(string value) =>
         value.Contains('@') && value.Contains('.');
