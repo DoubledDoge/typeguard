@@ -13,6 +13,8 @@
   <Folder Name="/.github/">
     <File Path=".github/dependabot.yml" />
     <File Path=".github/release-drafter.yml" />
+    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+    <File Path=".github/ISSUE_TEMPLATE/bug_report.yml" />
   </Folder>
 
   <Folder Name="/.github/workflows/">

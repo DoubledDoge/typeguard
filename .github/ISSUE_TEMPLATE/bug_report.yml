@@ -1,0 +1,48 @@
+name: Bug Report
+description: File a bug report
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps To Reproduce
+      description: Steps to reproduce the behavior
+    validations:
+      required: true
+
+  - type: input
+    id: net-version
+    attributes:
+      label: .NET Version
+      description: What version of .NET are you running? (9.0, 10.0, etc.)
+    validations:
+      required: false
+
+  - type: dropdown
+    id: projects
+    attributes:
+      label: What project are you seeing the problem on?
+      multiple: true
+      options:
+        - TypeGuard.Core
+        - TypeGuard.Console
+        - TypeGuard.WPF
+        - TypeGuard.WinForms
+        - TypeGuard.MAUI'
+        - TypeGuard.Blazor
+        - TypeGuard.Avalonia
+        - Other
+      validations:
+        required: true
