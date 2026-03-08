@@ -6,7 +6,6 @@ on:
     paths:
       - 'src/**'
       - '**/*.csproj'
-      - '**/*.sln'
       - '**/*.slnx'
       - '.github/workflows/ci-cd.yml'
   pull_request:
