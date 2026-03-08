@@ -329,7 +329,23 @@ public class FilePathRule(bool mustExist = false, string? customMessage = null)
             string fullPath = Path.GetFullPath(value);
             return !mustExist || File.Exists(fullPath);
         }
-        catch
+        catch (ArgumentException)
+        {
+            return false;
+        }
+        catch (ArgumentNullException)
+        {
+            return false;
+        }
+        catch (PathTooLongException)
+        {
+            return false;
+        }
+        catch (NotSupportedException)
+        {
+            return false;
+        }
+        catch (IOException)
         {
             return false;
         }
