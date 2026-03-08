@@ -42,7 +42,7 @@ public class WinFormsInput(Control control) : IInputProvider
     public string? GetInput()
     {
         string? text = _control.InvokeRequired
-            ? (string?)_control.Invoke(() => _control.Text)
+            ? _control.Invoke(() => _control.Text)
             : _control.Text;
 
         return string.IsNullOrEmpty(text) ? null : text.Trim();
