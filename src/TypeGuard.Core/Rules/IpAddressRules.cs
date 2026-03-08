@@ -37,17 +37,8 @@ public class PrivateIpRule(string? customMessage = null) : IValidatorRule<IPAddr
     /// <inheritdoc/>
     public bool IsValid(IPAddress value)
     {
-        if (value.AddressFamily != AddressFamily.InterNetwork)
-        {
-            return false;
-        }
-
-        byte[] b = value.GetAddressBytes();
-
-        return b[0] == 10
-            || b[0] == 172 && b[1] >= 16 && b[1] <= 31
-            || b[0] == 192 && b[1] == 168
-            || b[0] == 169 && b[1] == 254;
+        return value.AddressFamily == AddressFamily.InterNetwork
+            && IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes());
     }
 
     /// <inheritdoc/>
@@ -124,24 +115,11 @@ public class PublicIpRule(string? customMessage = null) : IValidatorRule<IPAddre
     /// <inheritdoc/>
     public bool IsValid(IPAddress value)
     {
-        if (IPAddress.IsLoopback(value))
-        {
-            return false;
-        }
-
-        if (value.AddressFamily != AddressFamily.InterNetwork)
-        {
-            return true;
-        }
-
-        byte[] b = value.GetAddressBytes();
-
-        return !(
-            b[0] == 10
-            || b[0] == 172 && b[1] >= 16 && b[1] <= 31
-            || b[0] == 192 && b[1] == 168
-            || b[0] == 169 && b[1] == 254
-        );
+        return !IPAddress.IsLoopback(value)
+            && (
+                value.AddressFamily != AddressFamily.InterNetwork
+                || !IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes())
+            );
     }
 
     /// <inheritdoc/>
@@ -283,5 +261,18 @@ public class BlockedIpAddressesRule(
         ArgumentNullException.ThrowIfNull(values, paramName);
         HashSet<IPAddress> set = [.. values];
         return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
+    }
+}
+
+internal static class IpAddressHelper
+{
+    internal static bool IsPrivateIpv4(byte[] addressBytes)
+    {
+        bool is10Range = addressBytes[0] == 10;
+        bool is172Range = addressBytes[0] == 172 && addressBytes[1] >= 16 && addressBytes[1] <= 31;
+        bool is192Range = addressBytes[0] == 192 && addressBytes[1] == 168;
+        bool isApipaRange = addressBytes[0] == 169 && addressBytes[1] == 254;
+
+        return is10Range || is172Range || is192Range || isApipaRange;
     }
 }
