@@ -6,14 +6,14 @@ on:
     paths:
       - 'src/**'
       - '**/*.csproj'
-      - '**/*.sln'
+      - '**/*.slnx'
       - '.github/workflows/codeql.yml'
   pull_request:
     branches: [main]
     paths:
       - 'src/**'
       - '**/*.csproj'
-      - '**/*.sln'
+      - '**/*.slnx'
       - '.github/workflows/codeql.yml'
   schedule:
     - cron: '40 4 * * 6'
@@ -65,9 +65,12 @@ jobs:
         with:
           languages: csharp
           queries: +security-and-quality
+          config: |
+            paths:
+            - src
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ./TypeGuard.slnx --configuration Release --no-restore
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
