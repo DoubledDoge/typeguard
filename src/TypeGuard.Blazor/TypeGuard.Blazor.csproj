@@ -36,6 +36,6 @@
     <None Include="../../README.md" Pack="true" PackagePath="/" />
     <None Include="../../icon.png" Pack="true" PackagePath="/" />
     <ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.14" />
   </ItemGroup>
 </Project>
