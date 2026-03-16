@@ -91,7 +91,7 @@ using TypeGuard.Console;
 
 int age = Guard.Int("Enter your age")
     .WithRange(1, 120)
-    .GetAsync();
+    .Get();
 
 string name = await Guard.String("Enter your name")
     .WithNoDigits()
