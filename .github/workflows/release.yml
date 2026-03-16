@@ -1,4 +1,4 @@
-﻿name: Release Drafter
+name: Release Drafter
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Draft release notes
-        uses: release-drafter/release-drafter@v6
+        uses: release-drafter/release-drafter@v7
         with:
           config-name: release-drafter.yml
         env:
