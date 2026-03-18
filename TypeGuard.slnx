@@ -1,4 +1,10 @@
 <Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+
   <Folder Name="/Typeguard/">
     <File Path=".gitignore" />
     <File Path=".gitattributes" />
@@ -11,8 +17,8 @@
   </Folder>
 
   <Folder Name="/.github/">
+    <File Path=".github/cliff.toml" />
     <File Path=".github/dependabot.yml" />
-    <File Path=".github/release-drafter.yml" />
     <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
     <File Path=".github/ISSUE_TEMPLATE/bug_report.yml" />
   </Folder>
@@ -21,7 +27,6 @@
     <File Path=".github/workflows/ci-cd.yml" />
     <File Path=".github/workflows/deploy.yml" />
     <File Path=".github/workflows/codeql.yml" />
-    <File Path=".github/workflows/release.yml" />
   </Folder>
 
   <Folder Name="/src/">
