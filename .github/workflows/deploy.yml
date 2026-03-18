@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'v*.*.*'
-  release:
-    types: [published]
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -22,16 +20,13 @@ jobs:
     outputs:
       version: ${{ steps.extract.outputs.version }}
       is-prerelease: ${{ steps.extract.outputs.is-prerelease }}
-
     steps:
       - name: Extract version from tag
         id: extract
         run: |
           TAG=${GITHUB_REF#refs/tags/}
           VERSION=${TAG#v}
-
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Release version: $VERSION"
 
           if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
             echo "::error::Invalid version format: $VERSION"
@@ -50,10 +45,9 @@ jobs:
     needs: validate-tag
     permissions:
       contents: read
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -62,7 +56,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install MAUI workloads
+      - name: Install workloads
         run: dotnet workload restore
 
       - name: Cache NuGet packages
@@ -81,8 +75,6 @@ jobs:
       - name: Pack NuGet packages
         run: |
           VERSION=${{ needs.validate-tag.outputs.version }}
-          echo "Packing version: $VERSION"
-
           PROJECTS=(
             "src/TypeGuard.Core/TypeGuard.Core.csproj"
             "src/TypeGuard.Console/TypeGuard.Console.csproj"
@@ -92,9 +84,7 @@ jobs:
             "src/TypeGuard.Maui/TypeGuard.Maui.csproj"
             "src/TypeGuard.Blazor/TypeGuard.Blazor.csproj"
           )
-
           for project in "${PROJECTS[@]}"; do
-            echo "Packing $project"
             dotnet pack "$project" \
               --configuration Release \
               --no-build \
@@ -103,23 +93,52 @@ jobs:
           done
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: nuget-packages-${{ github.sha }}
           path: ./artifacts/*.nupkg
           retention-days: 7
 
-  publish:
-    name: Publish
+  release:
+    name: Create GitHub Release
     runs-on: ubuntu-latest
     needs: [validate-tag, build-and-pack]
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: .github/cliff.toml
+          args: --verbose --latest --strip header
+        env:
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: ${{ steps.cliff.outputs.content }}
+          draft: false
+          prerelease: ${{ needs.validate-tag.outputs.is-prerelease == 'true' }}
+
+  publish:
+    name: Publish to NuGet
+    runs-on: ubuntu-latest
+    needs: [validate-tag, release]
     permissions:
       contents: write
       packages: write
     environment:
       name: nuget-production
       url: https://www.nuget.org/packages/TypeGuard.Core/${{ needs.validate-tag.outputs.version }}
-
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v8
@@ -132,31 +151,9 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Verify package signatures
-        run: |
-          for package in ./artifacts/*.nupkg; do
-            echo "Verifying $(basename "$package")"
-            dotnet nuget verify "$package" || echo "::warning::Package verification failed for $(basename "$package")"
-          done
-
       - name: Publish to NuGet.org
-        if: needs.validate-tag.outputs.is-prerelease == 'false'
         run: |
-          echo "Publishing stable packages to NuGet.org"
           for package in ./artifacts/*.nupkg; do
-            echo "Publishing $(basename "$package")"
-            dotnet nuget push "$package" \
-              --api-key ${{ secrets.NUGET_API_KEY }} \
-              --source https://api.nuget.org/v3/index.json \
-              --skip-duplicate
-          done
-
-      - name: Publish pre-release to NuGet.org
-        if: needs.validate-tag.outputs.is-prerelease == 'true'
-        run: |
-          echo "Publishing pre-release packages to NuGet.org"
-          for package in ./artifacts/*.nupkg; do
-            echo "Publishing $(basename "$package")"
             dotnet nuget push "$package" \
               --api-key ${{ secrets.NUGET_API_KEY }} \
               --source https://api.nuget.org/v3/index.json \
@@ -165,19 +162,9 @@ jobs:
 
       - name: Publish to GitHub Packages
         run: |
-          echo "Publishing packages to GitHub Packages"
           for package in ./artifacts/*.nupkg; do
-            echo "Publishing $(basename "$package")"
             dotnet nuget push "$package" \
               --api-key ${{ secrets.GITHUB_TOKEN }} \
               --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
               --skip-duplicate || echo "::warning::Failed to publish $(basename "$package") to GitHub Packages"
           done
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ./artifacts/*.nupkg
-          draft: false
-          prerelease: ${{ needs.validate-tag.outputs.is-prerelease == 'true' }}
-          fail_on_unmatched_files: true

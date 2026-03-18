@@ -1,0 +1,44 @@
+﻿[remote.github]
+owner = "DoubledDoge"
+repo = "typeguard"
+
+[changelog]
+header = ""
+body = """
+## What's Changed\n
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | upper_first }}
+{% for commit in commits %}
+- {{ commit.message | upper_first }} @{{ commit.author.name }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/DoubledDoge/TypeGuard/commit/{{ commit.id }}))
+{% endfor %}
+{% endfor %}
+
+{% if github.contributors | filter(attribute="is_first_time", value=true) | length != 0 %}
+### 🌱 New Contributors
+{% for contributor in github.contributors | filter(attribute="is_first_time", value=true) %}
+- @{{ contributor.username }} made their first contribution
+{% endfor %}
+{% endif %}\n
+"""
+trim = true
+footer = "**Full Changelog**: https://github.com/DoubledDoge/TypeGuard/compare/{{ previous.version }}...{{ version }}"
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+split_commits = false
+commit_parsers = [
+    { message = "^feat!", group = "💥 Breaking Changes" },
+    { message = "^feat",  group = "🚀 Features" },
+    { message = "^fix",   group = "🐛 Bug Fixes" },
+    { message = "^docs",  group = "📚 Documentation" },
+    { message = "^style", group = "🎨 Styling & Theming" },
+    { message = "^perf",  group = "🚅 Performance" },
+    { message = "^chore|^refactor|^build|^ci", group = "🧹 Maintenance" },
+]
+filter_commits = false
+tag_pattern = "v[0-9].*"
+skip_tags = ""
+ignore_tags = ""
+topo_order = false
+sort_commits = "newest"

@@ -42,7 +42,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install MAUI workloads
+      - name: Install workloads
         run: dotnet workload restore
 
       - name: Cache NuGet packages
@@ -80,7 +80,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install MAUI workloads
+      - name: Install workloads
         run: dotnet workload restore
 
       - name: Restore dependencies
