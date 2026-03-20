@@ -18,7 +18,7 @@
 
   <PropertyGroup>
     <PackageId>TypeGuard.Core</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>DoubledDoge</Authors>
     <Description>Core validation library for TypeGuard.</Description>
     <PackageIcon>icon.png</PackageIcon>
