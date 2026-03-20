@@ -3,5 +3,9 @@
     "version": "9.0.0",
     "rollForward": "latestMajor",
     "allowPrerelease": false
+  },
+
+  "msbuild-sdks": {
+    "Uno.Sdk": "6.5.31"
   }
 }
