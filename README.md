@@ -19,7 +19,6 @@ A fluent, type-safe user input handler and validation library for .NET with plat
 
 - [🚀 Features](#-features)
 - [📦 Installation](#-installation)
-- [🎯 Quick Start](#-quick-start)
 - [📚 Usage Guide](#-usage-guide)
 - [🖥️ Platform Guide](#-platform-guide)
 - [🏗️ Architecture](#-architecture)
@@ -90,44 +89,6 @@ dotnet add package TypeGuard.Core
 ### Manual Installation
 ```bash
 dotnet add reference path/to/TypeGuard.Console/TypeGuard.Console.csproj  # or your platform project
-```
-
----
-
-## 🎯 Quick Start
-
-### Console
-```csharp
-using TypeGuard.Console;
-
-int age = Guard.Int("Enter your age")
-    .WithRange(1, 120)
-    .Get();
-
-string name = await Guard.String("Enter your name")
-    .WithNoDigits()
-    .WithLengthRange(2, 50)
-    .GetAsync();
-```
-
-### WinForms
-```csharp
-using TypeGuard.Winforms;
-
-private readonly Guard _guard;
-
-public MyForm()
-{
-    InitializeComponent();
-    _guard = new Guard(inputTextBox, promptLabel, errorLabel);
-}
-
-private async void submitButton_Click(object sender, EventArgs e)
-{
-    int age = await _guard.Int("Enter your age")
-        .WithRange(1, 120)
-        .GetAsync();
-}
 ```
 
 ---
