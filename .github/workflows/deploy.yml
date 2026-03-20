@@ -83,6 +83,7 @@ jobs:
             "src/TypeGuard.Winforms/TypeGuard.Winforms.csproj"
             "src/TypeGuard.Maui/TypeGuard.Maui.csproj"
             "src/TypeGuard.Blazor/TypeGuard.Blazor.csproj"
+            "src/TypeGuard.Uno/TypeGuard.Uno.csproj"
           )
           for project in "${PROJECTS[@]}"; do
             dotnet pack "$project" \
