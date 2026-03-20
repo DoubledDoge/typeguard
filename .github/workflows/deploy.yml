@@ -129,6 +129,7 @@ jobs:
           body: ${{ steps.cliff.outputs.content }}
           draft: false
           prerelease: ${{ needs.validate-tag.outputs.is-prerelease == 'true' }}
+          files: ./artifacts/*.nupkg
 
   publish:
     name: Publish to NuGet
