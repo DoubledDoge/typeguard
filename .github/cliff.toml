@@ -21,7 +21,7 @@ body = """
 {% endif %}\n
 """
 trim = true
-footer = "**Full Changelog**: https://github.com/DoubledDoge/TypeGuard/compare/{{ previous.version }}...{{ version }}"
+footer = "{% if previous.version %}**Full Changelog**: https://github.com/DoubledDoge/TypeGuard/compare/{{ previous.version }}...{{ version }}{% endif %}"
 
 [git]
 conventional_commits = true
