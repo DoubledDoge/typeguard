@@ -32,35 +32,38 @@ public class MauiInput(Entry entry, Button? submitButton = null) : IInputProvide
 	{
 		TaskCompletionSource<string?> tcs = new();
 
-		await using CancellationTokenRegistration registration = cancellationToken.Register(() =>
+		CancellationTokenRegistration registration = cancellationToken.Register(() =>
 			tcs.TrySetCanceled()
 		);
 
-		if (submitButton is not null)
+		await using (registration.ConfigureAwait(false))
 		{
-			void OnButtonClicked(object? sender, EventArgs e) => tcs.TrySetResult(GetInput());
+			if (submitButton is not null)
+			{
+				void OnButtonClicked(object? sender, EventArgs e) => tcs.TrySetResult(GetInput());
 
-			submitButton.Clicked += OnButtonClicked;
+				submitButton.Clicked += OnButtonClicked;
+				try
+				{
+					return await tcs.Task.ConfigureAwait(false);
+				}
+				finally
+				{
+					submitButton.Clicked -= OnButtonClicked;
+				}
+			}
+
+			void OnEntryCompleted(object? sender, EventArgs e) => tcs.TrySetResult(GetInput());
+
+			_entry.Completed += OnEntryCompleted;
 			try
 			{
-				return await tcs.Task;
+				return await tcs.Task.ConfigureAwait(false);
 			}
 			finally
 			{
-				submitButton.Clicked -= OnButtonClicked;
+				_entry.Completed -= OnEntryCompleted;
 			}
-		}
-
-		void OnEntryCompleted(object? sender, EventArgs e) => tcs.TrySetResult(GetInput());
-
-		_entry.Completed += OnEntryCompleted;
-		try
-		{
-			return await tcs.Task;
-		}
-		finally
-		{
-			_entry.Completed -= OnEntryCompleted;
 		}
 	}
 

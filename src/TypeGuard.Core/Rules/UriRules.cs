@@ -66,28 +66,18 @@ public class DomainRule(string domain, string? customMessage = null)
 public class AllowedDomainsRule(IEnumerable<string> allowedDomains, string? customMessage = null)
 	: IValidatorRule<Uri>
 {
-	private readonly (HashSet<string> Set, string Joined) _built = BuildSet(
-		allowedDomains,
-		nameof(allowedDomains)
-	);
+	private readonly HashSet<string> _set = BuildHelper<string>.BuildSet(allowedDomains);
 
 	/// <inheritdoc/>
-	public bool IsValid(Uri value) => _built.Set.Contains(value.Host);
-
-	/// <inheritdoc/>
-	public string ErrorMessage => customMessage ?? $"URI must be from one of: {_built.Joined}";
-
-	private static (HashSet<string> Set, string Joined) BuildSet(
-		IEnumerable<string> values,
-		string paramName
-	)
+	public bool IsValid(Uri value)
 	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<string> set = new(values, StringComparer.OrdinalIgnoreCase);
-		return set.Count == 0
-			? throw new ArgumentException("Cannot be empty.", paramName)
-			: (set, string.Join(", ", set));
+		ArgumentNullException.ThrowIfNull(value);
+		return _set.Contains(value.Host);
 	}
+
+	/// <inheritdoc/>
+	public string ErrorMessage =>
+		customMessage ?? $"URI must be from one of: {string.Join(", ", _set)}";
 }
 
 /// <summary>

@@ -35,9 +35,12 @@ public class Ipv6Rule(string? customMessage = null)
 public class PrivateIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
 	/// <inheritdoc/>
-	public bool IsValid(IPAddress value) =>
-		value.AddressFamily == AddressFamily.InterNetwork
-		&& IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes());
+	public bool IsValid(IPAddress value)
+	{
+		ArgumentNullException.ThrowIfNull(value);
+		return value.AddressFamily == AddressFamily.InterNetwork
+			&& IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes());
+	}
 
 	/// <inheritdoc/>
 	public string ErrorMessage { get; } =
@@ -54,6 +57,7 @@ public class ApipaRule(string? customMessage = null) : IValidatorRule<IPAddress>
 	/// <inheritdoc/>
 	public bool IsValid(IPAddress value)
 	{
+		ArgumentNullException.ThrowIfNull(value);
 		if (value.AddressFamily != AddressFamily.InterNetwork)
 		{
 			return false;
@@ -78,6 +82,7 @@ public class NotApipaRule(string? customMessage = null) : IValidatorRule<IPAddre
 	/// <inheritdoc/>
 	public bool IsValid(IPAddress value)
 	{
+		ArgumentNullException.ThrowIfNull(value);
 		if (value.AddressFamily != AddressFamily.InterNetwork)
 		{
 			return true;
@@ -111,12 +116,15 @@ public class LoopbackIpRule(string? customMessage = null)
 public class PublicIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
 	/// <inheritdoc/>
-	public bool IsValid(IPAddress value) =>
-		!IPAddress.IsLoopback(value)
-		&& (
-			value.AddressFamily != AddressFamily.InterNetwork
-			|| !IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes())
-		);
+	public bool IsValid(IPAddress value)
+	{
+		ArgumentNullException.ThrowIfNull(value);
+		return !IPAddress.IsLoopback(value)
+			&& (
+				value.AddressFamily != AddressFamily.InterNetwork
+				|| !IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes())
+			);
+	}
 
 	/// <inheritdoc/>
 	public string ErrorMessage { get; } = customMessage ?? "IP address must be public";
@@ -151,6 +159,7 @@ public class SubnetRule(IPAddress network, int prefixLength, string? customMessa
 	/// <inheritdoc/>
 	public bool IsValid(IPAddress value)
 	{
+		ArgumentNullException.ThrowIfNull(value);
 		if (value.AddressFamily != _network.AddressFamily)
 		{
 			return false;
@@ -210,9 +219,8 @@ public class AllowedIpAddressesRule(
 	string? customMessage = null
 ) : IValidatorRule<IPAddress>
 {
-	private readonly HashSet<IPAddress> _allowed = BuildSet(
-		allowedAddresses,
-		nameof(allowedAddresses)
+	private readonly HashSet<IPAddress> _allowed = BuildHelper<IPAddress>.BuildSet(
+		allowedAddresses
 	);
 
 	/// <inheritdoc/>
@@ -220,13 +228,6 @@ public class AllowedIpAddressesRule(
 
 	/// <inheritdoc/>
 	public string ErrorMessage { get; } = customMessage ?? "IP address is not in the allowed list";
-
-	private static HashSet<IPAddress> BuildSet(IEnumerable<IPAddress> values, string paramName)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<IPAddress> set = [.. values];
-		return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
-	}
 }
 
 /// <summary>
@@ -241,9 +242,8 @@ public class BlockedIpAddressesRule(
 	string? customMessage = null
 ) : IValidatorRule<IPAddress>
 {
-	private readonly HashSet<IPAddress> _blocked = BuildSet(
-		blockedAddresses,
-		nameof(blockedAddresses)
+	private readonly HashSet<IPAddress> _blocked = BuildHelper<IPAddress>.BuildSet(
+		blockedAddresses
 	);
 
 	/// <inheritdoc/>
@@ -251,13 +251,6 @@ public class BlockedIpAddressesRule(
 
 	/// <inheritdoc/>
 	public string ErrorMessage { get; } = customMessage ?? "IP address is blocked";
-
-	private static HashSet<IPAddress> BuildSet(IEnumerable<IPAddress> values, string paramName)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<IPAddress> set = [.. values];
-		return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
-	}
 }
 
 internal static class IpAddressHelper

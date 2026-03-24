@@ -23,6 +23,7 @@ public class StringLengthRule(
 	/// <inheritdoc/>
 	public bool IsValid(string value)
 	{
+		ArgumentNullException.ThrowIfNull(value);
 		int length = value.Length;
 
 		return (!_minLength.HasValue || length >= _minLength.Value)
@@ -30,33 +31,32 @@ public class StringLengthRule(
 	}
 
 	/// <inheritdoc/>
-	public string ErrorMessage { get; } =
-		customMessage
-		?? (
-			minLength.HasValue && maxLength.HasValue
-				? $"Length must be between {minLength} and {maxLength} characters"
-			: minLength.HasValue ? $"Length must be at least {minLength} characters"
-			: maxLength.HasValue ? $"Length must be at most {maxLength} characters"
-			: "Invalid length"
-		);
+	public string ErrorMessage { get; } = customMessage ?? BuildMessage(minLength, maxLength);
+
+	private static string BuildMessage(int? minLength, int? maxLength) =>
+		minLength.HasValue && maxLength.HasValue
+			? $"Length must be between {minLength} and {maxLength} characters"
+		: minLength.HasValue ? $"Length must be at least {minLength} characters"
+		: maxLength.HasValue ? $"Length must be at most {maxLength} characters"
+		: "Invalid length";
 
 	private static int? ValidateArgs(int? min, int? max) =>
 		min is < 0
 			? throw new ArgumentOutOfRangeException(
-				nameof(minLength),
+				nameof(min),
 				min,
 				"minLength must be greater than or equal to zero."
 			)
 		: max is < 0
 			? throw new ArgumentOutOfRangeException(
-				nameof(maxLength),
+				nameof(max),
 				max,
 				"maxLength must be greater than or equal to zero."
 			)
 		: min.HasValue && max.HasValue && min.Value > max.Value
 			? throw new ArgumentException(
 				$"minLength ({min}) must be less than or equal to maxLength ({max}).",
-				nameof(minLength)
+				nameof(min)
 			)
 		: min;
 }
@@ -145,7 +145,7 @@ public class StartsWithRule(string prefix, string? customMessage = null)
 	private static Func<string, bool> BuildPredicate(string prefix) =>
 		string.IsNullOrEmpty(prefix)
 			? throw new ArgumentException("Cannot be null or empty.", nameof(prefix))
-			: v => v.StartsWith(prefix);
+			: v => v.StartsWith(prefix, StringComparison.Ordinal);
 }
 
 /// <summary>
@@ -160,7 +160,7 @@ public class EndsWithRule(string suffix, string? customMessage = null)
 	private static Func<string, bool> BuildPredicate(string suffix) =>
 		string.IsNullOrEmpty(suffix)
 			? throw new ArgumentException("Cannot be null or empty.", nameof(suffix))
-			: v => v.EndsWith(suffix);
+			: v => v.EndsWith(suffix, StringComparison.Ordinal);
 }
 
 /// <summary>
@@ -179,7 +179,7 @@ public class ContainsRule(string substring, string? customMessage = null)
 	private static Func<string, bool> BuildPredicate(string substring) =>
 		string.IsNullOrEmpty(substring)
 			? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
-			: v => v.Contains(substring);
+			: v => v.Contains(substring, StringComparison.OrdinalIgnoreCase);
 }
 
 /// <summary>
@@ -198,7 +198,7 @@ public class NotContainsRule(string substring, string? customMessage = null)
 	private static Func<string, bool> BuildPredicate(string substring) =>
 		string.IsNullOrEmpty(substring)
 			? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
-			: v => !v.Contains(substring);
+			: v => !v.Contains(substring, StringComparison.OrdinalIgnoreCase);
 }
 
 /// <summary>
@@ -211,28 +211,14 @@ public class NotContainsRule(string substring, string? customMessage = null)
 public class AllowedValuesRule(IEnumerable<string> allowedValues, string? customMessage = null)
 	: IValidatorRule<string>
 {
-	private readonly (HashSet<string> Set, string Joined) _built = BuildSet(
-		allowedValues,
-		nameof(allowedValues)
-	);
+	private readonly HashSet<string> _set = BuildHelper<string>.BuildSet(allowedValues);
 
 	/// <inheritdoc/>
-	public bool IsValid(string value) => _built.Set.Contains(value);
+	public bool IsValid(string value) => _set.Contains(value);
 
 	/// <inheritdoc/>
-	public string ErrorMessage => customMessage ?? $"Input must be one of: {_built.Joined}";
-
-	private static (HashSet<string> Set, string Joined) BuildSet(
-		IEnumerable<string> values,
-		string paramName
-	)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<string> set = [.. values];
-		return set.Count == 0
-			? throw new ArgumentException("Cannot be empty.", paramName)
-			: (set, string.Join(", ", set));
-	}
+	public string ErrorMessage =>
+		customMessage ?? $"Input must be one of: {string.Join(", ", _set)}";
 }
 
 /// <summary>
@@ -245,28 +231,14 @@ public class AllowedValuesRule(IEnumerable<string> allowedValues, string? custom
 public class ExcludedValuesRule(IEnumerable<string> excludedValues, string? customMessage = null)
 	: IValidatorRule<string>
 {
-	private readonly (HashSet<string> Set, string Joined) _built = BuildSet(
-		excludedValues,
-		nameof(excludedValues)
-	);
+	private readonly HashSet<string> _set = BuildHelper<string>.BuildSet(excludedValues);
 
 	/// <inheritdoc/>
-	public bool IsValid(string value) => !_built.Set.Contains(value);
+	public bool IsValid(string value) => !_set.Contains(value);
 
 	/// <inheritdoc/>
-	public string ErrorMessage => customMessage ?? $"Input must not be one of: {_built.Joined}";
-
-	private static (HashSet<string> Set, string Joined) BuildSet(
-		IEnumerable<string> values,
-		string paramName
-	)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<string> set = [.. values];
-		return set.Count == 0
-			? throw new ArgumentException("Cannot be empty.", paramName)
-			: (set, string.Join(", ", set));
-	}
+	public string ErrorMessage =>
+		customMessage ?? $"Input must not be one of: {string.Join(", ", _set)}";
 }
 
 /// <summary>

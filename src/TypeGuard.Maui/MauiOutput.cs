@@ -38,7 +38,9 @@ public class MauiOutput(Label promptLabel, Label errorLabel) : IOutputProvider
 		}
 		else
 		{
-			await MainThread.InvokeOnMainThreadAsync(() => DisplayPrompt(message));
+			await MainThread
+				.InvokeOnMainThreadAsync(() => DisplayPrompt(message))
+				.ConfigureAwait(false);
 		}
 	}
 
@@ -63,7 +65,9 @@ public class MauiOutput(Label promptLabel, Label errorLabel) : IOutputProvider
 		}
 		else
 		{
-			await MainThread.InvokeOnMainThreadAsync(() => DisplayError(message));
+			await MainThread
+				.InvokeOnMainThreadAsync(() => DisplayError(message))
+				.ConfigureAwait(false);
 		}
 	}
 

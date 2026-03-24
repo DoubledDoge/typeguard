@@ -48,28 +48,14 @@ public class AllowedEnumValuesRule<TEnum>(
 ) : IValidatorRule<TEnum>
 	where TEnum : struct, Enum
 {
-	private readonly (HashSet<TEnum> Set, string Joined) _built = BuildSet(
-		allowedValues,
-		nameof(allowedValues)
-	);
+	private readonly HashSet<TEnum> _set = BuildHelper<TEnum>.BuildSet(allowedValues);
 
 	/// <inheritdoc/>
-	public bool IsValid(TEnum value) => _built.Set.Contains(value);
+	public bool IsValid(TEnum value) => _set.Contains(value);
 
 	/// <inheritdoc/>
-	public string ErrorMessage => customMessage ?? $"Value must be one of: {_built.Joined}";
-
-	private static (HashSet<TEnum> Set, string Joined) BuildSet(
-		IEnumerable<TEnum> values,
-		string paramName
-	)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<TEnum> set = [.. values];
-		return set.Count == 0
-			? throw new ArgumentException("Cannot be empty.", paramName)
-			: (set, string.Join(", ", set));
-	}
+	public string ErrorMessage =>
+		customMessage ?? $"Value must be one of: {string.Join(", ", _set)}";
 }
 
 /// <summary>
@@ -86,28 +72,14 @@ public class ExcludedEnumValuesRule<TEnum>(
 ) : IValidatorRule<TEnum>
 	where TEnum : struct, Enum
 {
-	private readonly (HashSet<TEnum> Set, string Joined) _built = BuildSet(
-		excludedValues,
-		nameof(excludedValues)
-	);
+	private readonly HashSet<TEnum> _set = BuildHelper<TEnum>.BuildSet(excludedValues);
 
 	/// <inheritdoc/>
-	public bool IsValid(TEnum value) => !_built.Set.Contains(value);
+	public bool IsValid(TEnum value) => !_set.Contains(value);
 
 	/// <inheritdoc/>
-	public string ErrorMessage => customMessage ?? $"Value must not be one of: {_built.Joined}";
-
-	private static (HashSet<TEnum> Set, string Joined) BuildSet(
-		IEnumerable<TEnum> values,
-		string paramName
-	)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<TEnum> set = [.. values];
-		return set.Count == 0
-			? throw new ArgumentException("Cannot be empty.", paramName)
-			: (set, string.Join(", ", set));
-	}
+	public string ErrorMessage =>
+		customMessage ?? $"Value must not be one of: {string.Join(", ", _set)}";
 }
 
 /// <summary>

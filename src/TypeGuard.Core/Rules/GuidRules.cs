@@ -47,20 +47,13 @@ public class GuidVersionRule(int version, string? customMessage = null) : IValid
 public class ExcludedGuidRule(IEnumerable<Guid> excludedGuids, string? customMessage = null)
 	: IValidatorRule<Guid>
 {
-	private readonly HashSet<Guid> _excluded = BuildSet(excludedGuids, nameof(excludedGuids));
+	private readonly HashSet<Guid> _excluded = BuildHelper<Guid>.BuildSet(excludedGuids);
 
 	/// <inheritdoc/>
 	public bool IsValid(Guid value) => !_excluded.Contains(value);
 
 	/// <inheritdoc/>
 	public string ErrorMessage { get; } = customMessage ?? "This GUID is not allowed";
-
-	private static HashSet<Guid> BuildSet(IEnumerable<Guid> values, string paramName)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<Guid> set = [.. values];
-		return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
-	}
 }
 
 /// <summary>
@@ -73,18 +66,11 @@ public class ExcludedGuidRule(IEnumerable<Guid> excludedGuids, string? customMes
 public class AllowedGuidRule(IEnumerable<Guid> allowedGuids, string? customMessage = null)
 	: IValidatorRule<Guid>
 {
-	private readonly HashSet<Guid> _allowed = BuildSet(allowedGuids, nameof(allowedGuids));
+	private readonly HashSet<Guid> _allowed = BuildHelper<Guid>.BuildSet(allowedGuids);
 
 	/// <inheritdoc/>
 	public bool IsValid(Guid value) => _allowed.Contains(value);
 
 	/// <inheritdoc/>
 	public string ErrorMessage { get; } = customMessage ?? "This GUID is not in the allowed list";
-
-	private static HashSet<Guid> BuildSet(IEnumerable<Guid> values, string paramName)
-	{
-		ArgumentNullException.ThrowIfNull(values, paramName);
-		HashSet<Guid> set = [.. values];
-		return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
-	}
 }

@@ -55,7 +55,7 @@ public abstract class BuilderBase<T, TSelf>(HandlerBase<T> handler)
 	public async Task<T> GetAsync(CancellationToken cancellationToken = default)
 	{
 		_frozen = true;
-		return await _handler.GetValidInputAsync(cancellationToken);
+		return await _handler.GetValidInputAsync(cancellationToken).ConfigureAwait(false);
 	}
 
 	/// <summary>

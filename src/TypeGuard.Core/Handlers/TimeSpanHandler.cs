@@ -1,6 +1,8 @@
-﻿using TypeGuard.Core.Interfaces;
+﻿using System.Globalization;
 
 namespace TypeGuard.Core.Handlers;
+
+using Interfaces;
 
 /// <summary>
 /// An input handler that prompts for and validates TimeSpan input.
@@ -22,8 +24,8 @@ public class TimeSpanHandler(
 	protected override bool TryParse(string? input, out TimeSpan value, out string? errorMessage)
 	{
 		bool success = format is not null
-			? TimeSpan.TryParseExact(input, format, null, out value)
-			: TimeSpan.TryParse(input, out value);
+			? TimeSpan.TryParseExact(input, format, CultureInfo.InvariantCulture, out value)
+			: TimeSpan.TryParse(input, CultureInfo.InvariantCulture, out value);
 
 		if (success)
 		{
@@ -31,7 +33,7 @@ public class TimeSpanHandler(
 			return true;
 		}
 
-		value = default;
+		value = TimeSpan.Zero;
 		errorMessage = format is not null
 			? $"Please enter a valid time span in the format '{format}'."
 			: "Please enter a valid time span (e.g., '1:30:00' or '1.12:00:00').";

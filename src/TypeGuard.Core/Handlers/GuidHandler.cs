@@ -24,7 +24,7 @@ public class GuidHandler(
 			return true;
 		}
 
-		value = default;
+		value = Guid.Empty;
 		errorMessage = "Please enter a valid GUID (e.g., 3f2504e0-4f89-11d3-9a0c-0305e82c3301).";
 		return false;
 	}

@@ -42,27 +42,32 @@ public abstract class HandlerBase<T>(
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			await _outputProvider.DisplayPromptAsync(_prompt, cancellationToken);
-			string? rawInput = await _inputProvider.GetInputAsync(cancellationToken);
+			await _outputProvider
+				.DisplayPromptAsync(_prompt, cancellationToken)
+				.ConfigureAwait(false);
+			string? rawInput = await _inputProvider
+				.GetInputAsync(cancellationToken)
+				.ConfigureAwait(false);
 
 			if (!TryParse(rawInput, out T? value, out string? parseError))
 			{
-				await _outputProvider.DisplayErrorAsync(parseError!, cancellationToken);
+				await _outputProvider
+					.DisplayErrorAsync(parseError!, cancellationToken)
+					.ConfigureAwait(false);
 				continue;
 			}
 
-			bool allRulesPassed = true;
-			foreach (IValidatorRule<T> rule in _rules.Where(rule => !rule.IsValid(value!)))
+			IValidatorRule<T>? failedRule = _rules.FirstOrDefault(rule => !rule.IsValid(value!));
+
+			if (failedRule is not null)
 			{
-				await _outputProvider.DisplayErrorAsync(rule.ErrorMessage, cancellationToken);
-				allRulesPassed = false;
-				break;
+				await _outputProvider
+					.DisplayErrorAsync(failedRule.ErrorMessage, cancellationToken)
+					.ConfigureAwait(false);
+				continue;
 			}
 
-			if (allRulesPassed)
-			{
-				return value!;
-			}
+			return value!;
 		}
 	}
 

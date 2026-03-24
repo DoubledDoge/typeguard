@@ -38,12 +38,11 @@ public sealed class Validator<T>
 	/// </returns>
 	public ValidationResult Validate(T value)
 	{
-		foreach (IValidatorRule<T> rule in _rules.Where(rule => !rule.IsValid(value)))
-		{
-			return ValidationResult.Failure(rule.ErrorMessage);
-		}
+		IValidatorRule<T>? failedRule = _rules.FirstOrDefault(rule => !rule.IsValid(value));
 
-		return ValidationResult.Success;
+		return failedRule is not null
+			? ValidationResult.Failure(failedRule.ErrorMessage)
+			: ValidationResult.Success;
 	}
 
 	/// <summary>

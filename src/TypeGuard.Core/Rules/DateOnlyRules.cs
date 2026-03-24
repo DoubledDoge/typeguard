@@ -218,7 +218,7 @@ public static class DayOfWeekRule
 			customMessage
 		);
 
-	private class DayOfWeekRuleImpl<T>(
+	private sealed class DayOfWeekRuleImpl<T>(
 		Func<T, DateTime> converter,
 		DayOfWeek dayOfWeek,
 		string? customMessage
@@ -271,7 +271,7 @@ public static class WithinDaysRule
 				customMessage
 			);
 
-	private class WithinDaysRuleImpl<T>(
+	private sealed class WithinDaysRuleImpl<T>(
 		Func<T, DateTime> converter,
 		int days,
 		string? customMessage
@@ -320,7 +320,11 @@ public static class YearRule
 			)
 			: new YearRuleImpl<DateOnly>(v => v.ToDateTime(TimeOnly.MinValue), year, customMessage);
 
-	private class YearRuleImpl<T>(Func<T, DateTime> converter, int year, string? customMessage)
+	private sealed class YearRuleImpl<T>(
+		Func<T, DateTime> converter,
+		int year,
+		string? customMessage
+	)
 		: RulesBase<T>(
 			v => converter(v).Year == year,
 			$"Date must be in the year {year}",
@@ -399,7 +403,11 @@ public static class MonthRule
 				customMessage
 			);
 
-	private class MonthRuleImpl<T>(Func<T, DateTime> converter, int month, string? customMessage)
+	private sealed class MonthRuleImpl<T>(
+		Func<T, DateTime> converter,
+		int month,
+		string? customMessage
+	)
 		: RulesBase<T>(
 			v => converter(v).Month == month,
 			$"Date must be in month {month}",

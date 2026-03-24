@@ -44,36 +44,25 @@ public class StringInputBuilder(
 		int? minLength = null,
 		int? maxLength = null,
 		string? customMessage = null
-	)
-	{
-		if (minLength is < 0)
-		{
-			throw new ArgumentOutOfRangeException(
+	) =>
+		minLength is < 0
+			? throw new ArgumentOutOfRangeException(
 				nameof(minLength),
 				minLength,
 				"minLength must be greater than or equal to zero."
-			);
-		}
-
-		if (maxLength is < 0)
-		{
-			throw new ArgumentOutOfRangeException(
+			)
+		: maxLength is < 0
+			? throw new ArgumentOutOfRangeException(
 				nameof(maxLength),
 				maxLength,
 				"maxLength must be greater than or equal to zero."
-			);
-		}
-
-		if (minLength.HasValue && maxLength.HasValue && minLength.Value > maxLength.Value)
-		{
-			throw new ArgumentException(
+			)
+		: minLength.HasValue && maxLength.HasValue && minLength.Value > maxLength.Value
+			? throw new ArgumentException(
 				$"minLength ({minLength}) must be less than or equal to maxLength ({maxLength}).",
 				nameof(minLength)
-			);
-		}
-
-		return AddRule(new StringLengthRule(minLength, maxLength, customMessage));
-	}
+			)
+		: AddRule(new StringLengthRule(minLength, maxLength, customMessage));
 
 	/// <summary>
 	/// Adds a rule that ensures the string contains numeric digits.

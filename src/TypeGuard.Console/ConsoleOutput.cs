@@ -21,7 +21,7 @@ public class ConsoleOutput : IOutputProvider
 	public async Task DisplayPromptAsync(
 		string message,
 		CancellationToken cancellationToken = default
-	) => await Task.Run(() => DisplayPrompt(message), cancellationToken);
+	) => await Task.Run(() => DisplayPrompt(message), cancellationToken).ConfigureAwait(false);
 
 	/// <summary>
 	/// Asynchronously displays an error message to the console in red and waits for the user to
@@ -37,7 +37,7 @@ public class ConsoleOutput : IOutputProvider
 	public async Task DisplayErrorAsync(
 		string message,
 		CancellationToken cancellationToken = default
-	) => await Task.Run(() => DisplayError(message), cancellationToken);
+	) => await Task.Run(() => DisplayError(message), cancellationToken).ConfigureAwait(false);
 
 	/// <summary>
 	/// Synchronously displays a prompt message to the console, followed by a colon and space.

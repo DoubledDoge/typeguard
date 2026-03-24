@@ -26,7 +26,10 @@ public static class BusinessHoursRule
 	public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
 		new BusinessHoursRuleImpl<TimeOnly>(v => v.ToTimeSpan(), customMessage);
 
-	private class BusinessHoursRuleImpl<T>(Func<T, TimeSpan> converter, string? customMessage)
+	private sealed class BusinessHoursRuleImpl<T>(
+		Func<T, TimeSpan> converter,
+		string? customMessage
+	)
 		: RulesBase<T>(
 			v => converter(v) >= Open && converter(v) <= Close,
 			"Time must be within business hours (9 AM to 5 PM)",
@@ -61,7 +64,7 @@ public static class BeforeTimeRule
 		string? customMessage = null
 	) => new BeforeTimeRuleImpl<TimeOnly>(v => v.ToTimeSpan(), maxTime, customMessage);
 
-	private class BeforeTimeRuleImpl<T>(
+	private sealed class BeforeTimeRuleImpl<T>(
 		Func<T, TimeSpan> converter,
 		TimeSpan maxTime,
 		string? customMessage
@@ -100,7 +103,7 @@ public static class AfterTimeRule
 		string? customMessage = null
 	) => new AfterTimeRuleImpl<TimeOnly>(v => v.ToTimeSpan(), minTime, customMessage);
 
-	private class AfterTimeRuleImpl<T>(
+	private sealed class AfterTimeRuleImpl<T>(
 		Func<T, TimeSpan> converter,
 		TimeSpan minTime,
 		string? customMessage
@@ -155,7 +158,7 @@ public static class HourRule
 		}
 	}
 
-	private class HourRuleImpl<T>(Func<T, int> hourGetter, int hour, string? customMessage)
+	private sealed class HourRuleImpl<T>(Func<T, int> hourGetter, int hour, string? customMessage)
 		: RulesBase<T>(v => hourGetter(v) == hour, $"Time must be at hour {hour}", customMessage);
 }
 
@@ -268,7 +271,7 @@ public static class TimeIncrementRule
 		}
 	}
 
-	private class TimeIncrementRuleImpl<T>(
+	private sealed class TimeIncrementRuleImpl<T>(
 		Func<T, TimeSpan> converter,
 		TimeSpan increment,
 		string? customMessage
@@ -375,8 +378,8 @@ public static class MidnightRule
 /// </summary>
 public static class NoonRule
 {
-	private static readonly TimeSpan _noon = TimeSpan.FromHours(12);
-	private static readonly TimeOnly _noonTimeOnly = new(12, 0, 0);
+	private static readonly TimeSpan Noon = TimeSpan.FromHours(12);
+	private static readonly TimeOnly NoonTimeOnly = new(12, 0, 0);
 
 	/// <summary>
 	/// Creates a validation rule for DateTime values that ensures the time is noon (12:00:00).
@@ -385,7 +388,7 @@ public static class NoonRule
 	/// <returns>A validation rule for DateTime.</returns>
 	public static IValidatorRule<DateTime> ForDateTime(string? customMessage = null) =>
 		new RulesBase<DateTime>(
-			v => v.TimeOfDay == _noon,
+			v => v.TimeOfDay == Noon,
 			"Time must be noon (12:00:00)",
 			customMessage
 		);
@@ -397,7 +400,7 @@ public static class NoonRule
 	/// <returns>A validation rule for TimeOnly.</returns>
 	public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
 		new RulesBase<TimeOnly>(
-			v => v == _noonTimeOnly,
+			v => v == NoonTimeOnly,
 			"Time must be noon (12:00:00)",
 			customMessage
 		);
