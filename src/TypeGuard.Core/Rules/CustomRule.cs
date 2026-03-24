@@ -11,13 +11,13 @@ using Interfaces;
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="errorMessage"/> is null.</exception>
 public class CustomRule<T>(Func<T, bool> predicate, string errorMessage) : IValidatorRule<T>
 {
-    private readonly Func<T, bool> _predicate =
-        predicate ?? throw new ArgumentNullException(nameof(predicate));
+	private readonly Func<T, bool> _predicate =
+		predicate ?? throw new ArgumentNullException(nameof(predicate));
 
-    /// <inheritdoc/>
-    public bool IsValid(T value) => _predicate(value);
+	/// <inheritdoc/>
+	public bool IsValid(T value) => _predicate(value);
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } =
+		errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
 }

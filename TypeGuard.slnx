@@ -1,42 +1,42 @@
 <Solution>
-  <Configurations>
-    <Platform Name="Any CPU" />
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
+	<Configurations>
+		<Platform Name="Any CPU" />
+		<Platform Name="x64" />
+		<Platform Name="x86" />
+	</Configurations>
 
-  <Folder Name="/Typeguard/">
-    <File Path=".gitignore" />
-    <File Path=".gitattributes" />
-    <File Path=".editorconfig" />
-    <File Path="dotnet-tools.json" />
-    <File Path="global.json" />
-    <File Path="LICENSE" />
-    <File Path="README.md" />
-    <File Path="SECURITY.md" />
-  </Folder>
+	<Folder Name="/Typeguard/">
+		<File Path=".gitignore" />
+		<File Path=".gitattributes" />
+		<File Path=".editorconfig" />
+		<File Path="dotnet-tools.json" />
+		<File Path="global.json" />
+		<File Path="LICENSE" />
+		<File Path="README.md" />
+		<File Path="SECURITY.md" />
+	</Folder>
 
-  <Folder Name="/.github/">
-    <File Path=".github/cliff.toml" />
-    <File Path=".github/dependabot.yml" />
-    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
-    <File Path=".github/ISSUE_TEMPLATE/bug_report.yml" />
-  </Folder>
+	<Folder Name="/.github/">
+		<File Path=".github/cliff.toml" />
+		<File Path=".github/dependabot.yml" />
+		<File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+		<File Path=".github/ISSUE_TEMPLATE/bug_report.yml" />
+	</Folder>
 
-  <Folder Name="/.github/workflows/">
-    <File Path=".github/workflows/ci-cd.yml" />
-    <File Path=".github/workflows/deploy.yml" />
-    <File Path=".github/workflows/codeql.yml" />
-  </Folder>
+	<Folder Name="/.github/workflows/">
+		<File Path=".github/workflows/ci-cd.yml" />
+		<File Path=".github/workflows/deploy.yml" />
+		<File Path=".github/workflows/codeql.yml" />
+	</Folder>
 
-  <Folder Name="/src/">
-    <Project Path="src/TypeGuard.Avalonia/TypeGuard.Avalonia.csproj" />
-    <Project Path="src/TypeGuard.Blazor/TypeGuard.Blazor.csproj" />
-    <Project Path="src/TypeGuard.Console/TypeGuard.Console.csproj" />
-    <Project Path="src/TypeGuard.Core/TypeGuard.Core.csproj" />
-    <Project Path="src/TypeGuard.Maui/TypeGuard.Maui.csproj" />
-    <Project Path="src/TypeGuard.Uno/TypeGuard.Uno.csproj" />
-    <Project Path="src/TypeGuard.Winforms/TypeGuard.Winforms.csproj" />
-    <Project Path="src/TypeGuard.Wpf/TypeGuard.Wpf.csproj" />
-  </Folder>
+	<Folder Name="/src/">
+		<Project Path="src/TypeGuard.Avalonia/TypeGuard.Avalonia.csproj" />
+		<Project Path="src/TypeGuard.Blazor/TypeGuard.Blazor.csproj" />
+		<Project Path="src/TypeGuard.Console/TypeGuard.Console.csproj" />
+		<Project Path="src/TypeGuard.Core/TypeGuard.Core.csproj" />
+		<Project Path="src/TypeGuard.Maui/TypeGuard.Maui.csproj" />
+		<Project Path="src/TypeGuard.Uno/TypeGuard.Uno.csproj" />
+		<Project Path="src/TypeGuard.Winforms/TypeGuard.Winforms.csproj" />
+		<Project Path="src/TypeGuard.Wpf/TypeGuard.Wpf.csproj" />
+	</Folder>
 </Solution>

@@ -1,42 +1,42 @@
 <Project Sdk="Uno.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
-    <UnoSingleProject>true</UnoSingleProject>
-    <GenerateLibraryLayout>true</GenerateLibraryLayout>
-    <UnoFeatures>SkiaRenderer;</UnoFeatures>
-    <LangVersion>latest</LangVersion>
-    <PlatformTarget>AnyCpu</PlatformTarget>
-    <OutputType>Library</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <Optimize>true</Optimize>
-    <Deterministic>true</Deterministic>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AnalysisLevel>latest</AnalysisLevel>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+		<UnoSingleProject>true</UnoSingleProject>
+		<GenerateLibraryLayout>true</GenerateLibraryLayout>
+		<UnoFeatures>SkiaRenderer;</UnoFeatures>
+		<LangVersion>latest</LangVersion>
+		<PlatformTarget>AnyCpu</PlatformTarget>
+		<OutputType>Library</OutputType>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Optimize>true</Optimize>
+		<Deterministic>true</Deterministic>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>TypeGuard.Uno</PackageId>
-    <Version>1.1.0</Version>
-    <Authors>DoubledDoge</Authors>
-    <Description>Uno implementation for TypeGuard.</Description>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>desktop;validation;input-validation;gui;</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>TypeGuard.Uno</PackageId>
+		<Version>1.1.0</Version>
+		<Authors>DoubledDoge</Authors>
+		<Description>Uno implementation for TypeGuard.</Description>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>desktop;validation;input-validation;gui;</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="../../README.md" Pack="true" PackagePath="/" />
-    <None Include="../../icon.png" Pack="true" PackagePath="/" />
-    <ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="../../README.md" Pack="true" PackagePath="/" />
+		<None Include="../../icon.png" Pack="true" PackagePath="/" />
+		<ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
+	</ItemGroup>
 </Project>

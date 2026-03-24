@@ -10,14 +10,14 @@ using Interfaces;
 /// <param name="defaultMessage">The default error message used when no custom message is provided.</param>
 /// <param name="customMessage">An optional custom error message.</param>
 public class RulesBase<T>(
-    Func<T, bool> predicate,
-    string defaultMessage,
-    string? customMessage = null
+	Func<T, bool> predicate,
+	string defaultMessage,
+	string? customMessage = null
 ) : IValidatorRule<T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => predicate(value);
+	/// <inheritdoc/>
+	public bool IsValid(T value) => predicate(value);
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? defaultMessage;
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? defaultMessage;
 }

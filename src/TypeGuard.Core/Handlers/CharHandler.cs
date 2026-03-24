@@ -9,24 +9,24 @@ using Interfaces;
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 public class CharHandler(
-    IInputProvider inputProvider,
-    IOutputProvider outputProvider,
-    string prompt
+	IInputProvider inputProvider,
+	IOutputProvider outputProvider,
+	string prompt
 ) : HandlerBase<char>(inputProvider, outputProvider, prompt)
 {
-    /// <inheritdoc cref="HandlerBase{T}.TryParse"/>
-    /// <returns><c>true</c> if the input is exactly one character; otherwise, <c>false</c>.</returns>
-    protected override bool TryParse(string? input, out char value, out string? errorMessage)
-    {
-        if (string.IsNullOrEmpty(input) || input.Length != 1)
-        {
-            value = default;
-            errorMessage = "Please enter a single character.";
-            return false;
-        }
+	/// <inheritdoc cref="HandlerBase{T}.TryParse"/>
+	/// <returns><c>true</c> if the input is exactly one character; otherwise, <c>false</c>.</returns>
+	protected override bool TryParse(string? input, out char value, out string? errorMessage)
+	{
+		if (string.IsNullOrEmpty(input) || input.Length != 1)
+		{
+			value = default;
+			errorMessage = "Please enter a single character.";
+			return false;
+		}
 
-        value = input[0];
-        errorMessage = null;
-        return true;
-    }
+		value = input[0];
+		errorMessage = null;
+		return true;
+	}
 }

@@ -11,30 +11,30 @@ namespace TypeGuard.Core.Handlers;
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 /// <param name="format">The expected time span format string. If null, any valid TimeSpan format is accepted.</param>
 public class TimeSpanHandler(
-    IInputProvider inputProvider,
-    IOutputProvider outputProvider,
-    string prompt,
-    string? format = null
+	IInputProvider inputProvider,
+	IOutputProvider outputProvider,
+	string prompt,
+	string? format = null
 ) : HandlerBase<TimeSpan>(inputProvider, outputProvider, prompt)
 {
-    /// <inheritdoc cref="HandlerBase{T}.TryParse"/>
-    /// <returns><c>true</c> if the input is a valid TimeSpan matching the expected format; otherwise, <c>false</c>.</returns>
-    protected override bool TryParse(string? input, out TimeSpan value, out string? errorMessage)
-    {
-        bool success = format is not null
-            ? TimeSpan.TryParseExact(input, format, null, out value)
-            : TimeSpan.TryParse(input, out value);
+	/// <inheritdoc cref="HandlerBase{T}.TryParse"/>
+	/// <returns><c>true</c> if the input is a valid TimeSpan matching the expected format; otherwise, <c>false</c>.</returns>
+	protected override bool TryParse(string? input, out TimeSpan value, out string? errorMessage)
+	{
+		bool success = format is not null
+			? TimeSpan.TryParseExact(input, format, null, out value)
+			: TimeSpan.TryParse(input, out value);
 
-        if (success)
-        {
-            errorMessage = null;
-            return true;
-        }
+		if (success)
+		{
+			errorMessage = null;
+			return true;
+		}
 
-        value = default;
-        errorMessage = format is not null
-            ? $"Please enter a valid time span in the format '{format}'."
-            : "Please enter a valid time span (e.g., '1:30:00' or '1.12:00:00').";
-        return false;
-    }
+		value = default;
+		errorMessage = format is not null
+			? $"Please enter a valid time span in the format '{format}'."
+			: "Please enter a valid time span (e.g., '1:30:00' or '1.12:00:00').";
+		return false;
+	}
 }

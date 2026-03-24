@@ -23,69 +23,69 @@ using Core.Interfaces;
 /// </remarks>
 public class BlazorOutput : IOutputProvider
 {
-    /// <summary>
-    /// Gets the current prompt message. Bind this in your component markup to display the
-    /// active prompt to the user.
-    /// </summary>
-    public string? PromptMessage { get; private set; }
+	/// <summary>
+	/// Gets the current prompt message. Bind this in your component markup to display the
+	/// active prompt to the user.
+	/// </summary>
+	public string? PromptMessage { get; private set; }
 
-    /// <summary>
-    /// Gets the current error message. Bind this in your component markup to display validation
-    /// errors to the user. This is null when no error is present.
-    /// </summary>
-    public string? ErrorMessage { get; private set; }
+	/// <summary>
+	/// Gets the current error message. Bind this in your component markup to display validation
+	/// errors to the user. This is null when no error is present.
+	/// </summary>
+	public string? ErrorMessage { get; private set; }
 
-    /// <summary>
-    /// Gets or sets the callback invoked after each state update to notify the component that
-    /// it should re-render. Set this to <c>StateHasChanged</c> in your component's
-    /// <c>OnInitialized</c> method.
-    /// </summary>
-    public Action? OnStateChanged { get; set; }
+	/// <summary>
+	/// Gets or sets the callback invoked after each state update to notify the component that
+	/// it should re-render. Set this to <c>StateHasChanged</c> in your component's
+	/// <c>OnInitialized</c> method.
+	/// </summary>
+	public Action? OnStateChanged { get; set; }
 
-    /// <summary>
-    /// Asynchronously displays a prompt message, clearing any existing error message, and
-    /// notifies the component to re-render.
-    /// </summary>
-    /// <param name="message">The prompt message to display.</param>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    public Task DisplayPromptAsync(string message, CancellationToken cancellationToken = default)
-    {
-        DisplayPrompt(message);
-        return Task.CompletedTask;
-    }
+	/// <summary>
+	/// Asynchronously displays a prompt message, clearing any existing error message, and
+	/// notifies the component to re-render.
+	/// </summary>
+	/// <param name="message">The prompt message to display.</param>
+	/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+	/// <returns>A task representing the asynchronous operation.</returns>
+	public Task DisplayPromptAsync(string message, CancellationToken cancellationToken = default)
+	{
+		DisplayPrompt(message);
+		return Task.CompletedTask;
+	}
 
-    /// <summary>
-    /// Asynchronously displays an error message and notifies the component to re-render.
-    /// </summary>
-    /// <param name="message">The error message to display.</param>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    public Task DisplayErrorAsync(string message, CancellationToken cancellationToken = default)
-    {
-        DisplayError(message);
-        return Task.CompletedTask;
-    }
+	/// <summary>
+	/// Asynchronously displays an error message and notifies the component to re-render.
+	/// </summary>
+	/// <param name="message">The error message to display.</param>
+	/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+	/// <returns>A task representing the asynchronous operation.</returns>
+	public Task DisplayErrorAsync(string message, CancellationToken cancellationToken = default)
+	{
+		DisplayError(message);
+		return Task.CompletedTask;
+	}
 
-    /// <summary>
-    /// Synchronously displays a prompt message, clearing any existing error message, and
-    /// notifies the component to re-render.
-    /// </summary>
-    /// <param name="message">The prompt message to display.</param>
-    public void DisplayPrompt(string message)
-    {
-        PromptMessage = message;
-        ErrorMessage = null;
-        OnStateChanged?.Invoke();
-    }
+	/// <summary>
+	/// Synchronously displays a prompt message, clearing any existing error message, and
+	/// notifies the component to re-render.
+	/// </summary>
+	/// <param name="message">The prompt message to display.</param>
+	public void DisplayPrompt(string message)
+	{
+		PromptMessage = message;
+		ErrorMessage = null;
+		OnStateChanged?.Invoke();
+	}
 
-    /// <summary>
-    /// Synchronously displays an error message and notifies the component to re-render.
-    /// </summary>
-    /// <param name="message">The error message to display.</param>
-    public void DisplayError(string message)
-    {
-        ErrorMessage = message;
-        OnStateChanged?.Invoke();
-    }
+	/// <summary>
+	/// Synchronously displays an error message and notifies the component to re-render.
+	/// </summary>
+	/// <param name="message">The error message to display.</param>
+	public void DisplayError(string message)
+	{
+		ErrorMessage = message;
+		OnStateChanged?.Invoke();
+	}
 }

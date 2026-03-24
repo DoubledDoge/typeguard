@@ -11,34 +11,34 @@
 /// </remarks>
 public sealed class ValidationResult
 {
-    /// <summary>
-    /// Gets a <see cref="ValidationResult"/> representing a successful validation.
-    /// </summary>
-    public static readonly ValidationResult Success = new(true, null);
+	/// <summary>
+	/// Gets a <see cref="ValidationResult"/> representing a successful validation.
+	/// </summary>
+	public static readonly ValidationResult Success = new(true, null);
 
-    /// <summary>
-    /// Gets a value indicating whether the validation passed.
-    /// </summary>
-    public bool IsValid { get; }
+	/// <summary>
+	/// Gets a value indicating whether the validation passed.
+	/// </summary>
+	public bool IsValid { get; }
 
-    /// <summary>
-    /// Gets the error message describing why validation failed, or null if validation succeeded.
-    /// </summary>
-    public string? ErrorMessage { get; }
+	/// <summary>
+	/// Gets the error message describing why validation failed, or null if validation succeeded.
+	/// </summary>
+	public string? ErrorMessage { get; }
 
-    private ValidationResult(bool isValid, string? errorMessage)
-    {
-        IsValid = isValid;
-        ErrorMessage = errorMessage;
-    }
+	private ValidationResult(bool isValid, string? errorMessage)
+	{
+		IsValid = isValid;
+		ErrorMessage = errorMessage;
+	}
 
-    /// <summary>
-    /// Creates a <see cref="ValidationResult"/> representing a failed validation with the
-    /// specified error message.
-    /// </summary>
-    /// <param name="errorMessage">The message describing why validation failed. Cannot be null.</param>
-    /// <returns>A <see cref="ValidationResult"/> with <see cref="IsValid"/> set to false.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="errorMessage"/> is null.</exception>
-    public static ValidationResult Failure(string errorMessage) =>
-        new(false, errorMessage ?? throw new ArgumentNullException(nameof(errorMessage)));
+	/// <summary>
+	/// Creates a <see cref="ValidationResult"/> representing a failed validation with the
+	/// specified error message.
+	/// </summary>
+	/// <param name="errorMessage">The message describing why validation failed. Cannot be null.</param>
+	/// <returns>A <see cref="ValidationResult"/> with <see cref="IsValid"/> set to false.</returns>
+	/// <exception cref="ArgumentNullException">Thrown when <paramref name="errorMessage"/> is null.</exception>
+	public static ValidationResult Failure(string errorMessage) =>
+		new(false, errorMessage ?? throw new ArgumentNullException(nameof(errorMessage)));
 }

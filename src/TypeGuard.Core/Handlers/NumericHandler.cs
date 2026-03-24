@@ -13,24 +13,24 @@ using Interfaces;
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 public class NumericHandler<T>(
-    IInputProvider inputProvider,
-    IOutputProvider outputProvider,
-    string prompt
+	IInputProvider inputProvider,
+	IOutputProvider outputProvider,
+	string prompt
 ) : HandlerBase<T>(inputProvider, outputProvider, prompt)
-    where T : INumber<T>
+	where T : INumber<T>
 {
-    /// <inheritdoc cref="HandlerBase{T}.TryParse"/>
-    /// <returns><c>true</c> if the input is a valid <typeparamref name="T"/> value; otherwise, <c>false</c>.</returns>
-    protected override bool TryParse(string? input, out T? value, out string? errorMessage)
-    {
-        if (T.TryParse(input, null, out value))
-        {
-            errorMessage = null;
-            return true;
-        }
+	/// <inheritdoc cref="HandlerBase{T}.TryParse"/>
+	/// <returns><c>true</c> if the input is a valid <typeparamref name="T"/> value; otherwise, <c>false</c>.</returns>
+	protected override bool TryParse(string? input, out T? value, out string? errorMessage)
+	{
+		if (T.TryParse(input, null, out value))
+		{
+			errorMessage = null;
+			return true;
+		}
 
-        value = default;
-        errorMessage = $"Please enter a valid {typeof(T).Name}.";
-        return false;
-    }
+		value = default;
+		errorMessage = $"Please enter a valid {typeof(T).Name}.";
+		return false;
+	}
 }

@@ -10,22 +10,22 @@ using Interfaces;
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class Ipv4Rule(string? customMessage = null)
-    : RulesBase<IPAddress>(
-        v => v.AddressFamily == AddressFamily.InterNetwork,
-        "IP address must be IPv4",
-        customMessage
-    );
+	: RulesBase<IPAddress>(
+		v => v.AddressFamily == AddressFamily.InterNetwork,
+		"IP address must be IPv4",
+		customMessage
+	);
 
 /// <summary>
 /// A validation rule that ensures an IP address is IPv6.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class Ipv6Rule(string? customMessage = null)
-    : RulesBase<IPAddress>(
-        v => v.AddressFamily == AddressFamily.InterNetworkV6,
-        "IP address must be IPv6",
-        customMessage
-    );
+	: RulesBase<IPAddress>(
+		v => v.AddressFamily == AddressFamily.InterNetworkV6,
+		"IP address must be IPv6",
+		customMessage
+	);
 
 /// <summary>
 /// A validation rule that ensures an IP address is a private address.
@@ -34,17 +34,15 @@ public class Ipv6Rule(string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class PrivateIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value)
-    {
-        return value.AddressFamily == AddressFamily.InterNetwork
-            && IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes());
-    }
+	/// <inheritdoc/>
+	public bool IsValid(IPAddress value) =>
+		value.AddressFamily == AddressFamily.InterNetwork
+		&& IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes());
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage
-        ?? "IP address must be private (10.x.x.x, 172.16-31.x.x, 192.168.x.x, or 169.254.x.x)";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } =
+		customMessage
+		?? "IP address must be private (10.x.x.x, 172.16-31.x.x, 192.168.x.x, or 169.254.x.x)";
 }
 
 /// <summary>
@@ -53,21 +51,21 @@ public class PrivateIpRule(string? customMessage = null) : IValidatorRule<IPAddr
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class ApipaRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value)
-    {
-        if (value.AddressFamily != AddressFamily.InterNetwork)
-        {
-            return false;
-        }
+	/// <inheritdoc/>
+	public bool IsValid(IPAddress value)
+	{
+		if (value.AddressFamily != AddressFamily.InterNetwork)
+		{
+			return false;
+		}
 
-        byte[] b = value.GetAddressBytes();
-        return b[0] == 169 && b[1] == 254;
-    }
+		byte[] b = value.GetAddressBytes();
+		return b[0] == 169 && b[1] == 254;
+	}
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "IP address must be an APIPA address (169.254.x.x)";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } =
+		customMessage ?? "IP address must be an APIPA address (169.254.x.x)";
 }
 
 /// <summary>
@@ -77,21 +75,21 @@ public class ApipaRule(string? customMessage = null) : IValidatorRule<IPAddress>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class NotApipaRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value)
-    {
-        if (value.AddressFamily != AddressFamily.InterNetwork)
-        {
-            return true;
-        }
+	/// <inheritdoc/>
+	public bool IsValid(IPAddress value)
+	{
+		if (value.AddressFamily != AddressFamily.InterNetwork)
+		{
+			return true;
+		}
 
-        byte[] b = value.GetAddressBytes();
-        return !(b[0] == 169 && b[1] == 254);
-    }
+		byte[] b = value.GetAddressBytes();
+		return !(b[0] == 169 && b[1] == 254);
+	}
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? "IP address cannot be an APIPA address (169.254.x.x)";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } =
+		customMessage ?? "IP address cannot be an APIPA address (169.254.x.x)";
 }
 
 /// <summary>
@@ -99,11 +97,11 @@ public class NotApipaRule(string? customMessage = null) : IValidatorRule<IPAddre
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class LoopbackIpRule(string? customMessage = null)
-    : RulesBase<IPAddress>(
-        IPAddress.IsLoopback,
-        "IP address must be a loopback address (127.0.0.1 or ::1)",
-        customMessage
-    );
+	: RulesBase<IPAddress>(
+		IPAddress.IsLoopback,
+		"IP address must be a loopback address (127.0.0.1 or ::1)",
+		customMessage
+	);
 
 /// <summary>
 /// A validation rule that ensures an IP address is a public address.
@@ -112,18 +110,16 @@ public class LoopbackIpRule(string? customMessage = null)
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class PublicIpRule(string? customMessage = null) : IValidatorRule<IPAddress>
 {
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value)
-    {
-        return !IPAddress.IsLoopback(value)
-            && (
-                value.AddressFamily != AddressFamily.InterNetwork
-                || !IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes())
-            );
-    }
+	/// <inheritdoc/>
+	public bool IsValid(IPAddress value) =>
+		!IPAddress.IsLoopback(value)
+		&& (
+			value.AddressFamily != AddressFamily.InterNetwork
+			|| !IpAddressHelper.IsPrivateIpv4(value.GetAddressBytes())
+		);
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "IP address must be public";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "IP address must be public";
 }
 
 /// <summary>
@@ -131,11 +127,11 @@ public class PublicIpRule(string? customMessage = null) : IValidatorRule<IPAddre
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class NotLoopbackIpRule(string? customMessage = null)
-    : RulesBase<IPAddress>(
-        v => !IPAddress.IsLoopback(v),
-        "IP address cannot be a loopback address",
-        customMessage
-    );
+	: RulesBase<IPAddress>(
+		v => !IPAddress.IsLoopback(v),
+		"IP address cannot be a loopback address",
+		customMessage
+	);
 
 /// <summary>
 /// A validation rule that ensures an IP address falls within a specific subnet.
@@ -148,58 +144,58 @@ public class NotLoopbackIpRule(string? customMessage = null)
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="network"/> is null.</exception>
 /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="prefixLength"/> is invalid for the address family of <paramref name="network"/>.</exception>
 public class SubnetRule(IPAddress network, int prefixLength, string? customMessage = null)
-    : IValidatorRule<IPAddress>
+	: IValidatorRule<IPAddress>
 {
-    private readonly IPAddress _network = ValidateArgs(network, prefixLength);
+	private readonly IPAddress _network = ValidateArgs(network, prefixLength);
 
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value)
-    {
-        if (value.AddressFamily != _network.AddressFamily)
-        {
-            return false;
-        }
+	/// <inheritdoc/>
+	public bool IsValid(IPAddress value)
+	{
+		if (value.AddressFamily != _network.AddressFamily)
+		{
+			return false;
+		}
 
-        byte[] addressBytes = value.GetAddressBytes();
-        byte[] networkBytes = _network.GetAddressBytes();
+		byte[] addressBytes = value.GetAddressBytes();
+		byte[] networkBytes = _network.GetAddressBytes();
 
-        int fullBytes = prefixLength / 8;
-        int remainingBits = prefixLength % 8;
+		int fullBytes = prefixLength / 8;
+		int remainingBits = prefixLength % 8;
 
-        for (int i = 0; i < fullBytes; i++)
-        {
-            if (addressBytes[i] != networkBytes[i])
-            {
-                return false;
-            }
-        }
+		for (int i = 0; i < fullBytes; i++)
+		{
+			if (addressBytes[i] != networkBytes[i])
+			{
+				return false;
+			}
+		}
 
-        if (remainingBits == 0)
-        {
-            return true;
-        }
+		if (remainingBits == 0)
+		{
+			return true;
+		}
 
-        byte mask = (byte)(0xFF << 8 - remainingBits);
-        return (addressBytes[fullBytes] & mask) == (networkBytes[fullBytes] & mask);
-    }
+		byte mask = (byte)(0xFF << 8 - remainingBits);
+		return (addressBytes[fullBytes] & mask) == (networkBytes[fullBytes] & mask);
+	}
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? $"IP address must be within subnet {network}/{prefixLength}";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } =
+		customMessage ?? $"IP address must be within subnet {network}/{prefixLength}";
 
-    private static IPAddress ValidateArgs(IPAddress network, int prefixLength)
-    {
-        ArgumentNullException.ThrowIfNull(network);
+	private static IPAddress ValidateArgs(IPAddress network, int prefixLength)
+	{
+		ArgumentNullException.ThrowIfNull(network);
 
-        int maxPrefix = network.AddressFamily == AddressFamily.InterNetworkV6 ? 128 : 32;
-        return prefixLength < 0 || prefixLength > maxPrefix
-            ? throw new ArgumentOutOfRangeException(
-                nameof(prefixLength),
-                prefixLength,
-                $"prefixLength must be between 0 and {maxPrefix} for {network.AddressFamily}."
-            )
-            : network;
-    }
+		int maxPrefix = network.AddressFamily == AddressFamily.InterNetworkV6 ? 128 : 32;
+		return prefixLength < 0 || prefixLength > maxPrefix
+			? throw new ArgumentOutOfRangeException(
+				nameof(prefixLength),
+				prefixLength,
+				$"prefixLength must be between 0 and {maxPrefix} for {network.AddressFamily}."
+			)
+			: network;
+	}
 }
 
 /// <summary>
@@ -210,27 +206,27 @@ public class SubnetRule(IPAddress network, int prefixLength, string? customMessa
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedAddresses"/> is null.</exception>
 /// <exception cref="ArgumentException">Thrown when <paramref name="allowedAddresses"/> is empty.</exception>
 public class AllowedIpAddressesRule(
-    IEnumerable<IPAddress> allowedAddresses,
-    string? customMessage = null
+	IEnumerable<IPAddress> allowedAddresses,
+	string? customMessage = null
 ) : IValidatorRule<IPAddress>
 {
-    private readonly HashSet<IPAddress> _allowed = BuildSet(
-        allowedAddresses,
-        nameof(allowedAddresses)
-    );
+	private readonly HashSet<IPAddress> _allowed = BuildSet(
+		allowedAddresses,
+		nameof(allowedAddresses)
+	);
 
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value) => _allowed.Contains(value);
+	/// <inheritdoc/>
+	public bool IsValid(IPAddress value) => _allowed.Contains(value);
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "IP address is not in the allowed list";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "IP address is not in the allowed list";
 
-    private static HashSet<IPAddress> BuildSet(IEnumerable<IPAddress> values, string paramName)
-    {
-        ArgumentNullException.ThrowIfNull(values, paramName);
-        HashSet<IPAddress> set = [.. values];
-        return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
-    }
+	private static HashSet<IPAddress> BuildSet(IEnumerable<IPAddress> values, string paramName)
+	{
+		ArgumentNullException.ThrowIfNull(values, paramName);
+		HashSet<IPAddress> set = [.. values];
+		return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
+	}
 }
 
 /// <summary>
@@ -241,38 +237,38 @@ public class AllowedIpAddressesRule(
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="blockedAddresses"/> is null.</exception>
 /// <exception cref="ArgumentException">Thrown when <paramref name="blockedAddresses"/> is empty.</exception>
 public class BlockedIpAddressesRule(
-    IEnumerable<IPAddress> blockedAddresses,
-    string? customMessage = null
+	IEnumerable<IPAddress> blockedAddresses,
+	string? customMessage = null
 ) : IValidatorRule<IPAddress>
 {
-    private readonly HashSet<IPAddress> _blocked = BuildSet(
-        blockedAddresses,
-        nameof(blockedAddresses)
-    );
+	private readonly HashSet<IPAddress> _blocked = BuildSet(
+		blockedAddresses,
+		nameof(blockedAddresses)
+	);
 
-    /// <inheritdoc/>
-    public bool IsValid(IPAddress value) => !_blocked.Contains(value);
+	/// <inheritdoc/>
+	public bool IsValid(IPAddress value) => !_blocked.Contains(value);
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "IP address is blocked";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "IP address is blocked";
 
-    private static HashSet<IPAddress> BuildSet(IEnumerable<IPAddress> values, string paramName)
-    {
-        ArgumentNullException.ThrowIfNull(values, paramName);
-        HashSet<IPAddress> set = [.. values];
-        return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
-    }
+	private static HashSet<IPAddress> BuildSet(IEnumerable<IPAddress> values, string paramName)
+	{
+		ArgumentNullException.ThrowIfNull(values, paramName);
+		HashSet<IPAddress> set = [.. values];
+		return set.Count == 0 ? throw new ArgumentException("Cannot be empty.", paramName) : set;
+	}
 }
 
 internal static class IpAddressHelper
 {
-    internal static bool IsPrivateIpv4(byte[] addressBytes)
-    {
-        bool is10Range = addressBytes[0] == 10;
-        bool is172Range = addressBytes[0] == 172 && addressBytes[1] >= 16 && addressBytes[1] <= 31;
-        bool is192Range = addressBytes[0] == 192 && addressBytes[1] == 168;
-        bool isApipaRange = addressBytes[0] == 169 && addressBytes[1] == 254;
+	internal static bool IsPrivateIpv4(byte[] addressBytes)
+	{
+		bool is10Range = addressBytes[0] == 10;
+		bool is172Range = addressBytes[0] == 172 && addressBytes[1] >= 16 && addressBytes[1] <= 31;
+		bool is192Range = addressBytes[0] == 192 && addressBytes[1] == 168;
+		bool isApipaRange = addressBytes[0] == 169 && addressBytes[1] == 254;
 
-        return is10Range || is172Range || is192Range || isApipaRange;
-    }
+		return is10Range || is172Range || is192Range || isApipaRange;
+	}
 }

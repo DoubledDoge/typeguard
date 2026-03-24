@@ -14,28 +14,28 @@ using Interfaces;
 /// <param name="formatProvider">The format provider to use for parsing. Defaults to the current culture.</param>
 /// <param name="dateTimeStyles">The styles to use for parsing. Defaults to <see cref="DateTimeStyles.None"/>.</param>
 public class DateTimeHandler(
-    IInputProvider inputProvider,
-    IOutputProvider outputProvider,
-    string prompt,
-    string? format = null,
-    IFormatProvider? formatProvider = null,
-    DateTimeStyles dateTimeStyles = DateTimeStyles.None
+	IInputProvider inputProvider,
+	IOutputProvider outputProvider,
+	string prompt,
+	string? format = null,
+	IFormatProvider? formatProvider = null,
+	DateTimeStyles dateTimeStyles = DateTimeStyles.None
 ) : HandlerBase<DateTime>(inputProvider, outputProvider, prompt)
 {
-    /// <inheritdoc cref="HandlerBase{T}.TryParse"/>
-    /// <returns><c>true</c> if the input is a valid DateTime matching the expected format; otherwise, <c>false</c>.</returns>
-    protected override bool TryParse(string? input, out DateTime value, out string? errorMessage)
-    {
-        if (DateTime.TryParseExact(input, format, formatProvider, dateTimeStyles, out value))
-        {
-            errorMessage = null;
-            return true;
-        }
+	/// <inheritdoc cref="HandlerBase{T}.TryParse"/>
+	/// <returns><c>true</c> if the input is a valid DateTime matching the expected format; otherwise, <c>false</c>.</returns>
+	protected override bool TryParse(string? input, out DateTime value, out string? errorMessage)
+	{
+		if (DateTime.TryParseExact(input, format, formatProvider, dateTimeStyles, out value))
+		{
+			errorMessage = null;
+			return true;
+		}
 
-        value = default;
-        errorMessage = format is null
-            ? "Please enter a valid date and time."
-            : $"Please enter a valid date and time in the format '{format}'.";
-        return false;
-    }
+		value = default;
+		errorMessage = format is null
+			? "Please enter a valid date and time."
+			: $"Please enter a valid date and time in the format '{format}'.";
+		return false;
+	}
 }

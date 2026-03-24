@@ -13,21 +13,21 @@ using Interfaces;
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
 public class RangeRule<T>(T min, T max, string? customMessage = null) : IValidatorRule<T>
-    where T : IComparable<T>
+	where T : IComparable<T>
 {
-    private readonly T _min =
-        min.CompareTo(max) > 0
-            ? throw new ArgumentException(
-                $"min ({min}) must be less than or equal to max ({max}).",
-                nameof(min)
-            )
-            : min;
+	private readonly T _min =
+		min.CompareTo(max) > 0
+			? throw new ArgumentException(
+				$"min ({min}) must be less than or equal to max ({max}).",
+				nameof(min)
+			)
+			: min;
 
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value.CompareTo(_min) >= 0 && value.CompareTo(max) <= 0;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value.CompareTo(_min) >= 0 && value.CompareTo(max) <= 0;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Value must be between {min} and {max}";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? $"Value must be between {min} and {max}";
 }
 
 /// <summary>
@@ -36,13 +36,13 @@ public class RangeRule<T>(T min, T max, string? customMessage = null) : IValidat
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class PositiveRule<T>(string? customMessage = null) : IValidatorRule<T>
-    where T : INumber<T>
+	where T : INumber<T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value > T.Zero;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value > T.Zero;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Value must be positive";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "Value must be positive";
 }
 
 /// <summary>
@@ -51,13 +51,13 @@ public class PositiveRule<T>(string? customMessage = null) : IValidatorRule<T>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class NonNegativeRule<T>(string? customMessage = null) : IValidatorRule<T>
-    where T : INumber<T>
+	where T : INumber<T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value >= T.Zero;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value >= T.Zero;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Value must be non-negative";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "Value must be non-negative";
 }
 
 /// <summary>
@@ -66,13 +66,13 @@ public class NonNegativeRule<T>(string? customMessage = null) : IValidatorRule<T
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class NegativeRule<T>(string? customMessage = null) : IValidatorRule<T>
-    where T : INumber<T>
+	where T : INumber<T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value < T.Zero;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value < T.Zero;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Value must be negative";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "Value must be negative";
 }
 
 /// <summary>
@@ -82,13 +82,13 @@ public class NegativeRule<T>(string? customMessage = null) : IValidatorRule<T>
 /// <param name="min">The minimum acceptable value (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class MinimumRule<T>(T min, string? customMessage = null) : IValidatorRule<T>
-    where T : IComparable<T>
+	where T : IComparable<T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value.CompareTo(min) >= 0;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value.CompareTo(min) >= 0;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Value must be at least {min}";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? $"Value must be at least {min}";
 }
 
 /// <summary>
@@ -98,13 +98,13 @@ public class MinimumRule<T>(T min, string? customMessage = null) : IValidatorRul
 /// <param name="max">The maximum acceptable value (inclusive).</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class MaximumRule<T>(T max, string? customMessage = null) : IValidatorRule<T>
-    where T : IComparable<T>
+	where T : IComparable<T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value.CompareTo(max) <= 0;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value.CompareTo(max) <= 0;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Value must be at most {max}";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? $"Value must be at most {max}";
 }
 
 /// <summary>
@@ -113,13 +113,13 @@ public class MaximumRule<T>(T max, string? customMessage = null) : IValidatorRul
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/> and <see cref="IModulusOperators{TSelf, TOther, TResult}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class EvenRule<T>(string? customMessage = null) : IValidatorRule<T>
-    where T : INumber<T>, IModulusOperators<T, T, T>
+	where T : INumber<T>, IModulusOperators<T, T, T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value % (T.One + T.One) == T.Zero;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value % (T.One + T.One) == T.Zero;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Value must be even";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "Value must be even";
 }
 
 /// <summary>
@@ -128,13 +128,13 @@ public class EvenRule<T>(string? customMessage = null) : IValidatorRule<T>
 /// <typeparam name="T">The numeric type to validate. Must implement <see cref="INumber{TSelf}"/> and <see cref="IModulusOperators{TSelf, TOther, TResult}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class OddRule<T>(string? customMessage = null) : IValidatorRule<T>
-    where T : INumber<T>, IModulusOperators<T, T, T>
+	where T : INumber<T>, IModulusOperators<T, T, T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value % (T.One + T.One) != T.Zero;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value % (T.One + T.One) != T.Zero;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Value must be odd";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "Value must be odd";
 }
 
 /// <summary>
@@ -145,17 +145,17 @@ public class OddRule<T>(string? customMessage = null) : IValidatorRule<T>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="divisor"/> is zero.</exception>
 public class MultipleOfRule<T>(T divisor, string? customMessage = null) : IValidatorRule<T>
-    where T : INumber<T>, IModulusOperators<T, T, T>
+	where T : INumber<T>, IModulusOperators<T, T, T>
 {
-    private readonly T _divisor = T.IsZero(divisor)
-        ? throw new ArgumentException("divisor cannot be zero.", nameof(divisor))
-        : divisor;
+	private readonly T _divisor = T.IsZero(divisor)
+		? throw new ArgumentException("divisor cannot be zero.", nameof(divisor))
+		: divisor;
 
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value % _divisor == T.Zero;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value % _divisor == T.Zero;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? $"Value must be a multiple of {divisor}";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? $"Value must be a multiple of {divisor}";
 }
 
 /// <summary>
@@ -166,18 +166,18 @@ public class MultipleOfRule<T>(T divisor, string? customMessage = null) : IValid
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when <paramref name="divisor"/> is zero.</exception>
 public class NotMultipleOfRule<T>(T divisor, string? customMessage = null) : IValidatorRule<T>
-    where T : INumber<T>, IModulusOperators<T, T, T>
+	where T : INumber<T>, IModulusOperators<T, T, T>
 {
-    private readonly T _divisor = T.IsZero(divisor)
-        ? throw new ArgumentException("divisor cannot be zero.", nameof(divisor))
-        : divisor;
+	private readonly T _divisor = T.IsZero(divisor)
+		? throw new ArgumentException("divisor cannot be zero.", nameof(divisor))
+		: divisor;
 
-    /// <inheritdoc/>
-    public bool IsValid(T value) => value % _divisor != T.Zero;
+	/// <inheritdoc/>
+	public bool IsValid(T value) => value % _divisor != T.Zero;
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } =
-        customMessage ?? $"Value must not be a multiple of {divisor}";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } =
+		customMessage ?? $"Value must not be a multiple of {divisor}";
 }
 
 /// <summary>
@@ -193,47 +193,47 @@ public class NotMultipleOfRule<T>(T divisor, string? customMessage = null) : IVa
 /// <typeparam name="T">The integer type to validate. Must implement <see cref="IBinaryInteger{TSelf}"/>.</typeparam>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class LuhnRule<T>(string? customMessage = null) : IValidatorRule<T>
-    where T : IBinaryInteger<T>
+	where T : IBinaryInteger<T>
 {
-    /// <inheritdoc/>
-    public bool IsValid(T value)
-    {
-        // Negative values are not valid identification numbers
-        if (value < T.Zero)
-        {
-            return false;
-        }
+	/// <inheritdoc/>
+	public bool IsValid(T value)
+	{
+		// Negative values are not valid identification numbers
+		if (value < T.Zero)
+		{
+			return false;
+		}
 
-        string digits = value.ToString() ?? string.Empty;
-        int length = digits.Length;
+		string digits = value.ToString() ?? string.Empty;
+		int length = digits.Length;
 
-        if (length == 0)
-        {
-            return false;
-        }
+		if (length == 0)
+		{
+			return false;
+		}
 
-        int sum = 0;
+		int sum = 0;
 
-        // Process digits right to left
-        for (int i = 0; i < length; i++)
-        {
-            int digit = digits[length - 1 - i] - '0';
+		// Process digits right to left
+		for (int i = 0; i < length; i++)
+		{
+			int digit = digits[length - 1 - i] - '0';
 
-            if (i % 2 == 1)
-            {
-                digit *= 2;
-                if (digit > 9)
-                {
-                    digit -= 9;
-                }
-            }
+			if (i % 2 == 1)
+			{
+				digit *= 2;
+				if (digit > 9)
+				{
+					digit -= 9;
+				}
+			}
 
-            sum += digit;
-        }
+			sum += digit;
+		}
 
-        return sum % 10 == 0;
-    }
+		return sum % 10 == 0;
+	}
 
-    /// <inheritdoc/>
-    public string ErrorMessage { get; } = customMessage ?? "Value must pass the Luhn checksum";
+	/// <inheritdoc/>
+	public string ErrorMessage { get; } = customMessage ?? "Value must pass the Luhn checksum";
 }

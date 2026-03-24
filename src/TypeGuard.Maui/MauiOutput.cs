@@ -11,81 +11,81 @@ using Core.Interfaces;
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="promptLabel"/> or <paramref name="errorLabel"/> is null.</exception>
 public class MauiOutput(Label promptLabel, Label errorLabel) : IOutputProvider
 {
-    private readonly Label _promptLabel =
-        promptLabel ?? throw new ArgumentNullException(nameof(promptLabel));
-    private readonly Label _errorLabel =
-        errorLabel ?? throw new ArgumentNullException(nameof(errorLabel));
+	private readonly Label _promptLabel =
+		promptLabel ?? throw new ArgumentNullException(nameof(promptLabel));
+	private readonly Label _errorLabel =
+		errorLabel ?? throw new ArgumentNullException(nameof(errorLabel));
 
-    /// <summary>
-    /// Asynchronously displays a prompt message on the prompt label, clearing any existing
-    /// error message.
-    /// </summary>
-    /// <remarks>
-    /// All label updates are marshalled to the main thread via
-    /// MainThread.InvokeOnMainThreadAsync if called from a background thread.
-    /// </remarks>
-    /// <param name="message">The prompt message to display.</param>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    public async Task DisplayPromptAsync(
-        string message,
-        CancellationToken cancellationToken = default
-    )
-    {
-        if (MainThread.IsMainThread)
-        {
-            DisplayPrompt(message);
-        }
-        else
-        {
-            await MainThread.InvokeOnMainThreadAsync(() => DisplayPrompt(message));
-        }
-    }
+	/// <summary>
+	/// Asynchronously displays a prompt message on the prompt label, clearing any existing
+	/// error message.
+	/// </summary>
+	/// <remarks>
+	/// All label updates are marshalled to the main thread via
+	/// MainThread.InvokeOnMainThreadAsync if called from a background thread.
+	/// </remarks>
+	/// <param name="message">The prompt message to display.</param>
+	/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+	/// <returns>A task representing the asynchronous operation.</returns>
+	public async Task DisplayPromptAsync(
+		string message,
+		CancellationToken cancellationToken = default
+	)
+	{
+		if (MainThread.IsMainThread)
+		{
+			DisplayPrompt(message);
+		}
+		else
+		{
+			await MainThread.InvokeOnMainThreadAsync(() => DisplayPrompt(message));
+		}
+	}
 
-    /// <summary>
-    /// Asynchronously displays an error message on the error label in red.
-    /// </summary>
-    /// <remarks>
-    /// All label updates are marshalled to the main thread via
-    /// MainThread.InvokeOnMainThreadAsync if called from a background thread.
-    /// </remarks>
-    /// <param name="message">The error message to display.</param>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    public async Task DisplayErrorAsync(
-        string message,
-        CancellationToken cancellationToken = default
-    )
-    {
-        if (MainThread.IsMainThread)
-        {
-            DisplayError(message);
-        }
-        else
-        {
-            await MainThread.InvokeOnMainThreadAsync(() => DisplayError(message));
-        }
-    }
+	/// <summary>
+	/// Asynchronously displays an error message on the error label in red.
+	/// </summary>
+	/// <remarks>
+	/// All label updates are marshalled to the main thread via
+	/// MainThread.InvokeOnMainThreadAsync if called from a background thread.
+	/// </remarks>
+	/// <param name="message">The error message to display.</param>
+	/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+	/// <returns>A task representing the asynchronous operation.</returns>
+	public async Task DisplayErrorAsync(
+		string message,
+		CancellationToken cancellationToken = default
+	)
+	{
+		if (MainThread.IsMainThread)
+		{
+			DisplayError(message);
+		}
+		else
+		{
+			await MainThread.InvokeOnMainThreadAsync(() => DisplayError(message));
+		}
+	}
 
-    /// <summary>
-    /// Synchronously displays a prompt message on the prompt label, clearing any existing
-    /// error message.
-    /// </summary>
-    /// <param name="message">The prompt message to display.</param>
-    public void DisplayPrompt(string message)
-    {
-        _promptLabel.Text = message;
-        _errorLabel.Text = string.Empty;
-        _errorLabel.TextColor = Colors.Transparent;
-    }
+	/// <summary>
+	/// Synchronously displays a prompt message on the prompt label, clearing any existing
+	/// error message.
+	/// </summary>
+	/// <param name="message">The prompt message to display.</param>
+	public void DisplayPrompt(string message)
+	{
+		_promptLabel.Text = message;
+		_errorLabel.Text = string.Empty;
+		_errorLabel.TextColor = Colors.Transparent;
+	}
 
-    /// <summary>
-    /// Synchronously displays an error message on the error label in red.
-    /// </summary>
-    /// <param name="message">The error message to display.</param>
-    public void DisplayError(string message)
-    {
-        _errorLabel.TextColor = Colors.Red;
-        _errorLabel.Text = message;
-    }
+	/// <summary>
+	/// Synchronously displays an error message on the error label in red.
+	/// </summary>
+	/// <param name="message">The error message to display.</param>
+	public void DisplayError(string message)
+	{
+		_errorLabel.TextColor = Colors.Red;
+		_errorLabel.Text = message;
+	}
 }

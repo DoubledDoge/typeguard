@@ -14,37 +14,37 @@ using Core.Interfaces;
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="control"/> is null.</exception>
 public class WinFormsInput(Control control) : IInputProvider
 {
-    private readonly Control _control = control ?? throw new ArgumentNullException(nameof(control));
+	private readonly Control _control = control ?? throw new ArgumentNullException(nameof(control));
 
-    /// <summary>
-    /// Asynchronously reads the current text value from the control, trimming any leading or
-    /// trailing whitespace.
-    /// </summary>
-    /// <remarks>
-    /// This method marshals the read back to the UI thread via
-    /// Control.Invoke to ensure thread-safe access to the control's
-    /// <see cref="Control.Text"/> property.
-    /// </remarks>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>A task representing the asynchronous operation. The task result contains the trimmed text value of the control, or null if the control has no text.</returns>
-    public Task<string?> GetInputAsync(CancellationToken cancellationToken = default) =>
-        Task.FromResult(GetInput());
+	/// <summary>
+	/// Asynchronously reads the current text value from the control, trimming any leading or
+	/// trailing whitespace.
+	/// </summary>
+	/// <remarks>
+	/// This method marshals the read back to the UI thread via
+	/// Control.Invoke to ensure thread-safe access to the control's
+	/// <see cref="Control.Text"/> property.
+	/// </remarks>
+	/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+	/// <returns>A task representing the asynchronous operation. The task result contains the trimmed text value of the control, or null if the control has no text.</returns>
+	public Task<string?> GetInputAsync(CancellationToken cancellationToken = default) =>
+		Task.FromResult(GetInput());
 
-    /// <summary>
-    /// Synchronously reads the current text value from the control, trimming any leading or
-    /// trailing whitespace.
-    /// </summary>
-    /// <remarks>
-    /// If called from a thread other than the UI thread, the read is marshaled to the UI thread
-    /// via Control.Invoke"/>.
-    /// </remarks>
-    /// <returns>The trimmed text value of the control, or null if the control has no text.</returns>
-    public string? GetInput()
-    {
-        string? text = _control.InvokeRequired
-            ? _control.Invoke(() => _control.Text)
-            : _control.Text;
+	/// <summary>
+	/// Synchronously reads the current text value from the control, trimming any leading or
+	/// trailing whitespace.
+	/// </summary>
+	/// <remarks>
+	/// If called from a thread other than the UI thread, the read is marshaled to the UI thread
+	/// via Control.Invoke"/>.
+	/// </remarks>
+	/// <returns>The trimmed text value of the control, or null if the control has no text.</returns>
+	public string? GetInput()
+	{
+		string? text = _control.InvokeRequired
+			? _control.Invoke(() => _control.Text)
+			: _control.Text;
 
-        return string.IsNullOrEmpty(text) ? null : text.Trim();
-    }
+		return string.IsNullOrEmpty(text) ? null : text.Trim();
+	}
 }
