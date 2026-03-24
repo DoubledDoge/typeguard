@@ -10,7 +10,6 @@
 		<Deterministic>true</Deterministic>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<GenerateLibraryLayout>true</GenerateLibraryLayout>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<AnalysisMode>All</AnalysisMode>
 		<CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>

@@ -2,6 +2,9 @@
 	<PropertyGroup>
 		<UnoSingleProject>true</UnoSingleProject>
 		<UnoFeatures>SkiaRenderer;</UnoFeatures>
+		<IsPackable>true</IsPackable>
+		<IsUnoHead>false</IsUnoHead>
+		<GenerateLibraryLayout>false</GenerateLibraryLayout>
 	</PropertyGroup>
 
 	<PropertyGroup>
