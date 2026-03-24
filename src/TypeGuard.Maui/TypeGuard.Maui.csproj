@@ -42,6 +42,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" />
 	</ItemGroup>
 </Project>
