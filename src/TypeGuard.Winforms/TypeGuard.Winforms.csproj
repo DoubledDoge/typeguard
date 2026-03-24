@@ -1,20 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-windows;net10.0-windows</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
-		<PlatformTarget>AnyCpu</PlatformTarget>
-		<OutputType>Library</OutputType>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<Optimize>true</Optimize>
-		<Deterministic>true</Deterministic>
-		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<AnalysisLevel>latest</AnalysisLevel>
-		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<EnableWindowsTargeting>true</EnableWindowsTargeting>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
@@ -34,8 +20,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="../../README.md" Pack="true" PackagePath="/" />
-		<None Include="../../icon.png" Pack="true" PackagePath="/" />
 		<ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
 	</ItemGroup>
 </Project>
