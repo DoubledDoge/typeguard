@@ -47,7 +47,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -94,7 +94,7 @@ jobs:
           done
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuget-packages-${{ github.sha }}
           path: ./artifacts/*.nupkg
@@ -111,6 +111,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-${{ github.sha }}
+          path: ./artifacts
 
       - name: Generate changelog
         id: cliff
@@ -129,6 +135,7 @@ jobs:
           body: ${{ steps.cliff.outputs.content }}
           draft: false
           prerelease: ${{ needs.validate-tag.outputs.is-prerelease == 'true' }}
+          files: ./artifacts/*.nupkg
 
   publish:
     name: Publish to NuGet
