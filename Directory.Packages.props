@@ -3,9 +3,9 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageVersion Include="Avalonia" Version="11.3.12" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.14" />
+		<PackageVersion Include="Avalonia" Version="11.3.13" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="10.0.5" />
 		<PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.120" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.21.0.135717" />
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.22.0.136894" />
 	</ItemGroup>
 </Project>
