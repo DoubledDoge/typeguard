@@ -1,4 +1,7 @@
-<Solution>
+<Solution
+	Version="1.2.0"
+	Description="Another input handler and validation library for .NET applications."
+>
 	<Configurations>
 		<Platform Name="Any CPU" />
 		<Platform Name="x64" />
