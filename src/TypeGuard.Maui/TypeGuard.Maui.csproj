@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
+	<PropertyGroup Label="MAUI Configuration">
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 
@@ -25,7 +25,7 @@
 		>
 	</PropertyGroup>
 
-	<PropertyGroup>
+	<PropertyGroup Label="Package Metadata">
 		<PackageId>TypeGuard.Maui</PackageId>
 		<Version>1.1.0</Version>
 		<Authors>DoubledDoge</Authors>
@@ -40,7 +40,7 @@
 		<PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Label="Unique Dependency">
 		<PackageReference Include="Microsoft.Maui.Controls" />
 	</ItemGroup>
 </Project>

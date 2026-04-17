@@ -1,8 +1,9 @@
 ﻿<Project>
-	<PropertyGroup>
+	<PropertyGroup Label="Configuration">
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
-	<ItemGroup>
+
+	<ItemGroup Label="External Packages">
 		<PackageVersion Include="Avalonia" Version="12.0.0" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.14" />
 		<PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.120" />

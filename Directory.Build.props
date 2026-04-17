@@ -1,5 +1,5 @@
 ﻿<Project>
-	<PropertyGroup>
+	<PropertyGroup Label="General Configuration">
 		<TargetFrameworks>net9.0;net10.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<PlatformTarget>AnyCpu</PlatformTarget>
@@ -18,19 +18,19 @@
 		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Label="Package Files">
 		<None Include="../../README.md" Pack="true" PackagePath="/" />
 		<None Include="../../icon.png" Pack="true" PackagePath="/" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Label="Analyzer Configuration">
 		<PackageReference Include="SonarAnalyzer.CSharp">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(MSBuildProjectName)' != 'TypeGuard.Core'">
+	<ItemGroup Label="Core Dependency" Condition="'$(MSBuildProjectName)' != 'TypeGuard.Core'">
 		<ProjectReference Include="..\TypeGuard.Core\TypeGuard.Core.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
+	<PropertyGroup Label="Winforms Configuration">
 		<TargetFrameworks>net9.0-windows;net10.0-windows</TargetFrameworks>
 		<UseWindowsForms>true</UseWindowsForms>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 	</PropertyGroup>
 
-	<PropertyGroup>
+	<PropertyGroup Label="Package Metadata">
 		<PackageId>TypeGuard.WinForms</PackageId>
 		<Version>1.1.0</Version>
 		<Authors>DoubledDoge</Authors>

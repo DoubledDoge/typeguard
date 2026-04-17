@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
+	<PropertyGroup Label="Package Metadata">
 		<PackageId>TypeGuard.Avalonia</PackageId>
 		<Version>1.1.0</Version>
 		<Authors>DoubledDoge</Authors>
@@ -14,7 +14,7 @@
 		<PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Label="Unique Dependency">
 		<PackageReference Include="Avalonia" />
 	</ItemGroup>
 </Project>

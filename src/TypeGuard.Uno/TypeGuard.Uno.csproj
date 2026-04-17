@@ -1,5 +1,5 @@
 <Project Sdk="Uno.Sdk">
-	<PropertyGroup>
+	<PropertyGroup Label="Uno Configuration">
 		<UnoSingleProject>true</UnoSingleProject>
 		<UnoFeatures>SkiaRenderer;</UnoFeatures>
 		<IsPackable>true</IsPackable>
@@ -7,7 +7,7 @@
 		<GenerateLibraryLayout>false</GenerateLibraryLayout>
 	</PropertyGroup>
 
-	<PropertyGroup>
+	<PropertyGroup Label="Package Metadata">
 		<PackageId>TypeGuard.Uno</PackageId>
 		<Version>1.1.0</Version>
 		<Authors>DoubledDoge</Authors>
