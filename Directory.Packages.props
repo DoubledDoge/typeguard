@@ -7,6 +7,6 @@
 		<PackageVersion Include="Avalonia" Version="12.0.3" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.16" />
 		<PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.120" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.25.0.139117" />
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.26.0.140279" />
 	</ItemGroup>
 </Project>
