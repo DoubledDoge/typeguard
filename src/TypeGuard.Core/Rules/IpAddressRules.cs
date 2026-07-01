@@ -184,7 +184,7 @@ public class SubnetRule(IPAddress network, int prefixLength, string? customMessa
 			return true;
 		}
 
-		byte mask = (byte)(0xFF << 8 - remainingBits);
+		byte mask = (byte)(0xFF << (8 - remainingBits));
 		return (addressBytes[fullBytes] & mask) == (networkBytes[fullBytes] & mask);
 	}
 
