@@ -281,13 +281,25 @@ public partial class PhoneRule(string? customMessage = null) : IValidatorRule<st
 /// <param name="mustExist">If true, validates that the file actually exists on the file system. Defaults to false.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when the file path is invalid.</exception>
+/// <exception cref="NotSupportedException">Thrown when the operation isn't supported.</exception>
+/// <exception cref="PathTooLongException">Thrown when the file path is too long.</exception>
 public class FilePathRule(bool mustExist = false, string? customMessage = null)
 	: RulesBase<string>(BuildPredicate(mustExist), BuildMessage(mustExist), customMessage)
 {
 	private static Func<string, bool> BuildPredicate(bool mustExist) =>
 		value =>
 		{
-			string fullPath = Path.GetFullPath(value);
+			string fullPath;
+			try
+			{
+				fullPath = Path.GetFullPath(value);
+			}
+			catch (Exception e)
+				when (e is ArgumentException or NotSupportedException or PathTooLongException)
+			{
+				return false;
+			}
+
 			return !mustExist || File.Exists(fullPath);
 		};
 
