@@ -26,6 +26,14 @@ public static class BusinessHoursRule
 	public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
 		new BusinessHoursRuleImpl<TimeOnly>(v => v.ToTimeSpan(), customMessage);
 
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is within business hours (9 AM to 5 PM).
+	/// </summary>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(string? customMessage = null) =>
+		new BusinessHoursRuleImpl<DateTimeOffset>(v => v.TimeOfDay, customMessage);
+
 	private sealed class BusinessHoursRuleImpl<T>(
 		Func<T, TimeSpan> converter,
 		string? customMessage
@@ -63,6 +71,17 @@ public static class BeforeTimeRule
 		TimeSpan maxTime,
 		string? customMessage = null
 	) => new BeforeTimeRuleImpl<TimeOnly>(v => v.ToTimeSpan(), maxTime, customMessage);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is before the specified time.
+	/// </summary>
+	/// <param name="maxTime">The upper time boundary (exclusive).</param>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(
+		TimeSpan maxTime,
+		string? customMessage = null
+	) => new BeforeTimeRuleImpl<DateTimeOffset>(v => v.TimeOfDay, maxTime, customMessage);
 
 	private sealed class BeforeTimeRuleImpl<T>(
 		Func<T, TimeSpan> converter,
@@ -102,6 +121,17 @@ public static class AfterTimeRule
 		TimeSpan minTime,
 		string? customMessage = null
 	) => new AfterTimeRuleImpl<TimeOnly>(v => v.ToTimeSpan(), minTime, customMessage);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is after the specified time.
+	/// </summary>
+	/// <param name="minTime">The lower time boundary (exclusive).</param>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(
+		TimeSpan minTime,
+		string? customMessage = null
+	) => new AfterTimeRuleImpl<DateTimeOffset>(v => v.TimeOfDay, minTime, customMessage);
 
 	private sealed class AfterTimeRuleImpl<T>(
 		Func<T, TimeSpan> converter,
@@ -144,6 +174,22 @@ public static class HourRule
 	{
 		ValidateHour(hour);
 		return new HourRuleImpl<TimeOnly>(v => v.Hour, hour, customMessage);
+	}
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is at the specified hour.
+	/// </summary>
+	/// <param name="hour">The required hour (0-23).</param>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hour"/> is not between 0 and 23.</exception>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(
+		int hour,
+		string? customMessage = null
+	)
+	{
+		ValidateHour(hour);
+		return new HourRuleImpl<DateTimeOffset>(v => v.Hour, hour, customMessage);
 	}
 
 	private static void ValidateHour(int hour)
@@ -190,6 +236,18 @@ public static class WholeHourRule
 			"Time must be a whole hour (no minutes or seconds)",
 			customMessage
 		);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time represents a whole hour.
+	/// </summary>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(string? customMessage = null) =>
+		new RulesBase<DateTimeOffset>(
+			v => v is { Minute: 0, Second: 0, Millisecond: 0 },
+			"Time must be a whole hour (no minutes or seconds)",
+			customMessage
+		);
 }
 
 /// <summary>
@@ -216,6 +274,18 @@ public static class WholeMinuteRule
 	/// <returns>A validation rule for TimeOnly.</returns>
 	public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
 		new RulesBase<TimeOnly>(
+			v => v is { Second: 0, Millisecond: 0 },
+			"Time must be a whole minute (no seconds)",
+			customMessage
+		);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time represents a whole minute.
+	/// </summary>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(string? customMessage = null) =>
+		new RulesBase<DateTimeOffset>(
 			v => v is { Second: 0, Millisecond: 0 },
 			"Time must be a whole minute (no seconds)",
 			customMessage
@@ -257,6 +327,26 @@ public static class TimeIncrementRule
 	{
 		ValidateIncrement(increment);
 		return new TimeIncrementRuleImpl<TimeOnly>(v => v.ToTimeSpan(), increment, customMessage);
+	}
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is a multiple of the specified interval.
+	/// </summary>
+	/// <param name="increment">The required time increment. Must be greater than zero.</param>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="increment"/> is less than or equal to zero.</exception>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(
+		TimeSpan increment,
+		string? customMessage = null
+	)
+	{
+		ValidateIncrement(increment);
+		return new TimeIncrementRuleImpl<DateTimeOffset>(
+			v => v.TimeOfDay,
+			increment,
+			customMessage
+		);
 	}
 
 	private static void ValidateIncrement(TimeSpan increment)
@@ -311,6 +401,18 @@ public static class AmRule
 			"Time must be in the AM period (midnight to noon)",
 			customMessage
 		);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is in the AM period.
+	/// </summary>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(string? customMessage = null) =>
+		new RulesBase<DateTimeOffset>(
+			v => v.Hour < 12,
+			"Time must be in the AM period (midnight to noon)",
+			customMessage
+		);
 }
 
 /// <summary>
@@ -337,6 +439,18 @@ public static class PmRule
 	/// <returns>A validation rule for TimeOnly.</returns>
 	public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
 		new RulesBase<TimeOnly>(
+			v => v.Hour >= 12,
+			"Time must be in the PM period (noon to midnight)",
+			customMessage
+		);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is in the PM period.
+	/// </summary>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(string? customMessage = null) =>
+		new RulesBase<DateTimeOffset>(
 			v => v.Hour >= 12,
 			"Time must be in the PM period (noon to midnight)",
 			customMessage
@@ -371,6 +485,18 @@ public static class MidnightRule
 			"Time must be midnight (00:00:00)",
 			customMessage
 		);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is midnight (00:00:00).
+	/// </summary>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(string? customMessage = null) =>
+		new RulesBase<DateTimeOffset>(
+			v => v.TimeOfDay == TimeSpan.Zero,
+			"Time must be midnight (00:00:00)",
+			customMessage
+		);
 }
 
 /// <summary>
@@ -401,6 +527,18 @@ public static class NoonRule
 	public static IValidatorRule<TimeOnly> ForTimeOnly(string? customMessage = null) =>
 		new RulesBase<TimeOnly>(
 			v => v == NoonTimeOnly,
+			"Time must be noon (12:00:00)",
+			customMessage
+		);
+
+	/// <summary>
+	/// Creates a validation rule for DateTimeOffset values that ensures the time is noon (12:00:00).
+	/// </summary>
+	/// <param name="customMessage">An optional custom error message.</param>
+	/// <returns>A validation rule for DateTimeOffset.</returns>
+	public static IValidatorRule<DateTimeOffset> ForDateTimeOffset(string? customMessage = null) =>
+		new RulesBase<DateTimeOffset>(
+			v => v.TimeOfDay == Noon,
 			"Time must be noon (12:00:00)",
 			customMessage
 		);
