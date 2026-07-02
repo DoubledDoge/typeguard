@@ -5,39 +5,35 @@
 
 		<SupportedOSPlatformVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'"
-			>15.0</SupportedOSPlatformVersion
+			>15.0
+		</SupportedOSPlatformVersion
 		>
 		<SupportedOSPlatformVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'"
-			>15.0</SupportedOSPlatformVersion
+			>15.0
+		</SupportedOSPlatformVersion
 		>
 		<SupportedOSPlatformVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"
-			>21.0</SupportedOSPlatformVersion
+			>21.0
+		</SupportedOSPlatformVersion
 		>
 		<SupportedOSPlatformVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"
-			>10.0.17763.0</SupportedOSPlatformVersion
+			>10.0.17763.0
+		</SupportedOSPlatformVersion
 		>
 		<TargetPlatformMinVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"
-			>10.0.17763.0</TargetPlatformMinVersion
+			>10.0.17763.0
+		</TargetPlatformMinVersion
 		>
 	</PropertyGroup>
 
-	<PropertyGroup Label="Package Metadata">
+	<PropertyGroup Label="Unique Metadata">
 		<PackageId>TypeGuard.Maui</PackageId>
-		<Version>1.1.0</Version>
-		<Authors>DoubledDoge</Authors>
 		<Description>MAUI implementation for TypeGuard.</Description>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
 		<PackageTags>maui;mobile;cross-platform;validation;input-validation;android;ios;windows;macos</PackageTags>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup Label="Unique Dependency">

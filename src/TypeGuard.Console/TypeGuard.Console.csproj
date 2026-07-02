@@ -1,16 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup Label="Package Metadata">
+	<PropertyGroup Label="Unique Metadata">
 		<PackageId>TypeGuard.Console</PackageId>
-		<Version>1.1.0</Version>
-		<Authors>DoubledDoge</Authors>
 		<Description>Console implementation for TypeGuard.</Description>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
 		<PackageTags>console;validation;input-validation;cli;terminal;</PackageTags>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
 </Project>

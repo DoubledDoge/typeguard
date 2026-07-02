@@ -1,22 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup Label="Wpf Configuration">
-		<TargetFrameworks>net9.0-windows;net10.0-windows</TargetFrameworks>
 		<UseWPF>true</UseWPF>
-		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 	</PropertyGroup>
 
-	<PropertyGroup Label="Package Metadata">
+	<PropertyGroup Label="Unique Metadata">
 		<PackageId>TypeGuard.Wpf</PackageId>
-		<Version>1.1.0</Version>
-		<Authors>DoubledDoge</Authors>
 		<Description>WPF implementation for TypeGuard.</Description>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>desktop;validation;input-validation;gui;windows;</PackageTags>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageReleaseNotes>See https://github.com/DoubledDoge/typeguard/releases for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
 </Project>
