@@ -18,7 +18,8 @@
 		<File Path="LICENSE" />
 		<File Path="README.md" />
 		<File Path="SECURITY.md" />
-		<File Path="Directory.Build.props" />
+		<File Path="Directory.Build.props" />s
+		<File Path="README-NUGET.md" />
 	</Folder>
 
 	<Folder Name="/.github/">

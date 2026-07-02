@@ -26,7 +26,7 @@
 		<PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
 		<RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
 		<PackageReleaseNotes>See $(PackageProjectUrl)/releases for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
 
