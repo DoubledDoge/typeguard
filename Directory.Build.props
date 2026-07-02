@@ -23,11 +23,10 @@
 		<Authors>DoubledDoge</Authors>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/DoubledDoge/typeguard</PackageProjectUrl>
-		<RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+		<RepositoryUrl>https://github.com/DoubledDoge/typeguard</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
-		<PackageReleaseNotes>See $(PackageProjectUrl)/releases for release notes.</PackageReleaseNotes>
+		<PackageReleaseNotes>See $(RepositoryUrl)/releases for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup Label="Package Files">
