@@ -1,17 +1,31 @@
 ﻿using System.Text.RegularExpressions;
+using TypeGuard.Core.Interfaces;
 
 namespace TypeGuard.Core.Rules;
 
-using Interfaces;
-
 /// <summary>
-/// A validation rule that ensures a string's length falls within the specified minimum and maximum bounds.
+///     A validation rule that ensures a string's length falls within the specified minimum and maximum bounds.
 /// </summary>
-/// <param name="minLength">The optional minimum acceptable length (inclusive). Must be greater than or equal to zero if provided.</param>
-/// <param name="maxLength">The optional maximum acceptable length (inclusive). Must be greater than or equal to zero if provided.</param>
-/// <param name="customMessage">An optional custom error message. If not provided, a default message based on the constraints is used.</param>
-/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="minLength"/> or <paramref name="maxLength"/> is negative.</exception>
-/// <exception cref="ArgumentException">Thrown when <paramref name="minLength"/> is greater than <paramref name="maxLength"/>.</exception>
+/// <param name="minLength">
+///     The optional minimum acceptable length (inclusive). Must be greater than or equal to zero if
+///     provided.
+/// </param>
+/// <param name="maxLength">
+///     The optional maximum acceptable length (inclusive). Must be greater than or equal to zero if
+///     provided.
+/// </param>
+/// <param name="customMessage">
+///     An optional custom error message. If not provided, a default message based on the
+///     constraints is used.
+/// </param>
+/// <exception cref="ArgumentOutOfRangeException">
+///     Thrown when <paramref name="minLength" /> or
+///     <paramref name="maxLength" /> is negative.
+/// </exception>
+/// <exception cref="ArgumentException">
+///     Thrown when <paramref name="minLength" /> is greater than
+///     <paramref name="maxLength" />.
+/// </exception>
 public class StringLengthRule(
 	int? minLength = null,
 	int? maxLength = null,
@@ -20,7 +34,7 @@ public class StringLengthRule(
 {
 	private readonly int? _minLength = ValidateArgs(minLength, maxLength);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public bool IsValid(string value)
 	{
 		ArgumentNullException.ThrowIfNull(value);
@@ -30,7 +44,7 @@ public class StringLengthRule(
 			&& (!maxLength.HasValue || length <= maxLength.Value);
 	}
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public string ErrorMessage { get; } = customMessage ?? BuildMessage(minLength, maxLength);
 
 	private static string BuildMessage(int? minLength, int? maxLength) =>
@@ -62,26 +76,26 @@ public class StringLengthRule(
 }
 
 /// <summary>
-/// A validation rule that ensures a string matches a specified regular expression pattern.
+///     A validation rule that ensures a string matches a specified regular expression pattern.
 /// </summary>
 /// <param name="pattern">The regular expression pattern the string must match. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-/// <exception cref="ArgumentException">Thrown when <paramref name="pattern"/> is null or empty.</exception>
+/// <exception cref="ArgumentException">Thrown when <paramref name="pattern" /> is null or empty.</exception>
 public class RegexRule(string pattern, string? customMessage = null) : IValidatorRule<string>
 {
 	private readonly Regex _regex = string.IsNullOrEmpty(pattern)
 		? throw new ArgumentException("Cannot be null or empty.", nameof(pattern))
 		: new Regex(pattern, RegexOptions.Compiled);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public bool IsValid(string value) => _regex.IsMatch(value);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public string ErrorMessage { get; } = customMessage ?? $"Input must match pattern: {pattern}";
 }
 
 /// <summary>
-/// A validation rule that ensures a string contains only letters.
+///     A validation rule that ensures a string contains only letters.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class AlphabeticRule(string? customMessage = null)
@@ -92,7 +106,7 @@ public class AlphabeticRule(string? customMessage = null)
 	);
 
 /// <summary>
-/// A validation rule that ensures a string contains only letters and digits.
+///     A validation rule that ensures a string contains only letters and digits.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class AlphanumericStringRule(string? customMessage = null)
@@ -103,15 +117,15 @@ public class AlphanumericStringRule(string? customMessage = null)
 	);
 
 /// <summary>
-/// A validation rule that ensures a string contains only digits.
+///     A validation rule that ensures a string contains only digits.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class NumericRule(string? customMessage = null)
 	: RulesBase<string>(v => v.All(char.IsDigit), "Input must contain only digits", customMessage);
 
 /// <summary>
-/// A validation rule that ensures a string contains only uppercase letters.
-/// Non-letter characters are permitted.
+///     A validation rule that ensures a string contains only uppercase letters.
+///     Non-letter characters are permitted.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class UpperCaseStringRule(string? customMessage = null)
@@ -122,8 +136,8 @@ public class UpperCaseStringRule(string? customMessage = null)
 	);
 
 /// <summary>
-/// A validation rule that ensures a string contains only lowercase letters.
-/// Non-letter characters are permitted.
+///     A validation rule that ensures a string contains only lowercase letters.
+///     Non-letter characters are permitted.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public class LowerCaseStringRule(string? customMessage = null)
@@ -134,11 +148,11 @@ public class LowerCaseStringRule(string? customMessage = null)
 	);
 
 /// <summary>
-/// A validation rule that ensures a string starts with a specific prefix.
+///     A validation rule that ensures a string starts with a specific prefix.
 /// </summary>
 /// <param name="prefix">The required prefix. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-/// <exception cref="ArgumentException">Thrown when <paramref name="prefix"/> is null or empty.</exception>
+/// <exception cref="ArgumentException">Thrown when <paramref name="prefix" /> is null or empty.</exception>
 public class StartsWithRule(string prefix, string? customMessage = null)
 	: RulesBase<string>(BuildPredicate(prefix), $"Input must start with '{prefix}'", customMessage)
 {
@@ -149,11 +163,11 @@ public class StartsWithRule(string prefix, string? customMessage = null)
 }
 
 /// <summary>
-/// A validation rule that ensures a string ends with a specific suffix.
+///     A validation rule that ensures a string ends with a specific suffix.
 /// </summary>
 /// <param name="suffix">The required suffix. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-/// <exception cref="ArgumentException">Thrown when <paramref name="suffix"/> is null or empty.</exception>
+/// <exception cref="ArgumentException">Thrown when <paramref name="suffix" /> is null or empty.</exception>
 public class EndsWithRule(string suffix, string? customMessage = null)
 	: RulesBase<string>(BuildPredicate(suffix), $"Input must end with '{suffix}'", customMessage)
 {
@@ -164,142 +178,152 @@ public class EndsWithRule(string suffix, string? customMessage = null)
 }
 
 /// <summary>
-/// A validation rule that ensures a string contains a specific substring.
+///     A validation rule that ensures a string contains a specific substring.
 /// </summary>
 /// <param name="substring">The required substring. Cannot be null or empty.</param>
+/// <param name="ignoreCase">
+///     If <c>true</c>, the substring match is case-insensitive. Defaults to <c>false</c>
+///     (ordinal, case-sensitive), matching <see cref="string.Contains(string)" />'s own default
+///     and keeping behavior consistent with <see cref="AllowedValuesRule" />.
+/// </param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-/// <exception cref="ArgumentException">Thrown when <paramref name="substring"/> is null or empty.</exception>
-public class ContainsRule(string substring, string? customMessage = null)
+/// <exception cref="ArgumentException">Thrown when <paramref name="substring" /> is null or empty.</exception>
+public class ContainsRule(string substring, bool ignoreCase = false, string? customMessage = null)
 	: RulesBase<string>(
-		BuildPredicate(substring),
+		BuildPredicate(substring, ignoreCase),
 		$"Input must contain '{substring}'",
 		customMessage
 	)
 {
-	private static Func<string, bool> BuildPredicate(string substring) =>
+	private static Func<string, bool> BuildPredicate(string substring, bool ignoreCase) =>
 		string.IsNullOrEmpty(substring)
 			? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
-			: v => v.Contains(substring, StringComparison.OrdinalIgnoreCase);
+			: v =>
+				v.Contains(
+					substring,
+					ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal
+				);
 }
 
 /// <summary>
-/// A validation rule that ensures a string does not contain a specific substring.
+///     A validation rule that ensures a string does not contain a specific substring.
 /// </summary>
 /// <param name="substring">The forbidden substring. Cannot be null or empty.</param>
+/// <param name="ignoreCase">
+///     If <c>true</c>, the substring match is case-insensitive. Defaults to <c>false</c>
+///     (ordinal, case-sensitive), matching <see cref="string.Contains(string)" />'s own default
+///     and keeping behavior consistent with <see cref="ExcludedValuesRule" />.
+/// </param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-/// <exception cref="ArgumentException">Thrown when <paramref name="substring"/> is null or empty.</exception>
-public class NotContainsRule(string substring, string? customMessage = null)
+/// <exception cref="ArgumentException">Thrown when <paramref name="substring" /> is null or empty.</exception>
+public class NotContainsRule(
+	string substring,
+	bool ignoreCase = false,
+	string? customMessage = null
+)
 	: RulesBase<string>(
-		BuildPredicate(substring),
+		BuildPredicate(substring, ignoreCase),
 		$"Input must not contain '{substring}'",
 		customMessage
 	)
 {
-	private static Func<string, bool> BuildPredicate(string substring) =>
+	private static Func<string, bool> BuildPredicate(string substring, bool ignoreCase) =>
 		string.IsNullOrEmpty(substring)
 			? throw new ArgumentException("Cannot be null or empty.", nameof(substring))
-			: v => !v.Contains(substring, StringComparison.OrdinalIgnoreCase);
+			: v =>
+				!v.Contains(
+					substring,
+					ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal
+				);
 }
 
 /// <summary>
-/// A validation rule that ensures a string matches one of the allowed values (case-sensitive).
+///     A validation rule that ensures a string matches one of the allowed values (case-sensitive).
 /// </summary>
 /// <param name="allowedValues">The collection of allowed string values. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-/// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedValues"/> is null.</exception>
-/// <exception cref="ArgumentException">Thrown when <paramref name="allowedValues"/> is empty.</exception>
+/// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedValues" /> is null.</exception>
+/// <exception cref="ArgumentException">Thrown when <paramref name="allowedValues" /> is empty.</exception>
 public class AllowedValuesRule(IEnumerable<string> allowedValues, string? customMessage = null)
 	: IValidatorRule<string>
 {
 	private readonly HashSet<string> _set = BuildHelper<string>.BuildSet(allowedValues);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public bool IsValid(string value) => _set.Contains(value);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public string ErrorMessage =>
 		customMessage ?? $"Input must be one of: {string.Join(", ", _set)}";
 }
 
 /// <summary>
-/// A validation rule that ensures a string does not match any of the excluded values (case-sensitive).
+///     A validation rule that ensures a string does not match any of the excluded values (case-sensitive).
 /// </summary>
 /// <param name="excludedValues">The collection of excluded string values. Cannot be null or empty.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
-/// <exception cref="ArgumentNullException">Thrown when <paramref name="excludedValues"/> is null.</exception>
-/// <exception cref="ArgumentException">Thrown when <paramref name="excludedValues"/> is empty.</exception>
+/// <exception cref="ArgumentNullException">Thrown when <paramref name="excludedValues" /> is null.</exception>
+/// <exception cref="ArgumentException">Thrown when <paramref name="excludedValues" /> is empty.</exception>
 public class ExcludedValuesRule(IEnumerable<string> excludedValues, string? customMessage = null)
 	: IValidatorRule<string>
 {
 	private readonly HashSet<string> _set = BuildHelper<string>.BuildSet(excludedValues);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public bool IsValid(string value) => !_set.Contains(value);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public string ErrorMessage =>
 		customMessage ?? $"Input must not be one of: {string.Join(", ", _set)}";
 }
 
 /// <summary>
-/// A validation rule that ensures a string is a valid email address format.
-/// Uses a pattern that covers most common email formats.
+///     A validation rule that ensures a string is a valid email address format.
+///     Uses a pattern that covers most common email formats.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public partial class EmailRule(string? customMessage = null) : IValidatorRule<string>
 {
-	[GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
-	private static partial Regex EmailRegex();
-
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public bool IsValid(string value) => EmailRegex().IsMatch(value);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public string ErrorMessage { get; } = customMessage ?? "Input must be a valid email address";
+
+	[GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+	private static partial Regex EmailRegex();
 }
 
 /// <summary>
-/// A validation rule that ensures a string is a valid phone number format.
-/// Permits digits, spaces, hyphens, parentheses, and plus signs to support international formats.
+///     A validation rule that ensures a string is a valid phone number format.
+///     Permits digits, spaces, hyphens, parentheses, and plus signs to support international formats.
 /// </summary>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 public partial class PhoneRule(string? customMessage = null) : IValidatorRule<string>
 {
-	[GeneratedRegex(@"^[\d\s\-\(\)\+]+$", RegexOptions.Compiled)]
-	private static partial Regex PhoneRegex();
-
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public bool IsValid(string value) => PhoneRegex().IsMatch(value);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public string ErrorMessage { get; } = customMessage ?? "Input must be a valid phone number";
+
+	[GeneratedRegex(@"^[\d\s\-\(\)\+]+$", RegexOptions.Compiled)]
+	private static partial Regex PhoneRegex();
 }
 
 /// <summary>
-/// A validation rule that ensures a string is a valid file path, and optionally that the file exists.
+///     A validation rule that ensures a string is a valid file path, and optionally that the file exists.
 /// </summary>
 /// <param name="mustExist">If true, validates that the file actually exists on the file system. Defaults to false.</param>
 /// <param name="customMessage">An optional custom error message. If not provided, a default message is used.</param>
 /// <exception cref="ArgumentException">Thrown when the file path is invalid.</exception>
-/// <exception cref="NotSupportedException">Thrown when the operation isn't supported.</exception>
-/// <exception cref="PathTooLongException">Thrown when the file path is too long.</exception>
 public class FilePathRule(bool mustExist = false, string? customMessage = null)
 	: RulesBase<string>(BuildPredicate(mustExist), BuildMessage(mustExist), customMessage)
 {
 	private static Func<string, bool> BuildPredicate(bool mustExist) =>
 		value =>
 		{
-			string fullPath;
-			try
-			{
-				fullPath = Path.GetFullPath(value);
-			}
-			catch (Exception e)
-				when (e is ArgumentException or NotSupportedException or PathTooLongException)
-			{
-				return false;
-			}
-
+			string fullPath = Path.GetFullPath(value);
 			return !mustExist || File.Exists(fullPath);
 		};
 
