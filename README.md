@@ -9,7 +9,8 @@
 [![.NET](https://img.shields.io/badge/.NET-9.0%20%7C%2010.0-512BD4)](https://dotnet.microsoft.com)
 [![Downloads](https://img.shields.io/nuget/dt/TypeGuard.Core.svg)](https://www.nuget.org/packages/TypeGuard.Core)
 
-A fluent, type-safe user input handler and validation library for .NET with platform-specific implementations for Console, WinForms, WPF, Avalonia, MAUI, Uno, Blazor, and ASP.NET.
+A fluent, type-safe user input handler and validation library for .NET with platform-specific implementations for
+Console, WinForms, WPF, Avalonia, MAUI, Uno, Blazor, and ASP.NET.
 
 </div>
 
@@ -44,49 +45,58 @@ A fluent, type-safe user input handler and validation library for .NET with plat
 Install only the package for your platform. `TypeGuard.Core` is included automatically as a dependency.
 
 ### Console
+
 ```bash
 dotnet add package TypeGuard.Console
 ```
 
 ### WinForms
+
 ```bash
 dotnet add package TypeGuard.Winforms
 ```
 
 ### WPF
+
 ```bash
 dotnet add package TypeGuard.Wpf
 ```
 
 ### Avalonia
+
 ```bash
 dotnet add package TypeGuard.Avalonia
 ```
 
 ### MAUI
+
 ```bash
 dotnet add package TypeGuard.Maui
 ```
 
 ### Uno
+
 ```bash
 dotnet add package TypeGuard.Uno
 ```
 
 ### Blazor
+
 ```bash
 dotnet add package TypeGuard.Blazor
 ```
 
 ### ASP.NET
 
-ASP.NET applications use `TypeGuard.Core` directly via `Validator<T>` and `ValidationResult`, which are included automatically as a dependency of any platform package, or can be installed on their own:
+ASP.NET applications use `TypeGuard.Core` directly via `Validator<T>` and `ValidationResult`, which are included
+automatically as a dependency of any platform package, or can be installed on their own:
 
 ```bash
 dotnet add package TypeGuard.Core
 ```
 
 ### Manual Installation
+
 ```bash
 dotnet add reference path/to/TypeGuard.Console/TypeGuard.Console.csproj  # or your platform project
 ```
@@ -148,6 +158,8 @@ DateTime birthday = await Guard.DateTime("Enter birthday")
 DateTime meeting = await Guard.DateTime("Select meeting date", "yyyy-MM-dd")
     .WithWeekday()
     .GetAsync();
+
+// Do note that DateTimeOffset is also available as of ver 1.3.0
 ```
 
 ---
@@ -288,7 +300,8 @@ private async void SubmitButton_Click(object sender, RoutedEventArgs e)
 
 ### ASP.NET
 
-ASP.NET applications use `TypeGuard.Core` directly. Since the framework owns the I/O loop via model binding, there is no `Guard` entry point.
+ASP.NET applications use `TypeGuard.Core` directly. Since the framework owns the I/O loop via model binding, there is no
+`Guard` entry point.
 
 ```csharp
 using TypeGuard.Core;

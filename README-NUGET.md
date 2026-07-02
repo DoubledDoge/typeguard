@@ -154,6 +154,8 @@ DateTime birthday = await Guard.DateTime("Enter birthday")
 DateTime meeting = await Guard.DateTime("Select meeting date", "yyyy-MM-dd")
     .WithWeekday()
     .GetAsync();
+
+// Do note that DateTimeOffset is also available as of ver 1.3.0
 ```
 
 ---

@@ -19,7 +19,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Shared Package Metadata">
-		<Version>1.2.0</Version>
+		<Version>1.3.0</Version>
 		<Authors>DoubledDoge</Authors>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>

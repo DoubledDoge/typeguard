@@ -1,5 +1,5 @@
 <Solution
-	Version="1.2.0"
+	Version="1.3.0"
 	Description="Another input handler and validation library for .NET applications."
 >
 	<Configurations>
