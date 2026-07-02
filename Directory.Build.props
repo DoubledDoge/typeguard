@@ -31,7 +31,7 @@
 	</PropertyGroup>
 
 	<ItemGroup Label="Package Files">
-		<None Include="../../README.md" Pack="true" PackagePath="/" />
+		<None Include="../../README-NUGET.md" Pack="true" PackagePath="/" />
 		<None Include="../../icon.png" Pack="true" PackagePath="/" />
 	</ItemGroup>
 
