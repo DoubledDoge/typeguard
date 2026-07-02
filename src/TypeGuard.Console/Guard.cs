@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Numerics;
+﻿using System.Numerics;
+using TypeGuard.Core;
 using TypeGuard.Core.Builders;
 
 namespace TypeGuard.Console;
@@ -29,134 +29,67 @@ namespace TypeGuard.Console;
 /// </remarks>
 public static class Guard
 {
-	private static readonly ConsoleInput DefaultInput = new();
-	private static readonly ConsoleOutput DefaultOutput = new();
+	private static readonly ConsoleGuard Instance = new();
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="int" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	public static IntegerInputBuilder<int> Int(string prompt) =>
-		new(prompt, DefaultInput, DefaultOutput);
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Int" />
+	public static IntegerInputBuilder<int> Int(string prompt) => Instance.Int(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="double" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	public static NumericInputBuilder<double> Double(string prompt) =>
-		new(prompt, DefaultInput, DefaultOutput);
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Double" />
+	public static NumericInputBuilder<double> Double(string prompt) => Instance.Double(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="decimal" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	public static NumericInputBuilder<decimal> Decimal(string prompt) =>
-		new(prompt, DefaultInput, DefaultOutput);
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Decimal" />
+	public static NumericInputBuilder<decimal> Decimal(string prompt) => Instance.Decimal(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling numeric input of any type that implements
-	///     <see cref="INumber{TSelf}" /> and <see cref="IMinMaxValue{TSelf}" />.
-	///     Use this for less common numeric types such as <see cref="float" />, <see cref="long" />,
-	///     <see cref="byte" />, <see cref="Half" />, and so on.
-	/// </summary>
-	/// <typeparam name="T">The numeric type to handle.</typeparam>
-	/// <param name="prompt">The prompt message to display to the user.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Numeric{T}" />
 	public static NumericInputBuilder<T> Numeric<T>(string prompt)
-		where T : INumber<T>, IMinMaxValue<T> => new(prompt, DefaultInput, DefaultOutput);
+		where T : INumber<T>, IMinMaxValue<T> => Instance.Numeric<T>(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling integer input of any type that implements
-	///     <see cref="IBinaryInteger{TSelf}" /> and <see cref="IMinMaxValue{TSelf}" />.
-	///     Use this for less common integer types such as <see cref="long" />, <see cref="short" />,
-	///     <see cref="byte" />, and so on.
-	/// </summary>
-	/// <typeparam name="T">The integer type to handle.</typeparam>
-	/// <param name="prompt">The prompt message to display to the user.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Integer{T}" />
 	public static IntegerInputBuilder<T> Integer<T>(string prompt)
-		where T : IBinaryInteger<T>, IMinMaxValue<T> => new(prompt, DefaultInput, DefaultOutput);
+		where T : IBinaryInteger<T>, IMinMaxValue<T> => Instance.Integer<T>(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="string" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	public static StringInputBuilder String(string prompt) =>
-		new(prompt, DefaultInput, DefaultOutput);
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.String" />
+	public static StringInputBuilder String(string prompt) => Instance.String(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="char" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	public static CharInputBuilder Char(string prompt) => new(prompt, DefaultInput, DefaultOutput);
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Char" />
+	public static CharInputBuilder Char(string prompt) => Instance.Char(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="DateOnly" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	/// <param name="format">The expected date format string. If null, any valid DateOnly format is accepted.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.DateOnly" />
 	public static DateOnlyInputBuilder DateOnly(string prompt, string? format = null) =>
-		new(prompt, format, DefaultInput, DefaultOutput);
+		Instance.DateOnly(prompt, format);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="DateTime" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	/// <param name="format">The expected date and time format string. If null, any valid DateTime format is accepted.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.DateTime" />
 	public static DateTimeInputBuilder DateTime(string prompt, string? format = null) =>
-		new(prompt, format, DefaultInput, DefaultOutput);
+		Instance.DateTime(prompt, format);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="DateTimeOffset" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	/// <param name="format">The expected date and  time format string. If null, any valid DateTime format is accepted.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.DateTimeOffset" />
 	public static DateTimeOffsetInputBuilder DateTimeOffset(string prompt, string? format = null) =>
-		new(prompt, format, DefaultInput, DefaultOutput);
+		Instance.DateTimeOffset(prompt, format);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="TimeOnly" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	/// <param name="format">The expected time format string. If null, any valid TimeOnly format is accepted.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.TimeOnly" />
 	public static TimeOnlyInputBuilder TimeOnly(string prompt, string? format = null) =>
-		new(prompt, format, DefaultInput, DefaultOutput);
+		Instance.TimeOnly(prompt, format);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="TimeSpan" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	/// <param name="format">The expected time span format string. If null, any valid TimeSpan format is accepted.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.TimeSpan" />
 	public static TimeSpanInputBuilder TimeSpan(string prompt, string? format = null) =>
-		new(prompt, format, DefaultInput, DefaultOutput);
+		Instance.TimeSpan(prompt, format);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="System.Guid" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	public static GuidInputBuilder Guid(string prompt) => new(prompt, DefaultInput, DefaultOutput);
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Guid" />
+	public static GuidInputBuilder Guid(string prompt) => Instance.Guid(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="IPAddress" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	public static IpAddressInputBuilder IpAddress(string prompt) =>
-		new(prompt, DefaultInput, DefaultOutput);
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.IpAddress" />
+	public static IpAddressInputBuilder IpAddress(string prompt) => Instance.IpAddress(prompt);
 
-	/// <summary>
-	///     Creates a builder for handling <see cref="Uri" /> input.
-	/// </summary>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	/// <param name="uriKind">The kind of URI to accept. Defaults to <see cref="UriKind.RelativeOrAbsolute" />.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Uri" />
 	public static UriInputBuilder Uri(
 		string prompt,
 		UriKind uriKind = UriKind.RelativeOrAbsolute
-	) => new(prompt, uriKind, DefaultInput, DefaultOutput);
+	) => Instance.Uri(prompt, uriKind);
 
-	/// <summary>
-	///     Creates a builder for handling enum input of type <typeparamref name="TEnum" />.
-	/// </summary>
-	/// <typeparam name="TEnum">The enum type to handle.</typeparam>
-	/// <param name="prompt">The prompt message to display to the user.</param>
-	/// <param name="ignoreCase">If true, enum name parsing is case-insensitive. Defaults to true.</param>
+	/// <inheritdoc cref="GuardBase{TInput,TOutput}.Enum{TEnum}" />
 	public static EnumInputBuilder<TEnum> Enum<TEnum>(string prompt, bool ignoreCase = true)
-		where TEnum : struct, Enum => new(prompt, ignoreCase, DefaultInput, DefaultOutput);
+		where TEnum : struct, Enum => Instance.Enum<TEnum>(prompt, ignoreCase);
+
+	private sealed class ConsoleGuard()
+		: GuardBase<ConsoleInput, ConsoleOutput>(new ConsoleInput(), new ConsoleOutput());
 }
