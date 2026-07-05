@@ -1,21 +1,27 @@
-﻿using TypeGuard.Core.Handlers;
-using TypeGuard.Core.Interfaces;
-using TypeGuard.Core.Rules;
+﻿namespace TypeGuard.Core.Builders;
 
-namespace TypeGuard.Core.Builders;
+using Handlers;
+using Interfaces;
+using Rules;
 
 /// <summary>
-///     A fluent builder for constructing and configuring a DateTimeOffset input handler with validation rules.
-///     Each <c>With*</c> method accumulates a rule onto the internal handler while the rules are evaluated
+///     A fluent builder for constructing and configuring a DateTimeOffset input handler with
+///     validation rules.
+///     Each <c>With*</c> method accumulates a rule onto the internal handler while the rules are
+///     evaluated
 ///     in the order they are added.
 /// </summary>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
-/// <param name="format">The expected date/time/offset format string. If null, any valid DateTimeOffset format is accepted.</param>
+/// <param name="format">
+///     The expected date/time/offset format string. If null, any valid DateTimeOffset
+///     format is accepted.
+/// </param>
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
 ///     An optional factory for creating the internal <see cref="DateTimeOffsetHandler" />.
-///     Defaults to constructing a standard <see cref="DateTimeOffsetHandler" /> from the provided providers.
+///     Defaults to constructing a standard <see cref="DateTimeOffsetHandler" /> from the provided
+///     providers.
 /// </param>
 public class DateTimeOffsetInputBuilder(
 	string prompt,
@@ -26,7 +32,7 @@ public class DateTimeOffsetInputBuilder(
 		null
 )
 	: BuilderBase<DateTimeOffset, DateTimeOffsetInputBuilder>(
-		(validatorFactory ?? ((p, f, i, o) => new DateTimeOffsetHandler(i, o, p, f)))(
+		(validatorFactory ?? ((p, f, i, o) => new(i, o, p, f)))(
 			prompt ?? throw new ArgumentNullException(nameof(prompt)),
 			format ?? throw new ArgumentNullException(nameof(format)),
 			inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -47,7 +53,10 @@ public class DateTimeOffsetInputBuilder(
 	/// <param name="max">The maximum acceptable date/time (inclusive).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentException">Thrown when <paramref name="min" /> is greater than <paramref name="max" />.</exception>
+	/// <exception cref="ArgumentException">
+	///     Thrown when <paramref name="min" /> is greater than
+	///     <paramref name="max" />.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeOffsetInputBuilder WithRange(
 		DateTimeOffset min,
@@ -144,7 +153,10 @@ public class DateTimeOffsetInputBuilder(
 	/// <param name="days">The number of calendar days from today. Must be greater than zero.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="days" /> is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="days" /> is less than or
+	///     equal to zero.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeOffsetInputBuilder WithinDays(int days, string? customMessage = null) =>
 		days <= 0
@@ -223,7 +235,10 @@ public class DateTimeOffsetInputBuilder(
 	/// <param name="hour">The required hour (0-23).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hour" /> is not between 0 and 23.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="hour" /> is not between 0
+	///     and 23.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeOffsetInputBuilder WithHour(int hour, string? customMessage = null) =>
 		hour is < 0 or > 23
@@ -258,7 +273,10 @@ public class DateTimeOffsetInputBuilder(
 	/// <param name="increment">The required time increment. Must be greater than zero.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="increment" /> is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="increment" /> is less
+	///     than or equal to zero.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeOffsetInputBuilder WithTimeIncrement(
 		TimeSpan increment,
@@ -362,7 +380,10 @@ public class DateTimeOffsetInputBuilder(
 	/// <summary>
 	///     Adds a custom validation rule to the handler.
 	/// </summary>
-	/// <param name="predicate">The function that determines whether a DateTimeOffset value is valid. Cannot be null.</param>
+	/// <param name="predicate">
+	///     The function that determines whether a DateTimeOffset value is valid.
+	///     Cannot be null.
+	/// </param>
 	/// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
 	/// <exception cref="ArgumentNullException">

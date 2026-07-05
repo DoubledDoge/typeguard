@@ -5,17 +5,22 @@ using Interfaces;
 using Rules;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a DateTime input handler with validation rules.
-/// Each <c>With*</c> method accumulates a rule onto the internal handler while the rules are evaluated
-/// in the order they are added.
+///     A fluent builder for constructing and configuring a DateTime input handler with validation
+///     rules.
+///     Each <c>With*</c> method accumulates a rule onto the internal handler while the rules are
+///     evaluated
+///     in the order they are added.
 /// </summary>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
-/// <param name="format">The expected date/time format string. If null, any valid DateTime format is accepted.</param>
+/// <param name="format">
+///     The expected date/time format string. If null, any valid DateTime format is
+///     accepted.
+/// </param>
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="DateTimeHandler"/>.
-/// Defaults to constructing a standard <see cref="DateTimeHandler"/> from the provided providers.
+///     An optional factory for creating the internal <see cref="DateTimeHandler" />.
+///     Defaults to constructing a standard <see cref="DateTimeHandler" /> from the provided providers.
 /// </param>
 public class DateTimeInputBuilder(
 	string prompt,
@@ -25,7 +30,7 @@ public class DateTimeInputBuilder(
 	Func<string, string, IInputProvider, IOutputProvider, DateTimeHandler>? validatorFactory = null
 )
 	: BuilderBase<DateTime, DateTimeInputBuilder>(
-		(validatorFactory ?? ((p, f, i, o) => new DateTimeHandler(i, o, p, f)))(
+		(validatorFactory ?? ((p, f, i, o) => new(i, o, p, f)))(
 			prompt ?? throw new ArgumentNullException(nameof(prompt)),
 			format ?? throw new ArgumentNullException(nameof(format)),
 			inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -34,13 +39,16 @@ public class DateTimeInputBuilder(
 	)
 {
 	/// <summary>
-	/// Adds a rule that ensures the date/time is within the specified range.
+	///     Adds a rule that ensures the date/time is within the specified range.
 	/// </summary>
 	/// <param name="min">The minimum acceptable date/time (inclusive).</param>
 	/// <param name="max">The maximum acceptable date/time (inclusive).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentException">Thrown when <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
+	/// <exception cref="ArgumentException">
+	///     Thrown when <paramref name="min" /> is greater than
+	///     <paramref name="max" />.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeInputBuilder WithRange(
 		DateTime min,
@@ -55,7 +63,7 @@ public class DateTimeInputBuilder(
 			: AddRule(new RangeRule<DateTime>(min, max, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date is in the future.
+	///     Adds a rule that ensures the date is in the future.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -64,7 +72,7 @@ public class DateTimeInputBuilder(
 		AddRule(FutureDateRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date is in the past.
+	///     Adds a rule that ensures the date is in the past.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -73,7 +81,7 @@ public class DateTimeInputBuilder(
 		AddRule(PastDateRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date is today.
+	///     Adds a rule that ensures the date is today.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -82,7 +90,7 @@ public class DateTimeInputBuilder(
 		AddRule(TodayRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date is not today.
+	///     Adds a rule that ensures the date is not today.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -91,7 +99,7 @@ public class DateTimeInputBuilder(
 		AddRule(NotTodayRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date falls on a weekday.
+	///     Adds a rule that ensures the date falls on a weekday.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -100,7 +108,7 @@ public class DateTimeInputBuilder(
 		AddRule(WeekdayRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date falls on a weekend.
+	///     Adds a rule that ensures the date falls on a weekend.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -109,7 +117,7 @@ public class DateTimeInputBuilder(
 		AddRule(WeekendRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date falls on the specified day of the week.
+	///     Adds a rule that ensures the date falls on the specified day of the week.
 	/// </summary>
 	/// <param name="dayOfWeek">The specific day of the week the date must fall on.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
@@ -119,12 +127,15 @@ public class DateTimeInputBuilder(
 		AddRule(DayOfWeekRule.ForDateTime(dayOfWeek, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date is within the specified number of days from today.
+	///     Adds a rule that ensures the date is within the specified number of days from today.
 	/// </summary>
 	/// <param name="days">The number of days from today. Must be greater than zero.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="days"/> is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="days" /> is less than or
+	///     equal to zero.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeInputBuilder WithinDays(int days, string? customMessage = null) =>
 		days <= 0
@@ -136,7 +147,7 @@ public class DateTimeInputBuilder(
 			: AddRule(WithinDaysRule.ForDateTime(days, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date falls in the specified year.
+	///     Adds a rule that ensures the date falls in the specified year.
 	/// </summary>
 	/// <param name="year">The specific year the date must fall in.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
@@ -146,7 +157,7 @@ public class DateTimeInputBuilder(
 		AddRule(YearRule.ForDateTime(year, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date falls in a leap year.
+	///     Adds a rule that ensures the date falls in a leap year.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -155,7 +166,7 @@ public class DateTimeInputBuilder(
 		AddRule(LeapYearRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the date falls in the specified month.
+	///     Adds a rule that ensures the date falls in the specified month.
 	/// </summary>
 	/// <param name="month">The specific month the date must fall in.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
@@ -165,7 +176,7 @@ public class DateTimeInputBuilder(
 		AddRule(MonthRule.ForDateTime(month, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component falls within business hours (9 AM to 5 PM).
+	///     Adds a rule that ensures the time component falls within business hours (9 AM to 5 PM).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -174,7 +185,7 @@ public class DateTimeInputBuilder(
 		AddRule(BusinessHoursRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is before the specified time.
+	///     Adds a rule that ensures the time component is before the specified time.
 	/// </summary>
 	/// <param name="maxTime">The upper time boundary (exclusive).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
@@ -184,7 +195,7 @@ public class DateTimeInputBuilder(
 		AddRule(BeforeTimeRule.ForDateTime(maxTime, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is after the specified time.
+	///     Adds a rule that ensures the time component is after the specified time.
 	/// </summary>
 	/// <param name="minTime">The lower time boundary (exclusive).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
@@ -194,12 +205,15 @@ public class DateTimeInputBuilder(
 		AddRule(AfterTimeRule.ForDateTime(minTime, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is at the specified hour.
+	///     Adds a rule that ensures the time component is at the specified hour.
 	/// </summary>
 	/// <param name="hour">The required hour (0-23).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="hour"/> is not between 0 and 23.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="hour" /> is not between 0
+	///     and 23.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeInputBuilder WithHour(int hour, string? customMessage = null) =>
 		hour is < 0 or > 23
@@ -211,7 +225,7 @@ public class DateTimeInputBuilder(
 			: AddRule(HourRule.ForDateTime(hour, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component represents a whole hour (zero minutes and seconds).
+	///     Adds a rule that ensures the time component represents a whole hour (zero minutes and seconds).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -220,7 +234,7 @@ public class DateTimeInputBuilder(
 		AddRule(WholeHourRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component represents a whole minute (zero seconds).
+	///     Adds a rule that ensures the time component represents a whole minute (zero seconds).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -229,12 +243,15 @@ public class DateTimeInputBuilder(
 		AddRule(WholeMinuteRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is a multiple of the specified interval.
+	///     Adds a rule that ensures the time component is a multiple of the specified interval.
 	/// </summary>
 	/// <param name="increment">The required time increment. Must be greater than zero.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="increment"/> is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="increment" /> is less
+	///     than or equal to zero.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeInputBuilder WithTimeIncrement(
 		TimeSpan increment,
@@ -249,7 +266,7 @@ public class DateTimeInputBuilder(
 			: AddRule(TimeIncrementRule.ForDateTime(increment, customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is in the AM period.
+	///     Adds a rule that ensures the time component is in the AM period.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -258,7 +275,7 @@ public class DateTimeInputBuilder(
 		AddRule(AmRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is in the PM period.
+	///     Adds a rule that ensures the time component is in the PM period.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -267,7 +284,7 @@ public class DateTimeInputBuilder(
 		AddRule(PmRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is midnight (00:00:00).
+	///     Adds a rule that ensures the time component is midnight (00:00:00).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -276,7 +293,7 @@ public class DateTimeInputBuilder(
 		AddRule(MidnightRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a rule that ensures the time component is noon (12:00:00).
+	///     Adds a rule that ensures the time component is noon (12:00:00).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -285,12 +302,18 @@ public class DateTimeInputBuilder(
 		AddRule(NoonRule.ForDateTime(customMessage));
 
 	/// <summary>
-	/// Adds a custom validation rule to the handler.
+	///     Adds a custom validation rule to the handler.
 	/// </summary>
-	/// <param name="predicate">The function that determines whether a DateTime value is valid. Cannot be null.</param>
+	/// <param name="predicate">
+	///     The function that determines whether a DateTime value is valid. Cannot be
+	///     null.
+	/// </param>
 	/// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="errorMessage"/> is null.</exception>
+	/// <exception cref="ArgumentNullException">
+	///     Thrown when <paramref name="predicate" /> or
+	///     <paramref name="errorMessage" /> is null.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public DateTimeInputBuilder WithCustomRule(Func<DateTime, bool> predicate, string errorMessage)
 	{

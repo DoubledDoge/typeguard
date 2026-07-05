@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using System.Numerics;
-using TypeGuard.Core.Builders;
-using TypeGuard.Core.Interfaces;
 
 namespace TypeGuard.Core;
+
+using Builders;
+using Interfaces;
 
 /// <summary>
 ///     Provides the shared set of input-builder factory methods common to every platform's <c>Guard</c>

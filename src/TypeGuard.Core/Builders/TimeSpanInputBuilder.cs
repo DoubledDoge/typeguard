@@ -5,17 +5,22 @@ using Interfaces;
 using Rules;
 
 /// <summary>
-/// A fluent builder for constructing and configuring a TimeSpan input handler with validation rules.
-/// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
-/// in the order they are added.
+///     A fluent builder for constructing and configuring a TimeSpan input handler with validation
+///     rules.
+///     Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are
+///     evaluated
+///     in the order they are added.
 /// </summary>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
-/// <param name="format">Optional format hint for parsing. If null, any valid TimeSpan format is accepted.</param>
+/// <param name="format">
+///     Optional format hint for parsing. If null, any valid TimeSpan format is
+///     accepted.
+/// </param>
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="TimeSpanHandler"/>.
-/// Defaults to constructing a standard <see cref="TimeSpanHandler"/> from the provided providers.
+///     An optional factory for creating the internal <see cref="TimeSpanHandler" />.
+///     Defaults to constructing a standard <see cref="TimeSpanHandler" /> from the provided providers.
 /// </param>
 public class TimeSpanInputBuilder(
 	string prompt,
@@ -25,7 +30,7 @@ public class TimeSpanInputBuilder(
 	Func<string, string, IInputProvider, IOutputProvider, TimeSpanHandler>? validatorFactory = null
 )
 	: BuilderBase<TimeSpan, TimeSpanInputBuilder>(
-		(validatorFactory ?? ((p, f, i, o) => new TimeSpanHandler(i, o, p, f)))(
+		(validatorFactory ?? ((p, f, i, o) => new(i, o, p, f)))(
 			prompt ?? throw new ArgumentNullException(nameof(prompt)),
 			format ?? throw new ArgumentNullException(nameof(format)),
 			inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
@@ -34,13 +39,16 @@ public class TimeSpanInputBuilder(
 	)
 {
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan is within the specified range.
+	///     Adds a validation rule that ensures the TimeSpan is within the specified range.
 	/// </summary>
 	/// <param name="min">The minimum acceptable TimeSpan (inclusive).</param>
 	/// <param name="max">The maximum acceptable TimeSpan (inclusive).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentException">Thrown when <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
+	/// <exception cref="ArgumentException">
+	///     Thrown when <paramref name="min" /> is greater than
+	///     <paramref name="max" />.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public TimeSpanInputBuilder WithRange(
 		TimeSpan min,
@@ -55,7 +63,7 @@ public class TimeSpanInputBuilder(
 			: AddRule(new RangeRule<TimeSpan>(min, max, customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan is positive.
+	///     Adds a validation rule that ensures the TimeSpan is positive.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -64,7 +72,8 @@ public class TimeSpanInputBuilder(
 		AddRule(new PositiveTimeSpanRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan does not exceed the specified maximum duration.
+	///     Adds a validation rule that ensures the TimeSpan does not exceed the specified maximum
+	///     duration.
 	/// </summary>
 	/// <param name="maximum">The maximum acceptable duration (inclusive).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
@@ -74,7 +83,7 @@ public class TimeSpanInputBuilder(
 		AddRule(new MaxDurationRule(maximum, customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan meets the specified minimum duration.
+	///     Adds a validation rule that ensures the TimeSpan meets the specified minimum duration.
 	/// </summary>
 	/// <param name="minimum">The minimum acceptable duration (inclusive).</param>
 	/// <param name="customMessage">An optional custom error message.</param>
@@ -84,12 +93,19 @@ public class TimeSpanInputBuilder(
 		AddRule(new MinDurationRule(minimum, customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan does not exceed the specified number of working hours.
+	///     Adds a validation rule that ensures the TimeSpan does not exceed the specified number of
+	///     working hours.
 	/// </summary>
-	/// <param name="maxHours">The maximum number of hours for a work period. Must be greater than zero. Defaults to 8.</param>
+	/// <param name="maxHours">
+	///     The maximum number of hours for a work period. Must be greater than zero.
+	///     Defaults to 8.
+	/// </param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="maxHours"/> is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="maxHours" /> is less than
+	///     or equal to zero.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public TimeSpanInputBuilder WithWorkingHours(int maxHours = 8, string? customMessage = null) =>
 		maxHours <= 0
@@ -101,7 +117,8 @@ public class TimeSpanInputBuilder(
 			: AddRule(new WorkingHoursRule(maxHours, customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan represents whole hours (no minutes or seconds).
+	///     Adds a validation rule that ensures the TimeSpan represents whole hours (no minutes or
+	///     seconds).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -110,7 +127,7 @@ public class TimeSpanInputBuilder(
 		AddRule(new WholeHoursRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan represents whole minutes (no seconds).
+	///     Adds a validation rule that ensures the TimeSpan represents whole minutes (no seconds).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -119,12 +136,15 @@ public class TimeSpanInputBuilder(
 		AddRule(new WholeMinutesRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan is a multiple of the specified unit.
+	///     Adds a validation rule that ensures the TimeSpan is a multiple of the specified unit.
 	/// </summary>
 	/// <param name="unit">The unit TimeSpan the value must be a multiple of. Must be greater than zero.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="unit"/> is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="unit" /> is less than or
+	///     equal to zero.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public TimeSpanInputBuilder WithDurationIncrement(
 		TimeSpan unit,
@@ -139,7 +159,7 @@ public class TimeSpanInputBuilder(
 			: AddRule(new DurationIncrementRule(unit, customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the TimeSpan is within a single day (less than 24 hours).
+	///     Adds a validation rule that ensures the TimeSpan is within a single day (less than 24 hours).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -148,12 +168,15 @@ public class TimeSpanInputBuilder(
 		AddRule(new WithinDayRule(customMessage));
 
 	/// <summary>
-	/// Adds a custom validation rule to the input handler.
+	///     Adds a custom validation rule to the input handler.
 	/// </summary>
 	/// <param name="predicate">The function that determines whether a TimeSpan is valid. Cannot be null.</param>
 	/// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="errorMessage"/> is null.</exception>
+	/// <exception cref="ArgumentNullException">
+	///     Thrown when <paramref name="predicate" /> or
+	///     <paramref name="errorMessage" /> is null.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public TimeSpanInputBuilder WithCustomRule(Func<TimeSpan, bool> predicate, string errorMessage)
 	{

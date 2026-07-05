@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
-using TypeGuard.Core;
-using TypeGuard.Core.Builders;
 
 namespace TypeGuard.Console;
+
+using Core;
+using Core.Builders;
 
 /// <summary>
 ///     Provides a concise static API for creating configured input builders for console applications.
@@ -10,8 +11,10 @@ namespace TypeGuard.Console;
 /// <remarks>
 ///     <para>
 ///         Each method returns a fluent builder that can be configured with validation rules via
-///         <c>With*</c> methods before calling <see cref="Core.Builders.BuilderBase{T,TSelf}.Get" /> or
-///         <see cref="Core.Builders.BuilderBase{T,TSelf}.GetAsync" /> to prompt the user and retrieve a
+///         <c>With*</c> methods before calling <see cref="Core.Builders.BuilderBase{T,TSelf}.Get" />
+///         or
+///         <see cref="Core.Builders.BuilderBase{T,TSelf}.GetAsync" /> to prompt the user and retrieve
+///         a
 ///         validated value.
 ///     </para>
 ///     <para>
@@ -90,6 +93,5 @@ public static class Guard
 	public static EnumInputBuilder<TEnum> Enum<TEnum>(string prompt, bool ignoreCase = true)
 		where TEnum : struct, Enum => Instance.Enum<TEnum>(prompt, ignoreCase);
 
-	private sealed class ConsoleGuard()
-		: GuardBase<ConsoleInput, ConsoleOutput>(new ConsoleInput(), new ConsoleOutput());
+	private sealed class ConsoleGuard() : GuardBase<ConsoleInput, ConsoleOutput>(new(), new());
 }

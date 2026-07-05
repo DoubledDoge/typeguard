@@ -73,7 +73,7 @@ public class AllowedCharsRule(string allowedChars, string? customMessage = null)
 		}
 
 		HashSet<char> set = [.. allowedChars];
-		return c => set.Contains(c);
+		return set.Contains;
 	}
 }
 

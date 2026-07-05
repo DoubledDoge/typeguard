@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
-using TypeGuard.Core.Interfaces;
 
 namespace TypeGuard.Core.Handlers;
+
+using Interfaces;
 
 /// <summary>
 ///     An input handler that prompts for and validates DateTimeOffset input according to a specified format.

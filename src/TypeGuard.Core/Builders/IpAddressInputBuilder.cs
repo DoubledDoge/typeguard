@@ -7,16 +7,19 @@ using Interfaces;
 using Rules;
 
 /// <summary>
-/// A fluent builder for constructing and configuring an IP address input handler with validation rules.
-/// Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
-/// in the order they are added.
+///     A fluent builder for constructing and configuring an IP address input handler with validation
+///     rules.
+///     Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are
+///     evaluated
+///     in the order they are added.
 /// </summary>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
 /// <param name="inputProvider">The provider used to read user input.</param>
 /// <param name="outputProvider">The provider used to display prompts and error messages.</param>
 /// <param name="validatorFactory">
-/// An optional factory for creating the internal <see cref="IpAddressHandler"/>.
-/// Defaults to constructing a standard <see cref="IpAddressHandler"/> from the provided providers.
+///     An optional factory for creating the internal <see cref="IpAddressHandler" />.
+///     Defaults to constructing a standard <see cref="IpAddressHandler" /> from the provided
+///     providers.
 /// </param>
 public class IpAddressInputBuilder(
 	string prompt,
@@ -25,7 +28,7 @@ public class IpAddressInputBuilder(
 	Func<string, IInputProvider, IOutputProvider, IpAddressHandler>? validatorFactory = null
 )
 	: BuilderBase<IPAddress, IpAddressInputBuilder>(
-		(validatorFactory ?? ((p, i, o) => new IpAddressHandler(i, o, p)))(
+		(validatorFactory ?? ((p, i, o) => new(i, o, p)))(
 			prompt ?? throw new ArgumentNullException(nameof(prompt)),
 			inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
 			outputProvider ?? throw new ArgumentNullException(nameof(outputProvider))
@@ -33,7 +36,7 @@ public class IpAddressInputBuilder(
 	)
 {
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is IPv4.
+	///     Adds a validation rule that ensures the IP address is IPv4.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -42,7 +45,7 @@ public class IpAddressInputBuilder(
 		AddRule(new Ipv4Rule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is IPv6.
+	///     Adds a validation rule that ensures the IP address is IPv6.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -51,7 +54,7 @@ public class IpAddressInputBuilder(
 		AddRule(new Ipv6Rule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is a private address.
+	///     Adds a validation rule that ensures the IP address is a private address.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -60,7 +63,7 @@ public class IpAddressInputBuilder(
 		AddRule(new PrivateIpRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is an APIPA address (169.254.0.0/16).
+	///     Adds a validation rule that ensures the IP address is an APIPA address (169.254.0.0/16).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -69,7 +72,7 @@ public class IpAddressInputBuilder(
 		AddRule(new ApipaRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is not an APIPA address (169.254.0.0/16).
+	///     Adds a validation rule that ensures the IP address is not an APIPA address (169.254.0.0/16).
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -78,7 +81,7 @@ public class IpAddressInputBuilder(
 		AddRule(new NotApipaRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is a loopback address.
+	///     Adds a validation rule that ensures the IP address is a loopback address.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -87,7 +90,7 @@ public class IpAddressInputBuilder(
 		AddRule(new LoopbackIpRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is a public address.
+	///     Adds a validation rule that ensures the IP address is a public address.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -96,7 +99,7 @@ public class IpAddressInputBuilder(
 		AddRule(new PublicIpRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is not a loopback address.
+	///     Adds a validation rule that ensures the IP address is not a loopback address.
 	/// </summary>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
@@ -105,16 +108,20 @@ public class IpAddressInputBuilder(
 		AddRule(new NotLoopbackIpRule(customMessage));
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address falls within the specified subnet.
+	///     Adds a validation rule that ensures the IP address falls within the specified subnet.
 	/// </summary>
 	/// <param name="network">The network address of the subnet. Cannot be null.</param>
 	/// <param name="prefixLength">
-	/// The subnet prefix length. Must be between 0 and 32 for IPv4 addresses, or 0 and 128 for IPv6 addresses.
+	///     The subnet prefix length. Must be between 0 and 32 for IPv4 addresses, or 0 and 128 for IPv6
+	///     addresses.
 	/// </param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentNullException">Thrown when <paramref name="network"/> is null.</exception>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="prefixLength"/> is not between 0 and 128.</exception>
+	/// <exception cref="ArgumentNullException">Thrown when <paramref name="network" /> is null.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	///     Thrown when <paramref name="prefixLength" /> is not
+	///     between 0 and 128.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public IpAddressInputBuilder WithSubnet(
 		IPAddress network,
@@ -134,13 +141,14 @@ public class IpAddressInputBuilder(
 	}
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is in the specified collection of allowed addresses.
+	///     Adds a validation rule that ensures the IP address is in the specified collection of allowed
+	///     addresses.
 	/// </summary>
 	/// <param name="allowedAddresses">The collection of allowed IP addresses. Cannot be null or empty.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedAddresses"/> is null.</exception>
-	/// <exception cref="ArgumentException">Thrown when <paramref name="allowedAddresses"/> is empty.</exception>
+	/// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedAddresses" /> is null.</exception>
+	/// <exception cref="ArgumentException">Thrown when <paramref name="allowedAddresses" /> is empty.</exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public IpAddressInputBuilder WithAllowedAddresses(
 		IEnumerable<IPAddress> allowedAddresses,
@@ -156,13 +164,14 @@ public class IpAddressInputBuilder(
 	}
 
 	/// <summary>
-	/// Adds a validation rule that ensures the IP address is not in the specified collection of blocked addresses.
+	///     Adds a validation rule that ensures the IP address is not in the specified collection of
+	///     blocked addresses.
 	/// </summary>
 	/// <param name="blockedAddresses">The collection of blocked IP addresses. Cannot be null or empty.</param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentNullException">Thrown when <paramref name="blockedAddresses"/> is null.</exception>
-	/// <exception cref="ArgumentException">Thrown when <paramref name="blockedAddresses"/> is empty.</exception>
+	/// <exception cref="ArgumentNullException">Thrown when <paramref name="blockedAddresses" /> is null.</exception>
+	/// <exception cref="ArgumentException">Thrown when <paramref name="blockedAddresses" /> is empty.</exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public IpAddressInputBuilder WithoutBlockedAddresses(
 		IEnumerable<IPAddress> blockedAddresses,
@@ -178,12 +187,18 @@ public class IpAddressInputBuilder(
 	}
 
 	/// <summary>
-	/// Adds a custom validation rule to the handler.
+	///     Adds a custom validation rule to the handler.
 	/// </summary>
-	/// <param name="predicate">The function that determines whether an IP address is valid. Cannot be null.</param>
+	/// <param name="predicate">
+	///     The function that determines whether an IP address is valid. Cannot be
+	///     null.
+	/// </param>
 	/// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
-	/// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> or <paramref name="errorMessage"/> is null.</exception>
+	/// <exception cref="ArgumentNullException">
+	///     Thrown when <paramref name="predicate" /> or
+	///     <paramref name="errorMessage" /> is null.
+	/// </exception>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
 	public IpAddressInputBuilder WithCustomRule(
 		Func<IPAddress, bool> predicate,

@@ -1,12 +1,13 @@
-﻿using TypeGuard.Core.Handlers;
-using TypeGuard.Core.Interfaces;
-using TypeGuard.Core.Rules;
+﻿namespace TypeGuard.Core.Builders;
 
-namespace TypeGuard.Core.Builders;
+using Handlers;
+using Interfaces;
+using Rules;
 
 /// <summary>
 ///     A fluent builder for constructing and configuring a string input handler with validation rules.
-///     Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are evaluated
+///     Each <c>With*</c> method accumulates a rule onto the internal validator while the rules are
+///     evaluated
 ///     in the order they are added.
 /// </summary>
 /// <param name="prompt">The prompt message to display to the user when requesting input.</param>
@@ -23,7 +24,7 @@ public class StringInputBuilder(
 	Func<string, IInputProvider, IOutputProvider, StringHandler>? validatorFactory = null
 )
 	: BuilderBase<string, StringInputBuilder>(
-		(validatorFactory ?? ((p, i, o) => new StringHandler(i, o, p)))(
+		(validatorFactory ?? ((p, i, o) => new(i, o, p)))(
 			prompt ?? throw new ArgumentNullException(nameof(prompt)),
 			inputProvider ?? throw new ArgumentNullException(nameof(inputProvider)),
 			outputProvider ?? throw new ArgumentNullException(nameof(outputProvider))
@@ -33,8 +34,14 @@ public class StringInputBuilder(
 	/// <summary>
 	///     Adds a rule that ensures the string length is within the specified range.
 	/// </summary>
-	/// <param name="minLength">The optional minimum acceptable length (inclusive). Must be greater than or equal to zero.</param>
-	/// <param name="maxLength">The optional maximum acceptable length (inclusive). Must be greater than or equal to zero.</param>
+	/// <param name="minLength">
+	///     The optional minimum acceptable length (inclusive). Must be greater than or
+	///     equal to zero.
+	/// </param>
+	/// <param name="maxLength">
+	///     The optional maximum acceptable length (inclusive). Must be greater than or
+	///     equal to zero.
+	/// </param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
 	/// <exception cref="ArgumentOutOfRangeException">
@@ -82,7 +89,10 @@ public class StringInputBuilder(
 	/// <summary>
 	///     Adds a regular expression validation rule to the validator.
 	/// </summary>
-	/// <param name="pattern">The regular expression pattern the string must match. Cannot be null or empty.</param>
+	/// <param name="pattern">
+	///     The regular expression pattern the string must match. Cannot be null or
+	///     empty.
+	/// </param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
 	/// <exception cref="ArgumentException">Thrown when <paramref name="pattern" /> is null or empty.</exception>
@@ -259,7 +269,10 @@ public class StringInputBuilder(
 	/// <summary>
 	///     Adds a rule that ensures the string is a valid file path format.
 	/// </summary>
-	/// <param name="mustExist">Whether the file at the specified path must exist on disk. Defaults to false.</param>
+	/// <param name="mustExist">
+	///     Whether the file at the specified path must exist on disk. Defaults to
+	///     false.
+	/// </param>
 	/// <param name="customMessage">An optional custom error message.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
 	/// <exception cref="InvalidOperationException">Thrown if the builder has been frozen.</exception>
@@ -271,7 +284,10 @@ public class StringInputBuilder(
 	/// <summary>
 	///     Adds a custom validation rule to the input handler.
 	/// </summary>
-	/// <param name="predicate">The function that determines whether a string value is valid. Cannot be null.</param>
+	/// <param name="predicate">
+	///     The function that determines whether a string value is valid. Cannot be
+	///     null.
+	/// </param>
 	/// <param name="errorMessage">The error message to display when validation fails. Cannot be null.</param>
 	/// <returns>The current builder instance for method chaining.</returns>
 	/// <exception cref="ArgumentNullException">

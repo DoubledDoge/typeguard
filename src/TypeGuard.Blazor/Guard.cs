@@ -1,6 +1,6 @@
-﻿using TypeGuard.Core;
+﻿namespace TypeGuard.Blazor;
 
-namespace TypeGuard.Blazor;
+using Core;
 
 /// <summary>
 ///     Provides a concise API for creating configured input builders for Blazor applications.
@@ -44,8 +44,7 @@ namespace TypeGuard.Blazor;
 ///         the Blazor rendering thread, particularly on WebAssembly, will freeze the UI entirely.
 ///     </para>
 /// </remarks>
-public sealed class Guard()
-	: GuardBase<BlazorInput, BlazorOutput>(new BlazorInput(), new BlazorOutput())
+public sealed class Guard() : GuardBase<BlazorInput, BlazorOutput>(new(), new())
 {
 	/// <summary>
 	///     Gets the input provider that holds the current bound input value.

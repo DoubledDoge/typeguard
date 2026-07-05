@@ -1,6 +1,6 @@
-﻿using TypeGuard.Core;
+﻿namespace TypeGuard.Uno;
 
-namespace TypeGuard.Uno;
+using Core;
 
 /// <summary>
 ///     Provides a concise API for creating configured input builders for Uno applications.
@@ -41,7 +41,4 @@ namespace TypeGuard.Uno;
 /// <param name="promptBlock">The text block used to display prompt messages.</param>
 /// <param name="errorBlock">The text block used to display error messages.</param>
 public sealed class Guard(TextBox inputTextBox, TextBlock promptBlock, TextBlock errorBlock)
-	: GuardBase<UnoInput, UnoOutput>(
-		new UnoInput(inputTextBox),
-		new UnoOutput(promptBlock, errorBlock)
-	);
+	: GuardBase<UnoInput, UnoOutput>(new(inputTextBox), new(promptBlock, errorBlock));

@@ -1,6 +1,6 @@
-﻿using TypeGuard.Core.Interfaces;
+﻿namespace TypeGuard.Core.Handlers;
 
-namespace TypeGuard.Core.Handlers;
+using Interfaces;
 
 /// <summary>
 /// An input handler that prompts for and validates URI input.

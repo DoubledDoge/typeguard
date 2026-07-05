@@ -1,6 +1,6 @@
-﻿using TypeGuard.Core;
+﻿namespace TypeGuard.WinForms;
 
-namespace TypeGuard.WinForms;
+using Core;
 
 /// <summary>
 ///     Provides a concise API for creating configured input builders for WinForms applications.
@@ -41,7 +41,4 @@ namespace TypeGuard.WinForms;
 /// <param name="promptLabel">The label used to display prompt messages.</param>
 /// <param name="errorLabel">The label used to display error messages.</param>
 public sealed class Guard(Control inputControl, Label promptLabel, Label errorLabel)
-	: GuardBase<WinFormsInput, WinFormsOutput>(
-		new WinFormsInput(inputControl),
-		new WinFormsOutput(promptLabel, errorLabel)
-	);
+	: GuardBase<WinFormsInput, WinFormsOutput>(new(inputControl), new(promptLabel, errorLabel));

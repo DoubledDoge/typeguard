@@ -1,6 +1,6 @@
-﻿using TypeGuard.Core;
+﻿namespace TypeGuard.Maui;
 
-namespace TypeGuard.Maui;
+using Core;
 
 /// <summary>
 ///     Provides a concise API for creating configured input builders for MAUI applications.
@@ -30,8 +30,4 @@ public sealed class Guard(
 	Label promptLabel,
 	Label errorLabel,
 	Button? submitButton = null
-)
-	: GuardBase<MauiInput, MauiOutput>(
-		new MauiInput(entry, submitButton),
-		new MauiOutput(promptLabel, errorLabel)
-	);
+) : GuardBase<MauiInput, MauiOutput>(new(entry, submitButton), new(promptLabel, errorLabel));

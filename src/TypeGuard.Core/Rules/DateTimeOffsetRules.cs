@@ -1,6 +1,6 @@
-﻿using TypeGuard.Core.Interfaces;
+﻿namespace TypeGuard.Core.Rules;
 
-namespace TypeGuard.Core.Rules;
+using Interfaces;
 
 /// <summary>
 ///     A validation rule that ensures a DateTimeOffset's offset is exactly the specified value.

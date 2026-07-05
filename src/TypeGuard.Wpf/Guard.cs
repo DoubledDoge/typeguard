@@ -1,7 +1,8 @@
 ﻿using System.Windows.Controls;
-using TypeGuard.Core;
 
 namespace TypeGuard.Wpf;
+
+using Core;
 
 /// <summary>
 ///     Provides a concise API for creating configured input builders for WPF applications.
@@ -42,7 +43,4 @@ namespace TypeGuard.Wpf;
 /// <param name="promptBlock">The text block used to display prompt messages.</param>
 /// <param name="errorBlock">The text block used to display error messages.</param>
 public sealed class Guard(TextBox inputTextBox, TextBlock promptBlock, TextBlock errorBlock)
-	: GuardBase<WpfInput, WpfOutput>(
-		new WpfInput(inputTextBox),
-		new WpfOutput(promptBlock, errorBlock)
-	);
+	: GuardBase<WpfInput, WpfOutput>(new(inputTextBox), new(promptBlock, errorBlock));
