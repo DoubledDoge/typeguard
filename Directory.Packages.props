@@ -4,9 +4,9 @@
 	</PropertyGroup>
 
 	<ItemGroup Label="External Packages">
-		<PackageVersion Include="Avalonia" Version="12.0.5" />
+		<PackageVersion Include="Avalonia" Version="12.1.0" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.17" />
 		<PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.120" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.28.0.143324" />
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.29.0.143774" />
 	</ItemGroup>
 </Project>
