@@ -85,7 +85,7 @@ public class RegexRule(string pattern, string? customMessage = null) : IValidato
 {
 	private readonly Regex _regex = string.IsNullOrEmpty(pattern)
 		? throw new ArgumentException("Cannot be null or empty.", nameof(pattern))
-		: new Regex(pattern, RegexOptions.Compiled);
+		: new Regex(pattern, RegexOptions.Compiled, TimeSpan.FromMilliseconds(500));
 
 	/// <inheritdoc />
 	public bool IsValid(string value) => _regex.IsMatch(value);
@@ -290,7 +290,11 @@ public partial class EmailRule(string? customMessage = null) : IValidatorRule<st
 	/// <inheritdoc />
 	public string ErrorMessage { get; } = customMessage ?? "Input must be a valid email address";
 
-	[GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+	[GeneratedRegex(
+		@"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+		RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled,
+		matchTimeoutMilliseconds: 500
+	)]
 	private static partial Regex EmailRegex();
 }
 
@@ -307,7 +311,7 @@ public partial class PhoneRule(string? customMessage = null) : IValidatorRule<st
 	/// <inheritdoc />
 	public string ErrorMessage { get; } = customMessage ?? "Input must be a valid phone number";
 
-	[GeneratedRegex(@"^[\d\s\-\(\)\+]+$", RegexOptions.Compiled)]
+	[GeneratedRegex(@"^[\d\s\-\(\)\+]+$", RegexOptions.Compiled, matchTimeoutMilliseconds: 500)]
 	private static partial Regex PhoneRegex();
 }
 
