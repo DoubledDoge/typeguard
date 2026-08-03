@@ -33,7 +33,7 @@ public class MauiInput(Entry entry, Button? submitButton = null) : IInputProvide
 		TaskCompletionSource<string?> tcs = new();
 
 		CancellationTokenRegistration registration = cancellationToken.Register(() =>
-			tcs.TrySetCanceled()
+			tcs.TrySetCanceled(cancellationToken)
 		);
 
 		await using (registration.ConfigureAwait(false))
