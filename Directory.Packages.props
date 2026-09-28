@@ -3,7 +3,7 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup Label="External Packages">
-		<PackageVersion Include="Avalonia" Version="12.1.2" />
+		<PackageVersion Include="Avalonia" Version="12.1.3" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.20" />
 		<PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.120" />
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.34.0.3385" />
