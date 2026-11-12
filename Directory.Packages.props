@@ -2,10 +2,14 @@
 	<PropertyGroup Label="Configuration">
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
+
 	<ItemGroup Label="External Packages">
 		<PackageVersion Include="Avalonia" Version="12.1.4" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.22" />
-		<PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.120" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="10.0.15" />
+		<PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.130" />
 		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.35.0.4138" />
+		<PackageVersion Include="TUnit" Version="1.83.8" />
+		<PackageVersion Include="JetBrains.dotCover.Framework" Version="1.0.2" />
+		<PackageVersion Include="Imposter" Version="1.0.13" />
 	</ItemGroup>
 </Project>

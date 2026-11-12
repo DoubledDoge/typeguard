@@ -15,10 +15,10 @@ using Core.Interfaces;
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="promptBlock"/> or <paramref name="errorBlock"/> is null.</exception>
 public class WpfOutput(TextBlock promptBlock, TextBlock errorBlock) : IOutputProvider
 {
-	private readonly TextBlock _promptBlock =
-		promptBlock ?? throw new ArgumentNullException(nameof(promptBlock));
-	private readonly TextBlock _errorBlock =
-		errorBlock ?? throw new ArgumentNullException(nameof(errorBlock));
+	private readonly TextBlock _promptBlock = promptBlock
+		?? throw new ArgumentNullException(nameof(promptBlock));
+	private readonly TextBlock _errorBlock = errorBlock
+		?? throw new ArgumentNullException(nameof(errorBlock));
 
 	/// <summary>
 	/// Asynchronously displays a prompt message on the prompt text block, clearing any existing

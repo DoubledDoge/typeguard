@@ -17,11 +17,11 @@ public abstract class HandlerBase<T>(
 	string prompt
 ) : IHandler<T>
 {
-	private readonly IInputProvider _inputProvider =
-		inputProvider ?? throw new ArgumentNullException(nameof(inputProvider));
+	private readonly IInputProvider _inputProvider = inputProvider
+		?? throw new ArgumentNullException(nameof(inputProvider));
 
-	private readonly IOutputProvider _outputProvider =
-		outputProvider ?? throw new ArgumentNullException(nameof(outputProvider));
+	private readonly IOutputProvider _outputProvider = outputProvider
+		?? throw new ArgumentNullException(nameof(outputProvider));
 
 	private readonly string _prompt = prompt ?? throw new ArgumentNullException(nameof(prompt));
 

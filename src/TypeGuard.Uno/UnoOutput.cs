@@ -14,10 +14,10 @@ using Core.Interfaces;
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="promptBlock"/> or <paramref name="errorBlock"/> is null.</exception>
 public class UnoOutput(TextBlock promptBlock, TextBlock errorBlock) : IOutputProvider
 {
-	private readonly TextBlock _promptBlock =
-		promptBlock ?? throw new ArgumentNullException(nameof(promptBlock));
-	private readonly TextBlock _errorBlock =
-		errorBlock ?? throw new ArgumentNullException(nameof(errorBlock));
+	private readonly TextBlock _promptBlock = promptBlock
+		?? throw new ArgumentNullException(nameof(promptBlock));
+	private readonly TextBlock _errorBlock = errorBlock
+		?? throw new ArgumentNullException(nameof(errorBlock));
 
 	private static readonly SolidColorBrush ErrorBrush = new(Color.FromArgb(255, 255, 0, 0));
 

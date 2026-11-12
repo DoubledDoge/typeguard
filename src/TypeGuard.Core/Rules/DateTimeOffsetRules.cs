@@ -77,8 +77,8 @@ public class UtcOffsetRule(string? customMessage = null)
 public class MatchesTimeZoneRule(TimeZoneInfo timeZone, string? customMessage = null)
 	: IValidatorRule<DateTimeOffset>
 {
-	private readonly TimeZoneInfo _timeZone =
-		timeZone ?? throw new ArgumentNullException(nameof(timeZone));
+	private readonly TimeZoneInfo _timeZone = timeZone
+		?? throw new ArgumentNullException(nameof(timeZone));
 
 	/// <inheritdoc />
 	public bool IsValid(DateTimeOffset value) =>

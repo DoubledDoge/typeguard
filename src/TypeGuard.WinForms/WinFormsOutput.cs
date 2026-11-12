@@ -11,10 +11,10 @@ using Core.Interfaces;
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="promptLabel"/> or <paramref name="errorLabel"/> is null.</exception>
 public class WinFormsOutput(Label promptLabel, Label errorLabel) : IOutputProvider
 {
-	private readonly Label _promptLabel =
-		promptLabel ?? throw new ArgumentNullException(nameof(promptLabel));
-	private readonly Label _errorLabel =
-		errorLabel ?? throw new ArgumentNullException(nameof(errorLabel));
+	private readonly Label _promptLabel = promptLabel
+		?? throw new ArgumentNullException(nameof(promptLabel));
+	private readonly Label _errorLabel = errorLabel
+		?? throw new ArgumentNullException(nameof(errorLabel));
 
 	/// <summary>
 	/// Asynchronously displays a prompt message on the prompt label, clearing any existing

@@ -19,8 +19,8 @@ using Interfaces;
 public abstract class BuilderBase<T, TSelf>(HandlerBase<T> handler)
 	where TSelf : BuilderBase<T, TSelf>
 {
-	private readonly HandlerBase<T> _handler =
-		handler ?? throw new ArgumentNullException(nameof(handler));
+	private readonly HandlerBase<T> _handler = handler
+		?? throw new ArgumentNullException(nameof(handler));
 
 	private bool _frozen;
 
