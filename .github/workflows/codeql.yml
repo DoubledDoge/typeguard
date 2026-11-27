@@ -1,19 +1,17 @@
-name: CodeQL for C# Project
+name: .Net CodeQL Workflow
 
 on:
   push:
     branches: [main]
     paths:
       - 'src/**'
-      - '**/*.csproj'
-      - '**/*.slnx'
+      - 'TypeGuard.slnx'
       - '.github/workflows/codeql.yml'
   pull_request:
     branches: [main]
     paths:
       - 'src/**'
-      - '**/*.csproj'
-      - '**/*.slnx'
+      - 'TypeGuard.slnx'
       - '.github/workflows/codeql.yml'
   schedule:
     - cron: '40 4 * * 6'
@@ -70,7 +68,7 @@ jobs:
             - src
 
       - name: Build
-        run: dotnet build ./TypeGuard.slnx --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4

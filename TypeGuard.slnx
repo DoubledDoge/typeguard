@@ -8,39 +8,13 @@
 		<Platform Name="x86" />
 	</Configurations>
 
-	<Folder Name="/Typeguard/">
-		<File Path=".gitignore" />
-		<File Path=".gitattributes" />
-		<File Path=".editorconfig" />
-		<File Path="Directory.Packages.props" />
-		<File Path="dotnet-tools.json" />
-		<File Path="global.json" />
-		<File Path="LICENSE" />
-		<File Path="README.md" />
-		<File Path="SECURITY.md" />
-		<File Path="Directory.Build.props" />s
-		<File Path="README-NUGET.md" />
-	</Folder>
-
-	<Folder Name="/.github/">
-		<File Path=".github/cliff.toml" />
-		<File Path=".github/dependabot.yml" />
-		<File Path=".github/PULL_REQUEST_TEMPLATE.md" />
-		<File Path=".github/ISSUE_TEMPLATE/bug_report.yml" />
-	</Folder>
-
-	<Folder Name="/.github/workflows/">
-		<File Path=".github/workflows/ci-cd.yml" />
-		<File Path=".github/workflows/deploy.yml" />
-		<File Path=".github/workflows/codeql.yml" />
-	</Folder>
-
 	<Folder Name="/src/">
 		<Project Path="src/TypeGuard.Avalonia/TypeGuard.Avalonia.csproj" />
 		<Project Path="src/TypeGuard.Blazor/TypeGuard.Blazor.csproj" />
 		<Project Path="src/TypeGuard.Console/TypeGuard.Console.csproj" />
 		<Project Path="src/TypeGuard.Core/TypeGuard.Core.csproj" />
 		<Project Path="src/TypeGuard.Maui/TypeGuard.Maui.csproj" />
+		<Project Path="src/TypeGuard.Tests/TypeGuard.Tests.csproj" />
 		<Project Path="src/TypeGuard.Uno/TypeGuard.Uno.csproj" />
 		<Project Path="src/TypeGuard.WinForms/TypeGuard.WinForms.csproj" />
 		<Project Path="src/TypeGuard.Wpf/TypeGuard.Wpf.csproj" />

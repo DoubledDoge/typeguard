@@ -1,4 +1,4 @@
-name: Release Pipeline
+name: .NET CD Workflow
 
 on:
   push:
@@ -138,7 +138,7 @@ jobs:
           files: ./artifacts/*.nupkg
 
   publish:
-    name: Publish to NuGet
+    name: Publish to NuGet.org
     runs-on: ubuntu-latest
     needs: [validate-tag, release]
     permissions:

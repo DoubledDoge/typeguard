@@ -1,15 +1,18 @@
-name: .NET CI/CD Pipeline
+name: .NET CI Workflow
 
 on:
   push:
     branches: [main]
     paths:
       - 'src/**'
-      - '**/*.csproj'
-      - '**/*.slnx'
-      - '.github/workflows/ci-cd.yml'
+      - 'TypeGuard.slnx'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'TypeGuard.slnx'
+      - '.github/workflows/ci.yml'
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -63,35 +66,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: dotnet csharpier check .
 
-      - name: Build
+      - name: Build Project
         run: dotnet build --configuration Release --no-restore
 
-  validate-package:
-    name: Validate Package
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Install workloads
-        run: dotnet workload restore
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Pack NuGet packages
-        run: dotnet pack --configuration Release --no-restore --output ./artifacts
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: nuget-packages-${{ github.sha }}
-          path: ./artifacts/*.nupkg
-          retention-days: 7
+      - name: Test Project
+        run: dotnet test --no-restore --no-build

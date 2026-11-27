@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup Label="Unique Dependency">
+		<PackageReference Include="TUnit" />
+		<PackageReference Include="JetBrains.dotCover.Framework" />
+		<PackageReference Include="Imposter" />
+	</ItemGroup>
+</Project>

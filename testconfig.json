@@ -1,0 +1,23 @@
+{
+	"platformOptions": {
+		"resultDirectory": "./src/TypeGuard.Tests/TestResults",
+		"exitProcessOnUnhandledException": false
+	},
+	"environmentVariables": {
+		"DOTNET_ENVIRONMENT": "Development",
+		"FEATURE_FLAG": "true"
+	},
+	"mstest": {
+		"parallelism": {
+			"enabled": true,
+			"workers": 4,
+			"scope": "method"
+		},
+		"timeout": {
+			"test": 30000
+		},
+		"execution": {
+			"mapInconclusiveToFailed": true
+		}
+	}
+}
